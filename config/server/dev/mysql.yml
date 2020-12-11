@@ -1,0 +1,20 @@
+Master:
+  User: root
+  Password: mysql123
+  Host: 127.0.0.1
+  Database: ucenter
+Slave1:
+  User: root
+  Password: mysql123
+  Host: 127.0.0.1
+  Database: ucenter
+Slave2:
+  User: root
+  Password: mysql123
+  Host: 127.0.0.1
+  Database: ucenter
+Backup:
+  User: root
+  Password: mysql123
+  Host: 127.0.0.1
+  Database: ucenter
