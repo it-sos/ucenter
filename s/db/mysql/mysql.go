@@ -3,27 +3,23 @@ package mysql
 import (
 	"context"
 	"database/sql"
+	"github.com/go-xorm/xorm"
 )
 
 // https://github.com/go-xorm/xorm
 
 type MySQL struct {
-	Conn *sql.DB
+	Conn *xorm.EngineGroup
 }
 
 func ConnectMySQL(dsn string) (*MySQL, error) {
-	conn, err := sql.Open("mysql", dsn)
+	dataSourceNameSlice := []string{masterDataSourceName, slave1DataSourceName, slave2DataSourceName}
+	engineGroup, err := xorm.NewEngineGroup("mysql", dataSourceNameSlice)
 	if err != nil {
 		return nil, err
 	}
-	err = conn.Ping()
-	if err != nil {
-		conn.Close()
-		return nil, err
-	}
-
 	return &MySQL{
-		Conn: conn,
+		Conn: engineGroup,
 	}, nil
 }
 
@@ -86,4 +82,3 @@ func (db *MySQL) Commit() {
 
 func (db *MySQL) Rollback() {
 }
-
