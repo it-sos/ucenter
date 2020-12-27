@@ -21,7 +21,7 @@ type Config struct {
 	structs     interface{}
 	data        interface{}
 }
-
+// https://xuchao918.github.io/2019/04/29/%E4%BD%BF%E7%94%A8go%E8%AF%BB%E5%8F%96%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/
 // https://www.cnblogs.com/zhaof/p/8955332.html
 func (c *Config) getYamlAbsPath() {
 	cfg := strings.Split(c.name, ".")
