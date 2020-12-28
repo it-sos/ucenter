@@ -17,6 +17,7 @@ require (
 	github.com/nats-io/jwt v1.2.2 // indirect
 	github.com/nats-io/nats-server/v2 v2.1.9 // indirect
 	github.com/smartystreets/goconvey v1.6.4 // indirect
+	github.com/spf13/viper v1.7.1 // indirect
 	github.com/tdewolff/parse/v2 v2.5.6 // indirect
 	github.com/vmihailenco/msgpack/v5 v5.1.0 // indirect
 	github.com/yudai/pp v2.0.1+incompatible // indirect
