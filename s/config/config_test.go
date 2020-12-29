@@ -1,6 +1,7 @@
 package config
 
 import (
+	"github.com/spf13/viper"
 	"path/filepath"
 	"testing"
 	"ucenter/s"
@@ -12,7 +13,7 @@ func TestConfig_ConfSecurity(t *testing.T) {
 	}
 	s.AppRoot = root
 	s.AppEnv = "dev"
-	//config := Config{}
-	//c := config.ConfServer("mysql", Mysql{})
-	//t.Log(c)
+	config := Config{}
+	config.ConfServer("mysql")
+	t.Log(viper.Get("master.password"))
 }

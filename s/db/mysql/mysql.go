@@ -4,12 +4,33 @@ import (
 	"context"
 	"database/sql"
 	"github.com/go-xorm/xorm"
+	"github.com/spf13/viper"
+	"ucenter/s/config"
 )
 
 // https://github.com/go-xorm/xorm
-
+// https://gobook.io/read/gitea.com/xorm/manual-zh-CN/chapter-01/2.engine_group.html#
 type MySQL struct {
 	Conn *xorm.EngineGroup
+}
+
+func getDbTypeConfig(dbType string) (string, string, string, string) {
+	return viper.GetString(dbType + ".user"),
+		viper.GetString(dbType + ".password"),
+		viper.GetString(dbType + ".host"),
+		viper.GetString(dbType + ".database")
+}
+
+func getConfig() (string, string, string) {
+	c := config.Config{}
+	c.ConfServer("mysql")
+	user, password, host, database := getDbTypeConfig("master")
+	masterDataSourceName := ""
+	user, password, host, database := getDbTypeConfig("slave1")
+	slave1DataSourceName := ""
+	user, password, host, database := getDbTypeConfig("slave2")
+	slave2DataSourceName := ""
+	//return user, password, host, database
 }
 
 func ConnectMySQL(dsn string) (*MySQL, error) {
@@ -21,10 +42,6 @@ func ConnectMySQL(dsn string) (*MySQL, error) {
 	return &MySQL{
 		Conn: engineGroup,
 	}, nil
-}
-
-func config() {
-
 }
 
 var ErrNoRows = sql.ErrNoRows
