@@ -1,8 +1,8 @@
 package mysql
 
 import (
-	"context"
 	"database/sql"
+	"fmt"
 	"github.com/go-xorm/xorm"
 	"github.com/spf13/viper"
 	"ucenter/s/config"
@@ -14,27 +14,20 @@ type MySQL struct {
 	Conn *xorm.EngineGroup
 }
 
-func getDbTypeConfig(dbType string) (string, string, string, string) {
-	return viper.GetString(dbType + ".user"),
-		viper.GetString(dbType + ".password"),
-		viper.GetString(dbType + ".host"),
-		viper.GetString(dbType + ".database")
+func getDsn(dbType string) string {
+	user, password, host, port, database, charset := viper.GetString(dbType+".user"),
+		viper.GetString(dbType+".password"),
+		viper.GetString(dbType+".host"),
+		viper.GetString(dbType+".port"),
+		viper.GetString(dbType+".database"),
+		viper.GetString(dbType+".charset")
+	return fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s", user, password, host, port, database, charset)
 }
 
-func getConfig() (string, string, string) {
+func ConnectMySQL() (*MySQL, error) {
 	c := config.Config{}
 	c.ConfServer("mysql")
-	user, password, host, database := getDbTypeConfig("master")
-	masterDataSourceName := ""
-	user, password, host, database := getDbTypeConfig("slave1")
-	slave1DataSourceName := ""
-	user, password, host, database := getDbTypeConfig("slave2")
-	slave2DataSourceName := ""
-	//return user, password, host, database
-}
-
-func ConnectMySQL(dsn string) (*MySQL, error) {
-	dataSourceNameSlice := []string{masterDataSourceName, slave1DataSourceName, slave2DataSourceName}
+	dataSourceNameSlice := []string{getDsn("master"), getDsn("slave1"), getDsn("slave1")}
 	engineGroup, err := xorm.NewEngineGroup("mysql", dataSourceNameSlice)
 	if err != nil {
 		return nil, err
@@ -58,21 +51,7 @@ func (db *MySQL) Delete() {
 func (db *MySQL) Update() {
 }
 
-func (db *MySQL) Query(ctx context.Context, dest interface{}, query string, args ...interface{}) error {
-	rows, err := db.Conn.QueryContext(ctx, query, args...)
-	if err != nil {
-		return err
-	}
-	defer rows.Close()
-
-	if scannable, ok := dest.(Scannable); ok {
-		return scannable.Scan(rows)
-	}
-
-	if !rows.Next() {
-		return ErrNoRows
-	}
-	return rows.Scan(dest)
+func (db *MySQL) Query() {
 }
 
 func (db *MySQL) QueryOne() {
@@ -87,8 +66,7 @@ func (db *MySQL) QSqlOne() {
 func (db *MySQL) Count() {
 }
 
-func (db *MySQL) Exec(ctx context.Context, query string, args ...interface{}) (sql.Result, error) {
-	return db.Conn.ExecContext(ctx, query, args...)
+func (db *MySQL) Exec() {
 }
 
 func (db *MySQL) Transaction() {

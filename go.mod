@@ -5,7 +5,7 @@ go 1.15
 require (
 	github.com/Joker/hpp v1.0.0 // indirect
 	github.com/flosch/pongo2/v4 v4.0.2 // indirect
-	github.com/go-xorm/xorm v0.7.9 // indirect
+	github.com/go-xorm/xorm v0.7.9
 	github.com/gobwas/httphead v0.1.0 // indirect
 	github.com/gorilla/securecookie v1.1.1
 	github.com/k0kubun/colorstring v0.0.0-20150214042306-9440f1994b88 // indirect

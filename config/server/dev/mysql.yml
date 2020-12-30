@@ -2,20 +2,27 @@ Master:
   User: root
   Password: mysql123
   Host: 127.0.0.1
+  Port: 3306
   Database: ucenter
+  Charset: utf8mb4
 Slave1:
   User: root
   Password: mysql123
   Host: 127.0.0.1
+  Port: 3306
   Database: ucenter
+  Charset: utf8mb4
 Slave2:
   User: root
   Password: mysql123
   Host: 127.0.0.1
+  Port: 3306
   Database: ucenter
+  Charset: utf8mb4
 Backup:
   User: root
   Password: mysql123
   Host: 127.0.0.1
+  Port: 3306
   Database: ucenter
-Test: test
+  Charset: utf8mb4
