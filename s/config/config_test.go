@@ -1,6 +1,7 @@
 package config
 
 import (
+	"bytes"
 	"github.com/spf13/viper"
 	"path/filepath"
 	"testing"
@@ -16,4 +17,11 @@ func TestConfig_ConfSecurity(t *testing.T) {
 	config := Config{}
 	config.ConfServer("mysql")
 	t.Log(viper.Get("master.password"))
+}
+
+func TestByte(t *testing.T) {
+	s := []byte("")
+	s1 := append(s, 'a')
+	s2 := append(s, 'b')
+	t.Log(bytes.Equal(s1, s2))
 }

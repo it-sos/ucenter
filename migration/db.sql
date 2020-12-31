@@ -13,8 +13,8 @@ create table user (
     is_disabled tinyint unsigned not null default 0 comment '是否禁用状态 1=是；0=否',
     is_deleted tinyint unsigned not null default 0 comment '是否删除状态 1=是；0=否',
     salt varchar(32) not null comment '盐',
-    update_time datetime on update current_timestamp comment '更新时间',
-    create_time datetime default current_timestamp comment '创建时间',
+    update_time datetime not null on update current_timestamp default current_timestamp comment '更新时间',
+    create_time datetime not null default current_timestamp comment '创建时间',
     key idx_account(account),
     primary key(id)
 ) engine=innoDB charset=utf8mb4 comment '用户表';
@@ -28,8 +28,8 @@ create table app (
     info varchar(255) not null comment '应用描述',
     link varchar(255) not null default '' comment '应用链接',
     is_deleted tinyint unsigned not null default 2 comment '删除状态 1=是；0=否',
-    update_time datetime on update current_timestamp comment '更新时间',
-    create_time datetime default current_timestamp comment '创建时间',
+    update_time datetime not null on update current_timestamp default current_timestamp comment '更新时间',
+    create_time datetime not null default current_timestamp comment '创建时间',
     key idx_appid(appid),
     primary key(id)
 ) engine=innoDB charset=utf8mb4 comment '应用表';
@@ -39,8 +39,8 @@ create table role (
     id int unsigned not null auto_increment,
     name varchar(32) not null comment '角色名',
     info varchar(255) not null comment '描述',
-    update_time datetime on update current_timestamp comment '更新时间',
-    create_time datetime default current_timestamp comment '创建时间',
+    update_time datetime not null on update current_timestamp default current_timestamp comment '更新时间',
+    create_time datetime not null default current_timestamp comment '创建时间',
     primary key(id)
 ) engine=innoDB charset=utf8mb4 comment '角色表';
 
@@ -53,8 +53,8 @@ create table permission (
     router varchar(255) not null comment '路由',
     method varchar(8) not null comment '方法 PUT/DELETE/POST/GET',
     parent_id int unsigned not null default 0 comment '父ID',
-    update_time datetime on update current_timestamp comment '更新时间',
-    create_time datetime default current_timestamp comment '创建时间',
+    update_time datetime not null on update current_timestamp default current_timestamp comment '更新时间',
+    create_time datetime not null default current_timestamp comment '创建时间',
     key idx_appid(app_id),
     primary key(id)
 ) engine=innoDB charset=utf8mb4 comment '权限表';
@@ -65,8 +65,8 @@ create table permission_user (
     user_id int unsigned not null comment '用户表ID',
     permission_id int unsigned not null comment '权限表ID',
     is_forbidden tinyint unsigned not null default 1 comment '是否禁止访问 0=否；1=是',
-    update_time datetime on update current_timestamp comment '更新时间',
-    create_time datetime default current_timestamp comment '创建时间',
+    update_time datetime not null on update current_timestamp default current_timestamp comment '更新时间',
+    create_time datetime not null default current_timestamp comment '创建时间',
     unique uk_userid_permid(user_id, permission_id),
     primary key(id)
 ) engine=innoDB charset=utf8mb4 comment '用户权限';
@@ -77,8 +77,8 @@ create table permission_role (
     role_id int unsigned not null comment '角色表ID',
     permission_id int unsigned not null comment '权限表ID',
     is_forbidden tinyint unsigned not null default 1 comment '是否禁止访问 0=否；1=是',
-    update_time datetime on update current_timestamp comment '更新时间',
-    create_time datetime default current_timestamp comment '创建时间',
+    update_time datetime not null on update current_timestamp default current_timestamp comment '更新时间',
+    create_time datetime not null default current_timestamp comment '创建时间',
     unique uk_roleid_permid(role_id, permission_id),
     primary key(id)
 ) engine=innoDB charset=utf8mb4 comment '角色权限';
@@ -89,8 +89,8 @@ create table role_user (
     role_id int unsigned not null comment '角色表ID',
     user_id int unsigned not null comment '用户表ID',
     is_forbidden tinyint unsigned not null default 1 comment '是否禁止访问 0=否；1=是',
-    update_time datetime on update current_timestamp comment '更新时间',
-    create_time datetime default current_timestamp comment '创建时间',
+    update_time datetime not null on update current_timestamp default current_timestamp comment '更新时间',
+    create_time datetime not null default current_timestamp comment '创建时间',
     unique uk_roleid_userid(role_id, user_id),
     primary key(id)
 ) engine=innoDB charset=utf8mb4 comment '角色成员表';

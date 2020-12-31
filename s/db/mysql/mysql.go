@@ -3,6 +3,7 @@ package mysql
 import (
 	"database/sql"
 	"fmt"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/xorm"
 	"github.com/spf13/viper"
 	"ucenter/s/config"
@@ -29,6 +30,7 @@ func ConnectMySQL() (*MySQL, error) {
 	c.ConfServer("mysql")
 	dataSourceNameSlice := []string{getDsn("master"), getDsn("slave1"), getDsn("slave1")}
 	engineGroup, err := xorm.NewEngineGroup("mysql", dataSourceNameSlice)
+
 	if err != nil {
 		return nil, err
 	}
