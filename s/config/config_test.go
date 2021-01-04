@@ -11,6 +11,7 @@ import (
 func TestConfig_ConfSecurity(t *testing.T) {
 	root, err := filepath.Abs("../..")
 	if err != nil {
+
 	}
 	s.AppRoot = root
 	s.AppEnv = "dev"

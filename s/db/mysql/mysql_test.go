@@ -15,20 +15,58 @@ type Role struct {
 	CreateTime time.Time `xorm:"not null default 'CURRENT_TIMESTAMP' TIMESTAMP <-"` //创建时间
 }
 
-func TestMysql(t *testing.T) {
-	root, err := filepath.Abs("../../../")
-	if err != nil {
-	}
+func initConfig() {
+	root, _ := filepath.Abs("../../../")
 	s.AppRoot = root
 	s.AppEnv = "dev"
+}
+
+// add
+func TestAdd(t *testing.T) {
+	initConfig()
 	x, _ := ConnectMySQL()
 	role := new(Role)
 	role.Name = "普通"
 	role.Info = "超级普通"
-	//a, e := x.Conn.Insert(role)
-	//t.Log(a, e)
-	//results, err := x.Conn.Query("select * from user")
-	//x.Conn.Sync2(role)
-	results, err := x.Conn.ID(1).Update(&role)
-	t.Log(results, err)
+	a, e := x.Conn.Insert(role)
+	t.Log(a, e)
+	if a == 1 {
+		b, err := x.Conn.ID(1).Update(role)
+		t.Log(b, err)
+	}
+	//r, err := x.Conn.Query("select * from role")
+	//if r == "1" {
+	//	t.Log(results, err)
+	//}
+}
+
+// delete
+func TestDelelte(t *testing.T) {
+	initConfig()
+	x, _ := ConnectMySQL()
+	r, err := x.Conn.ID(1).Delete(new(Role))
+	t.Log(r, err)
+}
+
+// update
+func TestUpdate(t *testing.T) {
+	initConfig()
+	x, _ := ConnectMySQL()
+	role := new(Role)
+	role.Name = "普通0"
+	role.Info = "超级普通0"
+	r, err := x.Conn.ID(1).Update(role)
+	t.Log(r, err)
+}
+
+// select
+func TestSelect(t *testing.T) {
+	initConfig()
+	x, _ := ConnectMySQL()
+	role := new(Role)
+	role.Name = "普通0"
+	role.Info = "超级普通0"
+	r, err := x.Conn.Table("role").ID(1).Get(role)
+	t.Log(r, err)
+	t.Log(role.Name)
 }

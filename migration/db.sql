@@ -6,7 +6,7 @@ drop table if exists user;
 create table user (
     id int unsigned not null auto_increment,
     account varchar(32) not null comment '账号',
-    password varchar(32) not null comment '密码',
+    password varchar(64) not null comment '密码',
     nickname varchar(16) not null comment '昵称',
     phone varchar(16) not null default '' comment '联系电话',
     expired int unsigned not null default 0 comment '有效期 0=永久',

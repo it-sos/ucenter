@@ -14,6 +14,7 @@ type Config struct {
 	envPrefix    string
 	configPrefix string
 }
+
 func (c *Config) configSplit() {
 	cfg := strings.Split(c.configPrefix, ".")
 	base := fmt.Sprintf("%s/%s/%s/%s", s.AppRoot, "config", c.envPrefix, s.AppEnv)
