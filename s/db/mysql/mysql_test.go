@@ -1,6 +1,7 @@
 package mysql
 
 import (
+	"log"
 	"path/filepath"
 	"testing"
 	"time"
@@ -59,8 +60,8 @@ func TestUpdate(t *testing.T) {
 	t.Log(r, err)
 }
 
-// select
-func TestSelect(t *testing.T) {
+// select one
+func TestSelectOne(t *testing.T) {
 	initConfig()
 	x, _ := ConnectMySQL()
 	role := new(Role)
@@ -69,4 +70,38 @@ func TestSelect(t *testing.T) {
 	r, err := x.Conn.Table("role").ID(1).Get(role)
 	t.Log(r, err)
 	t.Log(role.Name)
+}
+
+// select more
+func TestSelectMore(t *testing.T) {
+	initConfig()
+	x, _ := ConnectMySQL()
+	role := make([]Role, 0)
+	err := x.Conn.Find(&role)
+	t.Log(err, role)
+}
+
+// transaction
+func TestTransaction(t *testing.T) {
+	initConfig()
+	x, _ := ConnectMySQL()
+	session := x.Conn.NewSession()
+	defer session.Close()
+	if err := session.Begin(); err != nil {
+		log.Fatal(err)
+	}
+	role := new(Role)
+	role.Name = "普通"
+	role.Info = "超级普通"
+	_, e := session.Insert(role)
+	if e != nil {
+		log.Fatal(e)
+	}
+	session.Commit()
+}
+
+// test
+func TestTest(t *testing.T) {
+	var b *int
+	t.Log(*b)
 }

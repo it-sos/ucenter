@@ -1,7 +1,6 @@
 package mysql
 
 import (
-	"database/sql"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/xorm"
@@ -37,45 +36,4 @@ func ConnectMySQL() (*MySQL, error) {
 	return &MySQL{
 		Conn: engineGroup,
 	}, nil
-}
-
-var ErrNoRows = sql.ErrNoRows
-
-func (db *MySQL) Insert() {
-}
-
-func (db *MySQL) MultiInsert() {
-}
-
-func (db *MySQL) Delete() {
-}
-
-func (db *MySQL) Update() {
-}
-
-func (db *MySQL) Query() {
-}
-
-func (db *MySQL) QueryOne() {
-}
-
-func (db *MySQL) QSql() {
-}
-
-func (db *MySQL) QSqlOne() {
-}
-
-func (db *MySQL) Count() {
-}
-
-func (db *MySQL) Exec() {
-}
-
-func (db *MySQL) Transaction() {
-}
-
-func (db *MySQL) Commit() {
-}
-
-func (db *MySQL) Rollback() {
 }
