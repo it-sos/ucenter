@@ -102,6 +102,10 @@ func TestTransaction(t *testing.T) {
 
 // test
 func TestTest(t *testing.T) {
-	var b *int
-	t.Log(*b)
+	var a map[string]string
+	a = map[string]string{
+		"a": "bb",
+	}
+	a["b"] = "ccc"
+	t.Log(a)
 }

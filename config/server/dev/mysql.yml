@@ -1,28 +1,29 @@
-Master:
-  User: root
-  Password: mysql123
-  Host: 127.0.0.1
-  Port: 3306
-  Database: ucenter
-  Charset: utf8
-Slave1:
-  User: root
-  Password: mysql123
-  Host: 127.0.0.1
-  Port: 3306
-  Database: ucenter
-  Charset: utf8
-Slave2:
-  User: root
-  Password: mysql123
-  Host: 127.0.0.1
-  Port: 3306
-  Database: ucenter
-  Charset: utf8
-Backup:
-  User: root
-  Password: mysql123
-  Host: 127.0.0.1
-  Port: 3306
-  Database: ucenter
-  Charset: utf8
+Mysql:
+  Master:
+    User: root
+    Password: mysql123
+    Host: 127.0.0.1
+    Port: 3306
+    Database: ucenter
+    Charset: utf8
+  Slave1:
+    User: root
+    Password: mysql123
+    Host: 127.0.0.1
+    Port: 3306
+    Database: ucenter
+    Charset: utf8
+  Slave2:
+    User: root
+    Password: mysql123
+    Host: 127.0.0.1
+    Port: 3306
+    Database: ucenter
+    Charset: utf8
+  Backup:
+    User: root
+    Password: mysql123
+    Host: 127.0.0.1
+    Port: 3306
+    Database: ucenter
+    Charset: utf8
