@@ -1,11 +1,14 @@
 package routes
 
 import (
+	"github.com/kataras/iris/v12/mvc"
+	"ucenter/s/db/connect"
 	"ucenter/web/bootstrap"
-	"ucenter/web/controllers"
 )
 
-// Configure registers the necessary routes to the app.
+var db = connect.Connect()
+
 func Configure(b *bootstrap.Bootstrapper) {
-	b.Get("/login", controllers.Login)
+	mvc.Configure(b.Party("/"), IndexRoute)
+	mvc.Configure(b.Party("/user"), UserRoute)
 }

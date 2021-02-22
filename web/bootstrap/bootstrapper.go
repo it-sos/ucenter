@@ -1,13 +1,18 @@
 package bootstrap
 
 import (
+	"fmt"
+	"github.com/spf13/viper"
+	"os"
+	"time"
+	"ucenter/web/middleware"
+
 	"github.com/gorilla/securecookie"
+
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/middleware/logger"
 	"github.com/kataras/iris/v12/middleware/recover"
 	"github.com/kataras/iris/v12/sessions"
-	"github.com/kataras/iris/v12/websocket"
-	"time"
 )
 
 type Configurator func(*Bootstrapper)
@@ -37,10 +42,25 @@ func New(appName, appOwner string, cfgs ...Configurator) *Bootstrapper {
 	return b
 }
 
+// set config
+func SetupConfig() {
+	env, ok := os.LookupEnv("GOENVIRON")
+	if ok == false {
+		env = "dev"
+	}
+	viper.SetConfigName("config")
+	viper.SetConfigType("yaml")
+	viper.AddConfigPath("./config/" + env)
+	err := viper.ReadInConfig()
+	if err != nil {
+		panic(fmt.Errorf("Fatal error config file: %s \n", err))
+	}
+}
+
 // SetupViews loads the templates.
-//func (b *Bootstrapper) SetupViews(viewsDir string) {
-//	b.RegisterView(iris.HTML(viewsDir, ".html").Layout("shared/layout.html"))
-//}
+func (b *Bootstrapper) SetupViews(viewsDir string) {
+	b.RegisterView(iris.HTML(viewsDir, ".html").Layout("shared/layout.html"))
+}
 
 // SetupSessions initializes the sessions, optionally.
 func (b *Bootstrapper) SetupSessions(expires time.Duration, cookieHashKey, cookieBlockKey []byte) {
@@ -51,14 +71,6 @@ func (b *Bootstrapper) SetupSessions(expires time.Duration, cookieHashKey, cooki
 	})
 }
 
-// SetupWebsockets prepares the websocket server.
-func (b *Bootstrapper) SetupWebsockets(endpoint string, handler websocket.ConnHandler) {
-	ws := websocket.New(websocket.DefaultGorillaUpgrader, handler)
-
-	b.Get(endpoint, websocket.Handler(ws))
-}
-
-// SetupErrorHandlers prepares the http error handlers
 // `(context.StatusCodeNotSuccessful`,  which defaults to >=400 (but you can change it).
 func (b *Bootstrapper) SetupErrorHandlers() {
 	b.OnAnyErrorCode(func(ctx iris.Context) {
@@ -68,20 +80,20 @@ func (b *Bootstrapper) SetupErrorHandlers() {
 			"message": ctx.Values().GetString("message"),
 		}
 
-		//if jsonOutput := ctx.URLParamExists("json"); jsonOutput {
+		if jsonOutput := ctx.URLParamExists("json"); jsonOutput {
 			ctx.JSON(err)
-		//	return
-		//}
+			return
+		}
 
-		//ctx.ViewData("Err", err)
-		//ctx.ViewData("Title", "Error")
-		//ctx.View("shared/error.html")
+		ctx.ViewData("Err", err)
+		ctx.ViewData("Title", "Error")
+		ctx.View("shared/error.html")
 	})
 }
 
 const (
 	// StaticAssets is the root directory for public assets like images, css, js.
-	StaticAssets = "./public/"
+	StaticAssets = "./web/public/"
 	// Favicon is the relative 9to the "StaticAssets") favicon path for our app.
 	Favicon = "favicon.ico"
 )
@@ -97,21 +109,23 @@ func (b *Bootstrapper) Configure(cs ...Configurator) {
 //
 // Returns itself.
 func (b *Bootstrapper) Bootstrap() *Bootstrapper {
-	//b.SetupViews("./views")
+	b.SetupViews("./web/views")
 	b.SetupSessions(24*time.Hour,
-		[]byte("the-big-and-secret-fash-key-here"),
-		[]byte("lot-secret-of-characters-big-too"),
+		[]byte("a374c126e98c671bf6555a50a5cc39696e47040a"),
+		[]byte("350f2f2a376f996599613f863946303e8dcd088f"),
 	)
 	b.SetupErrorHandlers()
 
 	// static files
 	b.Favicon(StaticAssets + Favicon)
-	b.HandleDir("/public", iris.Dir(StaticAssets))
+	b.HandleDir("./web/public", iris.Dir(StaticAssets))
 
 	// middleware, after static files
 	b.Use(recover.New())
 	b.Use(logger.New())
+	b.Use(middleware.BasicAuth)
 
+	SetupConfig()
 	return b
 }
 

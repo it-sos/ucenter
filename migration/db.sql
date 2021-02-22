@@ -88,7 +88,6 @@ create table role_user (
     id int unsigned not null auto_increment,
     role_id int unsigned not null comment '角色表ID',
     user_id int unsigned not null comment '用户表ID',
-    is_forbidden tinyint unsigned not null default 1 comment '是否禁止访问 0=否；1=是',
     update_time datetime not null on update current_timestamp default current_timestamp comment '更新时间',
     create_time datetime not null default current_timestamp comment '创建时间',
     unique uk_roleid_userid(role_id, user_id),
