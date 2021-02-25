@@ -3,9 +3,8 @@ package bootstrap
 import (
 	"fmt"
 	"github.com/spf13/viper"
-	"os"
 	"time"
-	"ucenter/web/middleware"
+	"ucenter/s/core"
 
 	"github.com/gorilla/securecookie"
 
@@ -44,13 +43,9 @@ func New(appName, appOwner string, cfgs ...Configurator) *Bootstrapper {
 
 // set config
 func SetupConfig() {
-	env, ok := os.LookupEnv("GOENVIRON")
-	if ok == false {
-		env = "dev"
-	}
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
-	viper.AddConfigPath("./config/" + env)
+	viper.AddConfigPath("./config/" + core.GetEnviron())
 	err := viper.ReadInConfig()
 	if err != nil {
 		panic(fmt.Errorf("Fatal error config file: %s \n", err))
@@ -59,7 +54,7 @@ func SetupConfig() {
 
 // SetupViews loads the templates.
 func (b *Bootstrapper) SetupViews(viewsDir string) {
-	b.RegisterView(iris.HTML(viewsDir, ".html").Layout("shared/layout.html"))
+	b.RegisterView(iris.HTML(viewsDir, ".html").Layout("shared/layout.html").Reload(!core.IsProudctEnv()))
 }
 
 // SetupSessions initializes the sessions, optionally.
@@ -118,12 +113,11 @@ func (b *Bootstrapper) Bootstrap() *Bootstrapper {
 
 	// static files
 	b.Favicon(StaticAssets + Favicon)
-	b.HandleDir("./web/public", iris.Dir(StaticAssets))
+	b.HandleDir("/public", iris.Dir(StaticAssets))
 
 	// middleware, after static files
 	b.Use(recover.New())
 	b.Use(logger.New())
-	b.Use(middleware.BasicAuth)
 
 	SetupConfig()
 	return b
