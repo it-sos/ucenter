@@ -27,7 +27,8 @@ create table app (
     name varchar(32) not null comment '应用名称',
     info varchar(255) not null comment '应用描述',
     link varchar(255) not null default '' comment '应用链接',
-    is_deleted tinyint unsigned not null default 2 comment '删除状态 1=是；0=否',
+    icon varchar(255) not null default '' comment '应用图标',
+    is_deleted tinyint unsigned not null default 0 comment '删除状态 1=是；0=否',
     update_time datetime not null on update current_timestamp default current_timestamp comment '更新时间',
     create_time datetime not null default current_timestamp comment '创建时间',
     key idx_appid(appid),
@@ -37,10 +38,12 @@ create table app (
 drop table if exists role;
 create table role (
     id int unsigned not null auto_increment,
+    app_id int unsigned not null comment '应用表ID',
     name varchar(32) not null comment '角色名',
     info varchar(255) not null comment '描述',
     update_time datetime not null on update current_timestamp default current_timestamp comment '更新时间',
     create_time datetime not null default current_timestamp comment '创建时间',
+    key idx_appid(app_id),
     primary key(id)
 ) engine=innoDB charset=utf8mb4 comment '角色表';
 
@@ -59,8 +62,8 @@ create table permission (
     primary key(id)
 ) engine=innoDB charset=utf8mb4 comment '权限表';
 
-drop table if exists permission_user;
-create table permission_user (
+drop table if exists user_permission;
+create table user_permission (
     id int unsigned not null auto_increment,
     user_id int unsigned not null comment '用户表ID',
     permission_id int unsigned not null comment '权限表ID',
@@ -71,8 +74,8 @@ create table permission_user (
     primary key(id)
 ) engine=innoDB charset=utf8mb4 comment '用户权限';
 
-drop table if exists permission_role;
-create table permission_role (
+drop table if exists role_permission;
+create table role_permission (
     id int unsigned not null auto_increment,
     role_id int unsigned not null comment '角色表ID',
     permission_id int unsigned not null comment '权限表ID',
@@ -83,13 +86,25 @@ create table permission_role (
     primary key(id)
 ) engine=innoDB charset=utf8mb4 comment '角色权限';
 
-drop table if exists role_user;
-create table role_user (
+drop table if exists user_app;
+create table user_app (
     id int unsigned not null auto_increment,
-    role_id int unsigned not null comment '角色表ID',
     user_id int unsigned not null comment '用户表ID',
+    app_id int unsigned not null comment '应用表ID',
     update_time datetime not null on update current_timestamp default current_timestamp comment '更新时间',
     create_time datetime not null default current_timestamp comment '创建时间',
-    unique uk_roleid_userid(role_id, user_id),
+    unique uk_userid_appid(user_id, app_id),
     primary key(id)
-) engine=innoDB charset=utf8mb4 comment '角色成员表';
+) engine=innoDB charset=utf8mb4 comment '用户所属应用表';
+
+drop table if exists user_role;
+create table user_role (
+    id int unsigned not null auto_increment,
+    user_id int unsigned not null comment '用户表ID',
+    role_id int unsigned not null comment '角色表ID',
+    update_time datetime not null on update current_timestamp default current_timestamp comment '更新时间',
+    create_time datetime not null default current_timestamp comment '创建时间',
+    unique uk_userid_roleid(user_id, role_id),
+    primary key(id)
+) engine=innoDB charset=utf8mb4 comment '用户所属角色表';
+

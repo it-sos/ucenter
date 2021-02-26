@@ -1,9 +1,9 @@
 package repositories
 
 import (
-	"punch-in/datamodels"
-	"punch-in/s/tests"
 	"testing"
+	"ucenter/datamodels"
+	"ucenter/s/tests"
 )
 
 var user = &datamodels.User{Account: "peng.yu"}
