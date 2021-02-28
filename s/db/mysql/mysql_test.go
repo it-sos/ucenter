@@ -18,7 +18,7 @@ type Role struct {
 }
 
 func initConfig() *db.Db {
-	os.Chdir("/data1/htdocs/punch-in")
+	os.Chdir("/data1/htdocs/ucenter")
 	bootstrap.SetupConfig()
 	var connectDb db.ConnectDb
 	connectDb = new(Mysql)

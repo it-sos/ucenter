@@ -1,4 +1,4 @@
-useDriver: sqlite3
+useDriver: mysql
 mysql:
   master:
     user: root

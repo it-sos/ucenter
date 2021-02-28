@@ -9,7 +9,7 @@ create table user (
     password varchar(64) not null comment '密码',
     nickname varchar(16) not null comment '昵称',
     phone varchar(16) not null default '' comment '联系电话',
-    expired int unsigned not null default 0 comment '有效期 0=永久',
+    expired int unsigned not null default 0 comment '有效期 0=永久/unix时间戳',
     is_disabled tinyint unsigned not null default 0 comment '是否禁用状态 1=是；0=否',
     is_deleted tinyint unsigned not null default 0 comment '是否删除状态 1=是；0=否',
     salt varchar(32) not null comment '盐',

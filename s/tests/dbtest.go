@@ -8,7 +8,7 @@ import (
 )
 
 func ConnectDb() *db.Db {
-	os.Chdir("/data1/htdocs/punch-in")
+	os.Chdir("/data1/htdocs/ucenter")
 	bootstrap.SetupConfig()
 	conn := connect.Connect()
 	conn.Conn.ShowSQL(true)
