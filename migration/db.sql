@@ -38,7 +38,6 @@ create table app (
 drop table if exists role;
 create table role (
     id int unsigned not null auto_increment,
-    app_id int unsigned not null comment '应用表ID',
     name varchar(32) not null comment '角色名',
     info varchar(255) not null comment '描述',
     update_time datetime not null on update current_timestamp default current_timestamp comment '更新时间',
@@ -47,8 +46,8 @@ create table role (
     primary key(id)
 ) engine=innoDB charset=utf8mb4 comment '角色表';
 
-drop table if exists permission;
-create table permission (
+drop table if exists route;
+create table route (
     id int unsigned not null auto_increment,
     app_id int unsigned not null comment '应用表ID',
     name varchar(32) not null comment '功能名称',
@@ -60,17 +59,19 @@ create table permission (
     create_time datetime not null default current_timestamp comment '创建时间',
     key idx_appid(app_id),
     primary key(id)
-) engine=innoDB charset=utf8mb4 comment '权限表';
+) engine=innoDB charset=utf8mb4 comment '路由表';
 
 drop table if exists user_permission;
 create table user_permission (
     id int unsigned not null auto_increment,
     user_id int unsigned not null comment '用户表ID',
-    permission_id int unsigned not null comment '权限表ID',
+    app_id int unsigned not null comment '应用表ID',
+    route_id int unsigned not null comment '路由表ID',
+    app_id int unsigned not null comment '应用表ID',
     is_forbidden tinyint unsigned not null default 1 comment '是否禁止访问 0=否；1=是',
     update_time datetime not null on update current_timestamp default current_timestamp comment '更新时间',
     create_time datetime not null default current_timestamp comment '创建时间',
-    unique uk_userid_permid(user_id, permission_id),
+    unique uk_userid_appid_routeid(user_id, app_id, route_id),
     primary key(id)
 ) engine=innoDB charset=utf8mb4 comment '用户权限';
 
@@ -78,33 +79,35 @@ drop table if exists role_permission;
 create table role_permission (
     id int unsigned not null auto_increment,
     role_id int unsigned not null comment '角色表ID',
-    permission_id int unsigned not null comment '权限表ID',
+    app_id int unsigned not null comment '应用表ID',
+    route_id int unsigned not null comment '路由表ID',
     is_forbidden tinyint unsigned not null default 1 comment '是否禁止访问 0=否；1=是',
     update_time datetime not null on update current_timestamp default current_timestamp comment '更新时间',
     create_time datetime not null default current_timestamp comment '创建时间',
-    unique uk_roleid_permid(role_id, permission_id),
+    unique uk_roleid_appid_routeid(role_id, app_id, route_id),
     primary key(id)
 ) engine=innoDB charset=utf8mb4 comment '角色权限';
-
-drop table if exists user_app;
-create table user_app (
-    id int unsigned not null auto_increment,
-    user_id int unsigned not null comment '用户表ID',
-    app_id int unsigned not null comment '应用表ID',
-    update_time datetime not null on update current_timestamp default current_timestamp comment '更新时间',
-    create_time datetime not null default current_timestamp comment '创建时间',
-    unique uk_userid_appid(user_id, app_id),
-    primary key(id)
-) engine=innoDB charset=utf8mb4 comment '用户所属应用表';
 
 drop table if exists user_role;
 create table user_role (
     id int unsigned not null auto_increment,
     user_id int unsigned not null comment '用户表ID',
     role_id int unsigned not null comment '角色表ID',
+    app_id int unsigned not null comment '应用表ID',
     update_time datetime not null on update current_timestamp default current_timestamp comment '更新时间',
     create_time datetime not null default current_timestamp comment '创建时间',
-    unique uk_userid_roleid(user_id, role_id),
+    unique uk_userid_roleid_appid(user_id, role_id, app_id),
     primary key(id)
-) engine=innoDB charset=utf8mb4 comment '用户所属角色表';
+) engine=innoDB charset=utf8mb4 comment '用户角色关系表';
+
+drop table if exists app_role;
+create table app_role (
+    id int unsigned not null auto_increment,
+    app_id int unsigned not null comment '应用表ID',
+    role_id int unsigned not null comment '角色表ID',
+    update_time datetime not null on update current_timestamp default current_timestamp comment '更新时间',
+    create_time datetime not null default current_timestamp comment '创建时间',
+    unique uk_appid_roleid(app_id, role_id),
+    primary key(id)
+) engine=innoDB charset=utf8mb4 comment '应用角色关系表';
 
