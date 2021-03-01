@@ -4,7 +4,7 @@ import "time"
 
 // 应用表
 type App struct {
-	Id         int64     `xorm:"notnull autoincr pk id"`
+	Id         uint      `xorm:"notnull autoincr pk id"`
 	Appid      string    `xorm:"varchar(32) notnull index comment('应用ID')"`
 	Appsecret  string    `xorm:"varchar(32) notnull comment('应用秘钥')"`
 	Name       string    `xorm:"varchar(32) notnull comment('应用名称')"`

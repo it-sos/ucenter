@@ -2,9 +2,9 @@ package datamodels
 
 import "time"
 
-// 权限表
-type Permission struct {
-	Id         int64     `xorm:"notnull autoincr pk id"`
+// 路由表
+type Route struct {
+	Id         uint      `xorm:"notnull autoincr pk id"`
 	AppId      uint      `xorm:"notnull index comment('应用表ID')"`
 	Name       string    `xorm:"varchar(32) notnull comment('功能名称')"`
 	Info       string    `xorm:"varchar(255) notnull comment('功能描述')"`
