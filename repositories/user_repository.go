@@ -9,24 +9,18 @@ import (
 )
 
 type UserRepository interface {
+	// 新增或更新
+	InsertOrUpdate(p *datamodels.User) (id uint)
+	// 查询用户详细
 	Select(p *datamodels.User) (datamodels.User, bool)
+	// 查询用户列表
 	SelectMany(p *datamodels.User, offset int, limit int) (results []datamodels.User)
-
-	InsertOrUpdate(p *datamodels.User) (id int64)
-	// 加入到角色
-	JoinRole(userId int, roleId int) bool
-	// 加入到应用
-	JoinApp(userId int, appId int) bool
-	// 从角色中移除
-	RemoveRole(userId int, roleId int) bool
-	// 从应用中移除
-	RemoveApp(userId int, appId int) bool
 	// 查询用户所属角色
-	SelectRole(userId int) []datamodels.Role
+	SelectRole(userId uint) []datamodels.Role
 	// 查询用户具备的权限
-	SelectPermission(userId int) []datamodels.Permission
+	SelectPermission(userId uint) []datamodels.Permission
 	// 给用户授权
-	GrantPermission(userId int, permissionId int) bool
+	GrantPermission(userId uint, AppId uint, RouteId uint) bool
 }
 
 type punchRepository struct {
