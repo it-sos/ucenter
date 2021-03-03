@@ -5,6 +5,7 @@ import "time"
 // 用户表
 type User struct {
 	Id         uint      `xorm:"notnull autoincr pk id"`
+	Uuid       string    `xorm:"varchar(64) notnull index comment('uuid')"`
 	Account    string    `xorm:"varchar(32) notnull index comment('账号')"`
 	Password   string    `xorm:"varchar(64) notnull"`
 	Nickname   string    `xorm:"varchar(16) notnull"`
