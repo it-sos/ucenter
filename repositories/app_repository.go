@@ -8,11 +8,11 @@ import (
 	"ucenter/s/db"
 )
 
-type RoleRepository interface {
-	Select(p *datamodels.Role) (datamodels.Role, bool)
-	SelectMany(p *datamodels.Role, offset int, limit int) (results []datamodels.Role)
+type AppRepository interface {
+	Select(p *datamodels.App) (datamodels.App, bool)
+	SelectMany(p *datamodels.App, offset int, limit int) (results []datamodels.App)
 
-	InsertOrUpdate(p *datamodels.Role) (id int64)
+	InsertOrUpdate(p *datamodels.App) (id int64)
 	// 加入用户到角色
 	JoinUser(userId int, appId int) bool
 	// 从角色中移除用户
@@ -28,11 +28,11 @@ type appRepository struct {
 	db *db.Db
 }
 
-func NewRoleRepository(db *db.Db) RoleRepository {
+func NewAppRepository(db *db.Db) AppRepository {
 	return &appRepository{db: db}
 }
 
-func (pu *appRepository) Select(p *datamodels.Role) (datamodels.Role, bool) {
+func (pu *appRepository) Select(p *datamodels.App) (datamodels.App, bool) {
 	has, err := pu.db.Conn.Get(p)
 	if err != nil {
 		panic(err)
@@ -40,8 +40,8 @@ func (pu *appRepository) Select(p *datamodels.Role) (datamodels.Role, bool) {
 	return *p, has
 }
 
-func (pu *appRepository) SelectMany(p *datamodels.Role, offset int, limit int) (results []datamodels.Role) {
-	app := make([]datamodels.Role, 0)
+func (pu *appRepository) SelectMany(p *datamodels.App, offset int, limit int) (results []datamodels.App) {
+	app := make([]datamodels.App, 0)
 	err := pu.db.Conn.Limit(limit, offset).Find(&app)
 	if err != nil {
 		panic(err)
@@ -49,7 +49,7 @@ func (pu *appRepository) SelectMany(p *datamodels.Role, offset int, limit int) (
 	return app
 }
 
-func (pu *appRepository) InsertOrUpdate(p *datamodels.Role) (id int64) {
+func (pu *appRepository) InsertOrUpdate(p *datamodels.App) (id int64) {
 	if p.Id > 0 {
 		_, err = pu.db.Conn.ID(p.Id).Update(p)
 		if err != nil {
