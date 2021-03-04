@@ -13,6 +13,20 @@ func newApp() *bootstrap.Bootstrapper {
 	return app
 }
 
+// @title ucenter api
+// @version 1.0
+// @description 用户中心接口
+// @termsOfService http://www.yibuyiyin.com/terms/
+
+// @contact.name API Support
+// @contact.url http://www.yibuyiyin.com/support
+// @contact.email peng.yu@yibuyiyin.com
+
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host localhost:8080
+// @BasePath /v1
 func main() {
 	app := newApp()
 	app.Listen(":8080", iris.WithOptimizations)

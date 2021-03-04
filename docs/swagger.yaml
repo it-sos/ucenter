@@ -1,0 +1,57 @@
+basePath: /v1
+host: localhost:8080
+info:
+  contact:
+    email: peng.yu@yibuyiyin.com
+    name: API Support
+    url: http://www.yibuyiyin.com/support
+  description: 用户中心接口
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://www.yibuyiyin.com/terms/
+  title: ucenter api
+  version: "1.0"
+paths:
+  /user:
+    post:
+      consumes:
+      - application/json
+      description: 创建用户
+      parameters:
+      - description: 账号
+        in: query
+        name: account
+        required: true
+        type: string
+      - description: 密码
+        in: query
+        name: password
+        required: true
+        type: string
+      - description: 昵称
+        in: query
+        name: nickname
+        required: true
+        type: string
+      - description: 手机号
+        in: query
+        name: phone
+        type: string
+      - description: 有效期，0=永久/指定过期时间，默认:否
+        in: query
+        name: expired
+        type: string
+      - description: 是否禁用状态1=是;0=否，默认:否
+        in: query
+        name: is_disabled
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: 创建用户
+swagger: "2.0"

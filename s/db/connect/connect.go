@@ -10,7 +10,7 @@ import (
 
 func Connect() *db.Db {
 	var connectDb db.ConnectDb
-	useDriver := viper.GetString("useDriver")
+	useDriver := viper.GetString("use-driver")
 	if useDriver == "mysql" {
 		connectDb = new(mysql.Mysql)
 	} else {

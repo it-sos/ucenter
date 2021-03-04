@@ -1,10 +1,10 @@
 package routes
 
 import (
-	"github.com/kataras/iris/v12/_examples/mvc/login/web/controllers"
 	"github.com/kataras/iris/v12/mvc"
 	"ucenter/repositories"
 	"ucenter/services"
+	"ucenter/web/controllers"
 )
 
 func UserRoute(app *mvc.Application) {

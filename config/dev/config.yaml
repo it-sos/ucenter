@@ -1,4 +1,4 @@
-useDriver: mysql
+use-driver: mysql
 mysql:
   master:
     user: root

@@ -12,11 +12,11 @@ var user = &datamodels.User{Account: "peng.yu"}
 
 type UserService interface {
 	GetAll(page int, limit int) []datamodels.User
-	GetByID(id int64) map[string]interface{}
+	GetByID(id uint) map[string]interface{}
 	GetByDate() map[string]interface{}
 	GetCurWeek() string
 	GetCurTime() string
-	UpdatePosterAndGenreByID(id int64, morning uint8, noon uint8, night uint8) int64
+	UpdatePosterAndGenreByID(id uint, morning uint8, noon uint8, night uint8) uint
 }
 
 func NewUserService(repo repositories.UserRepository) UserService {
@@ -40,7 +40,7 @@ func (s *userService) GetAll(page int, limit int) []datamodels.User {
 	return s.repo.SelectMany(user, offset, limit)
 }
 
-func (s *userService) GetByID(id int64) map[string]interface{} {
+func (s *userService) GetByID(id uint) map[string]interface{} {
 	user.Id = id
 	return s.getUserInfo()
 }
@@ -88,7 +88,7 @@ func (s *userService) getUserInfo() map[string]interface{} {
 	}
 }
 
-func (s *userService) UpdatePosterAndGenreByID(id int64, morning uint8, noon uint8, night uint8) int64 {
+func (s *userService) UpdatePosterAndGenreByID(id uint, morning uint8, noon uint8, night uint8) uint {
 	if id > 0 {
 		user.Id = id
 	}

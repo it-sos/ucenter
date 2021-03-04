@@ -3,7 +3,6 @@ package controllers
 import (
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
-	"strconv"
 	"ucenter/services"
 )
 
@@ -12,17 +11,19 @@ type UserController struct {
 	Ctx     iris.Context
 }
 
-/**
- * 提交打卡
- */
-func (c *UserController) PostBy(id int64) mvc.Result {
-	var (
-		morning, _ = strconv.ParseUint(c.Ctx.FormValue("morning"), 10, 8)
-		noon, _    = strconv.ParseUint(c.Ctx.FormValue("noon"), 10, 8)
-		night, _   = strconv.ParseUint(c.Ctx.FormValue("night"), 10, 8)
-	)
-
-	c.Service.UpdatePosterAndGenreByID(id, uint8(morning), uint8(noon), uint8(night))
+// @Summary 创建用户
+// @Description 创建用户
+// @Accept  json
+// @Produce  json
+// @Param account      query string    true		"账号"
+// @Param password     query string    true		"密码"
+// @Param nickname     query string    true     "昵称"
+// @Param phone        query string    false    "手机号"
+// @Param expired      query string    false 	"有效期，0=永久/指定过期时间，默认:否"
+// @Param is_disabled  query uint8     false 	"是否禁用状态1=是;0=否，默认:否"
+// @Success 200 {string} string	"ok"
+// @Router /user [post]
+func (c *UserController) Post() mvc.Result {
 	return mvc.Response{
 		//Err: err,
 		Path: "/",

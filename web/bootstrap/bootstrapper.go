@@ -6,12 +6,9 @@ import (
 	"time"
 	"ucenter/s/core"
 
-	"github.com/gorilla/securecookie"
-
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/middleware/logger"
 	"github.com/kataras/iris/v12/middleware/recover"
-	"github.com/kataras/iris/v12/sessions"
 )
 
 type Configurator func(*Bootstrapper)
@@ -21,8 +18,6 @@ type Bootstrapper struct {
 	AppName      string
 	AppOwner     string
 	AppSpawnDate time.Time
-
-	Sessions *sessions.Sessions
 }
 
 // New returns a new Bootstrapper.
@@ -55,15 +50,6 @@ func SetupConfig() {
 // SetupViews loads the templates.
 func (b *Bootstrapper) SetupViews(viewsDir string) {
 	b.RegisterView(iris.HTML(viewsDir, ".html").Layout("shared/layout.html").Reload(!core.IsProudctEnv()))
-}
-
-// SetupSessions initializes the sessions, optionally.
-func (b *Bootstrapper) SetupSessions(expires time.Duration, cookieHashKey, cookieBlockKey []byte) {
-	b.Sessions = sessions.New(sessions.Config{
-		Cookie:   "SECRET_SESS_COOKIE_" + b.AppName,
-		Expires:  expires,
-		Encoding: securecookie.New(cookieHashKey, cookieBlockKey),
-	})
 }
 
 // `(context.StatusCodeNotSuccessful`,  which defaults to >=400 (but you can change it).
@@ -100,15 +86,8 @@ func (b *Bootstrapper) Configure(cs ...Configurator) {
 	}
 }
 
-// Bootstrap prepares our application.
-//
-// Returns itself.
 func (b *Bootstrapper) Bootstrap() *Bootstrapper {
 	b.SetupViews("./web/views")
-	b.SetupSessions(24*time.Hour,
-		[]byte("a374c126e98c671bf6555a50a5cc39696e47040a"),
-		[]byte("350f2f2a376f996599613f863946303e8dcd088f"),
-	)
 	b.SetupErrorHandlers()
 
 	// static files
@@ -123,7 +102,6 @@ func (b *Bootstrapper) Bootstrap() *Bootstrapper {
 	return b
 }
 
-// Listen starts the http server with the specified "addr".
 func (b *Bootstrapper) Listen(addr string, cfgs ...iris.Configurator) {
 	b.Run(iris.Addr(addr), cfgs...)
 }
