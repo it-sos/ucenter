@@ -53,5 +53,39 @@ paths:
           description: ok
           schema:
             type: string
+        "400":
+          description: error message
+          schema:
+            type: string
       summary: 创建用户
+    put:
+      consumes:
+      - application/json
+      description: 更新用户
+      parameters:
+      - description: 昵称
+        in: query
+        name: nickname
+        required: true
+        type: string
+      - description: 手机号
+        in: query
+        name: phone
+        type: string
+      - description: 有效期，0=永久/指定过期时间，默认:否
+        in: query
+        name: expired
+        type: string
+      - description: 是否禁用状态1=是;0=否，默认:否
+        in: query
+        name: is_disabled
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: 更新用户
 swagger: "2.0"

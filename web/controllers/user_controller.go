@@ -22,8 +22,26 @@ type UserController struct {
 // @Param expired      query string    false 	"有效期，0=永久/指定过期时间，默认:否"
 // @Param is_disabled  query uint8     false 	"是否禁用状态1=是;0=否，默认:否"
 // @Success 200 {string} string	"ok"
+// @Failure 400 {string} string "error message"
 // @Router /user [post]
 func (c *UserController) Post() mvc.Result {
+	return mvc.Response{
+		//Err: err,
+		Path: "/",
+	}
+}
+
+// @Summary 更新用户
+// @Description 更新用户
+// @Accept  json
+// @Produce  json
+// @Param nickname     query string    true     "昵称"
+// @Param phone        query string    false    "手机号"
+// @Param expired      query string    false 	"有效期，0=永久/指定过期时间，默认:否"
+// @Param is_disabled  query uint8     false 	"是否禁用状态1=是;0=否，默认:否"
+// @Success 200 {string} string	"ok"
+// @Router /user [put]
+func (c *UserController) PutBy(uid uint) mvc.Result {
 	return mvc.Response{
 		//Err: err,
 		Path: "/",

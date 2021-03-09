@@ -92,5 +92,5 @@ func (s *userService) UpdatePosterAndGenreByID(id uint, morning uint8, noon uint
 	if id > 0 {
 		user.Id = id
 	}
-	return s.repo.InsertOrUpdate(user)
+	return 0
 }

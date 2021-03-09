@@ -1,7 +1,8 @@
 package controllers
 
 import (
-	"github.com/kataras/iris/v12/mvc"
+	"errors"
+	"ucenter/datamodels"
 	"ucenter/services"
 )
 
@@ -12,10 +13,7 @@ type IndexController struct {
 /**
  * 获取打卡记录
  */
-func (c *IndexController) Get() mvc.Result {
-	data := c.Service.GetByDate()
-	return mvc.View{
-		Name: "index.html",
-		Data: data,
-	}
+func (c *IndexController) Get() (datamodels.App, error) {
+	//data := c.Service.GetByDate()
+	return datamodels.App{}, errors.New("hello is error.")
 }
