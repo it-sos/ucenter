@@ -92,3 +92,15 @@ func (c *UserController) PutPassword() error {
 func (c *UserController) Get() (datamodels.User, bool) {
 	return datamodels.User{}, false
 }
+
+// @Summary 获取用户信息
+// @Description 通过用户ID获取用户信息
+// @Accept json
+// @Produce json
+// @Param uuid query integer  true   "用户uuid"
+// @Success 200 {string} string	"ok"
+// @Failure 404 {object} response.Error "error message"
+// @Router /users/uuid [get]
+func (c *UserController) GetUuid() error {
+	return errors.Errors("param_err")
+}
