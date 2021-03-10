@@ -10,5 +10,5 @@ var db = connect.Connect()
 
 func Configure(b *bootstrap.Bootstrapper) {
 	mvc.Configure(b.Party("/"), IndexRoute)
-	mvc.Configure(b.Party("/user"), UserRoute)
+	mvc.Configure(b.Party("/users"), UserRoute)
 }

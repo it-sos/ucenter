@@ -33,7 +33,40 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/user": {
+        "/users": {
+            "get": {
+                "description": "通过用户ID获取用户信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "获取用户信息",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "用户id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "error message",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    }
+                }
+            },
             "put": {
                 "description": "更新用户",
                 "consumes": [
@@ -59,20 +92,26 @@ var doc = `{
                     },
                     {
                         "type": "string",
-                        "description": "有效期，0=永久/指定过期时间，默认:否",
+                        "description": "有效期，0=永久/指定过期时间，默认:0",
                         "name": "expired",
                         "in": "query"
                     },
                     {
                         "type": "integer",
                         "description": "是否禁用状态1=是;0=否，默认:否",
-                        "name": "is_disabled",
+                        "name": "disabled",
                         "in": "query"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "ok",
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/datamodels.User"
+                        }
+                    },
+                    "400": {
+                        "description": "error message",
                         "schema": {
                             "type": "string"
                         }
@@ -125,8 +164,118 @@ var doc = `{
                     {
                         "type": "integer",
                         "description": "是否禁用状态1=是;0=否，默认:否",
-                        "name": "is_disabled",
+                        "name": "disabled",
                         "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/datamodels.User"
+                        }
+                    },
+                    "400": {
+                        "description": "error message",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "删除用户",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "删除用户",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "用户id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "error message",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/disabled": {
+            "put": {
+                "description": "设置用户禁用状态",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "设置用户禁用状态",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "用户id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "0=启用；1=禁用",
+                        "name": "disabled",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "error message",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/password": {
+            "put": {
+                "description": "修改当前用户密码",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "修改当前用户密码",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "密码",
+                        "name": "password",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -139,9 +288,63 @@ var doc = `{
                     "400": {
                         "description": "error message",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/response.Error"
                         }
                     }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "datamodels.User": {
+            "type": "object",
+            "properties": {
+                "account": {
+                    "type": "string"
+                },
+                "createTime": {
+                    "type": "string"
+                },
+                "expired": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "isDeleted": {
+                    "type": "integer"
+                },
+                "isDisabled": {
+                    "type": "integer"
+                },
+                "nickname": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "salt": {
+                    "type": "string"
+                },
+                "updateTime": {
+                    "type": "string"
+                },
+                "uuid": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.Error": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
                 }
             }
         }
@@ -161,7 +364,7 @@ type swaggerInfo struct {
 var SwaggerInfo = swaggerInfo{
 	Version:     "1.0",
 	Host:        "localhost:8080",
-	BasePath:    "/v1",
+	BasePath:    "/",
 	Schemes:     []string{},
 	Title:       "ucenter api",
 	Description: "用户中心接口",

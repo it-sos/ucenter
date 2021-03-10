@@ -2,13 +2,13 @@ package bootstrap
 
 import (
 	"fmt"
+	"github.com/kataras/iris/v12"
+	"github.com/kataras/iris/v12/context"
+	"github.com/kataras/iris/v12/middleware/logger"
+	"github.com/kataras/iris/v12/middleware/recover"
 	"github.com/spf13/viper"
 	"time"
 	"ucenter/s/core"
-
-	"github.com/kataras/iris/v12"
-	"github.com/kataras/iris/v12/middleware/logger"
-	"github.com/kataras/iris/v12/middleware/recover"
 )
 
 type Configurator func(*Bootstrapper)
@@ -56,12 +56,13 @@ func (b *Bootstrapper) SetupViews(viewsDir string) {
 func (b *Bootstrapper) SetupErrorHandlers() {
 	b.OnAnyErrorCode(func(ctx iris.Context) {
 		err := iris.Map{
-			"app":     b.AppName,
 			"status":  ctx.GetStatusCode(),
 			"message": ctx.Values().GetString("message"),
 		}
 
-		if jsonOutput := ctx.URLParamExists("json"); jsonOutput {
+		if ctx.IsAjax() ||
+			ctx.URLParamExists("json") ||
+			ctx.GetHeader("Accept") == context.ContentJSONHeaderValue {
 			ctx.JSON(err)
 			return
 		}

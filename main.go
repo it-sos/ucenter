@@ -26,7 +26,7 @@ func newApp() *bootstrap.Bootstrapper {
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
 // @host localhost:8080
-// @BasePath /v1
+// @BasePath /
 func main() {
 	app := newApp()
 	app.Listen(":8080", iris.WithOptimizations)

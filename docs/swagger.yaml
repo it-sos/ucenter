@@ -1,4 +1,39 @@
-basePath: /v1
+basePath: /
+definitions:
+  datamodels.User:
+    properties:
+      account:
+        type: string
+      createTime:
+        type: string
+      expired:
+        type: integer
+      id:
+        type: integer
+      isDeleted:
+        type: integer
+      isDisabled:
+        type: integer
+      nickname:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      salt:
+        type: string
+      updateTime:
+        type: string
+      uuid:
+        type: string
+    type: object
+  response.Error:
+    properties:
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
 host: localhost:8080
 info:
   contact:
@@ -13,7 +48,51 @@ info:
   title: ucenter api
   version: "1.0"
 paths:
-  /user:
+  /users:
+    delete:
+      consumes:
+      - application/json
+      description: 删除用户
+      parameters:
+      - description: 用户id
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            type: string
+        "400":
+          description: error message
+          schema:
+            type: string
+      summary: 删除用户
+    get:
+      consumes:
+      - application/json
+      description: 通过用户ID获取用户信息
+      parameters:
+      - description: 用户id
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+        "404":
+          description: error message
+          schema:
+            $ref: '#/definitions/response.Error'
+      summary: 获取用户信息
     post:
       consumes:
       - application/json
@@ -44,15 +123,15 @@ paths:
         type: string
       - description: 是否禁用状态1=是;0=否，默认:否
         in: query
-        name: is_disabled
+        name: disabled
         type: integer
       produces:
       - application/json
       responses:
         "200":
-          description: ok
+          description: success
           schema:
-            type: string
+            $ref: '#/definitions/datamodels.User'
         "400":
           description: error message
           schema:
@@ -72,14 +151,65 @@ paths:
         in: query
         name: phone
         type: string
-      - description: 有效期，0=永久/指定过期时间，默认:否
+      - description: 有效期，0=永久/指定过期时间，默认:0
         in: query
         name: expired
         type: string
       - description: 是否禁用状态1=是;0=否，默认:否
         in: query
-        name: is_disabled
+        name: disabled
         type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/datamodels.User'
+        "400":
+          description: error message
+          schema:
+            type: string
+      summary: 更新用户
+  /users/disabled:
+    put:
+      consumes:
+      - application/json
+      description: 设置用户禁用状态
+      parameters:
+      - description: 用户id
+        in: query
+        name: id
+        required: true
+        type: integer
+      - description: 0=启用；1=禁用
+        in: query
+        name: disabled
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            type: string
+        "400":
+          description: error message
+          schema:
+            type: string
+      summary: 设置用户禁用状态
+  /users/password:
+    put:
+      consumes:
+      - application/json
+      description: 修改当前用户密码
+      parameters:
+      - description: 密码
+        in: query
+        name: password
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -87,5 +217,9 @@ paths:
           description: ok
           schema:
             type: string
-      summary: 更新用户
+        "400":
+          description: error message
+          schema:
+            $ref: '#/definitions/response.Error'
+      summary: 修改当前用户密码
 swagger: "2.0"
