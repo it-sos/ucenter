@@ -6,18 +6,15 @@ import (
 )
 
 type Error struct {
-	ErrorCode    int
-	ErrorMessage string
+	errorCode    int
+	errorMessage string
 }
 
-var errResponse = map[string]Error{
-	"param_err": {
-		ErrorCode:    4001001,
-		ErrorMessage: "参数异常",
-	},
+var errorResponse = map[string]Error{
+	"param_err": {4001001, "参数异常"},
 }
 
 func Errors(key string) error {
-	ret, _ := json.Marshal(errResponse[key])
+	ret, _ := json.Marshal(errorResponse[key])
 	return errors.New(string(ret))
 }

@@ -90,7 +90,7 @@ func (c *UserController) PutPassword() error {
 // @Failure 404 {object} response.Error "error message"
 // @Router /users [get]
 func (c *UserController) Get() (datamodels.User, bool) {
-	return datamodels.User{}, false
+	return datamodels.User{}, true
 }
 
 // @Summary 获取用户信息
