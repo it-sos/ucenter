@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/context"
+	"github.com/kataras/iris/v12/hero"
 	"github.com/kataras/iris/v12/middleware/logger"
 	"github.com/kataras/iris/v12/middleware/recover"
 	"github.com/spf13/viper"
@@ -54,15 +55,31 @@ func (b *Bootstrapper) SetupViews(viewsDir string) {
 
 // `(context.StatusCodeNotSuccessful`,  which defaults to >=400 (but you can change it).
 func (b *Bootstrapper) SetupErrorHandlers() {
+	b.APIBuilder.ConfigureContainer().Container.GetErrorHandler = func(*context.Context) hero.ErrorHandler {
+		return hero.ErrorHandlerFunc(func(ctx *context.Context, err error) {
+			if err != hero.ErrStopExecution {
+				if status := ctx.GetStatusCode(); status == 0 || !context.StatusCodeNotSuccessful(status) {
+					ctx.StatusCode(hero.DefaultErrStatusCode)
+				}
+
+				if isOutJson(ctx) {
+					ctx.JSON(err.Error())
+				} else {
+					_, _ = ctx.WriteString(err.Error())
+				}
+			}
+
+			ctx.StopExecution()
+		})
+	}
+
 	b.OnAnyErrorCode(func(ctx iris.Context) {
 		err := iris.Map{
 			"status":  ctx.GetStatusCode(),
 			"message": ctx.Values().GetString("message"),
 		}
 
-		if ctx.IsAjax() ||
-			ctx.URLParamExists("json") ||
-			ctx.GetHeader("Accept") == context.ContentJSONHeaderValue {
+		if isOutJson(ctx) {
 			ctx.JSON(err)
 			return
 		}
@@ -71,6 +88,12 @@ func (b *Bootstrapper) SetupErrorHandlers() {
 		ctx.ViewData("Title", "Error")
 		ctx.View("shared/error.html")
 	})
+}
+
+func isOutJson(ctx iris.Context) bool {
+	return ctx.IsAjax() ||
+		ctx.URLParamExists("json") ||
+		ctx.GetHeader("Accept") == context.ContentJSONHeaderValue
 }
 
 const (

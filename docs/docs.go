@@ -56,13 +56,7 @@ var doc = `{
                     "200": {
                         "description": "ok",
                         "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "error message",
-                        "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/datamodels.User"
                         }
                     }
                 }
@@ -108,12 +102,6 @@ var doc = `{
                         "description": "success",
                         "schema": {
                             "$ref": "#/definitions/datamodels.User"
-                        }
-                    },
-                    "400": {
-                        "description": "error message",
-                        "schema": {
-                            "type": "string"
                         }
                     }
                 }
@@ -174,12 +162,6 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/datamodels.User"
                         }
-                    },
-                    "400": {
-                        "description": "error message",
-                        "schema": {
-                            "type": "string"
-                        }
                     }
                 }
             },
@@ -204,12 +186,6 @@ var doc = `{
                 "responses": {
                     "200": {
                         "description": "success",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "400": {
-                        "description": "error message",
                         "schema": {
                             "type": "string"
                         }
@@ -249,12 +225,6 @@ var doc = `{
                         "schema": {
                             "type": "string"
                         }
-                    },
-                    "400": {
-                        "description": "error message",
-                        "schema": {
-                            "type": "string"
-                        }
                     }
                 }
             }
@@ -284,11 +254,40 @@ var doc = `{
                         "schema": {
                             "type": "string"
                         }
+                    }
+                }
+            }
+        },
+        "/users/uuid": {
+            "get": {
+                "description": "通过用户ID获取用户信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "获取用户信息",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "用户uuid",
+                        "name": "uuid",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
                     },
                     "400": {
                         "description": "error message",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/errors.Errors"
                         }
                     }
                 }
@@ -302,19 +301,19 @@ var doc = `{
                 "account": {
                     "type": "string"
                 },
-                "createTime": {
+                "create_time": {
                     "type": "string"
+                },
+                "deleted": {
+                    "type": "integer"
+                },
+                "disabled": {
+                    "type": "integer"
                 },
                 "expired": {
                     "type": "integer"
                 },
                 "id": {
-                    "type": "integer"
-                },
-                "isDeleted": {
-                    "type": "integer"
-                },
-                "isDisabled": {
                     "type": "integer"
                 },
                 "nickname": {
@@ -326,10 +325,7 @@ var doc = `{
                 "phone": {
                     "type": "string"
                 },
-                "salt": {
-                    "type": "string"
-                },
-                "updateTime": {
+                "update_time": {
                     "type": "string"
                 },
                 "uuid": {
@@ -337,14 +333,14 @@ var doc = `{
                 }
             }
         },
-        "response.Error": {
+        "errors.Errors": {
             "type": "object",
             "properties": {
-                "message": {
-                    "type": "string"
-                },
-                "status": {
+                "errorCode": {
                     "type": "integer"
+                },
+                "errorMessage": {
+                    "type": "string"
                 }
             }
         }

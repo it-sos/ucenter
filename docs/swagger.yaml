@@ -4,15 +4,15 @@ definitions:
     properties:
       account:
         type: string
-      createTime:
+      create_time:
         type: string
+      deleted:
+        type: integer
+      disabled:
+        type: integer
       expired:
         type: integer
       id:
-        type: integer
-      isDeleted:
-        type: integer
-      isDisabled:
         type: integer
       nickname:
         type: string
@@ -20,19 +20,17 @@ definitions:
         type: string
       phone:
         type: string
-      salt:
-        type: string
-      updateTime:
+      update_time:
         type: string
       uuid:
         type: string
     type: object
-  response.Error:
+  errors.Errors:
     properties:
-      message:
-        type: string
-      status:
+      errorCode:
         type: integer
+      errorMessage:
+        type: string
     type: object
 host: localhost:8080
 info:
@@ -66,10 +64,6 @@ paths:
           description: success
           schema:
             type: string
-        "400":
-          description: error message
-          schema:
-            type: string
       summary: 删除用户
     get:
       consumes:
@@ -87,11 +81,7 @@ paths:
         "200":
           description: ok
           schema:
-            type: string
-        "404":
-          description: error message
-          schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/datamodels.User'
       summary: 获取用户信息
     post:
       consumes:
@@ -132,10 +122,6 @@ paths:
           description: success
           schema:
             $ref: '#/definitions/datamodels.User'
-        "400":
-          description: error message
-          schema:
-            type: string
       summary: 创建用户
     put:
       consumes:
@@ -166,10 +152,6 @@ paths:
           description: success
           schema:
             $ref: '#/definitions/datamodels.User'
-        "400":
-          description: error message
-          schema:
-            type: string
       summary: 更新用户
   /users/disabled:
     put:
@@ -194,10 +176,6 @@ paths:
           description: success
           schema:
             type: string
-        "400":
-          description: error message
-          schema:
-            type: string
       summary: 设置用户禁用状态
   /users/password:
     put:
@@ -217,9 +195,28 @@ paths:
           description: ok
           schema:
             type: string
+      summary: 修改当前用户密码
+  /users/uuid:
+    get:
+      consumes:
+      - application/json
+      description: 通过用户ID获取用户信息
+      parameters:
+      - description: 用户uuid
+        in: query
+        name: uuid
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
         "400":
           description: error message
           schema:
-            $ref: '#/definitions/response.Error'
-      summary: 修改当前用户密码
+            $ref: '#/definitions/errors.Errors'
+      summary: 获取用户信息
 swagger: "2.0"

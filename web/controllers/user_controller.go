@@ -23,7 +23,6 @@ type UserController struct {
 // @Param expired   query string  false 	"有效期，0=永久/指定过期时间，默认:否"
 // @Param disabled query uint8   false 	"是否禁用状态1=是;0=否，默认:否"
 // @Success 200 {object} datamodels.User "success"
-// @Failure 400 {string} string "error message"
 // @Router /users [post]
 func (c *UserController) Post() (datamodels.User, error) {
 	return datamodels.User{}, nil
@@ -38,7 +37,6 @@ func (c *UserController) Post() (datamodels.User, error) {
 // @Param expired   query string  false 	"有效期，0=永久/指定过期时间，默认:0"
 // @Param disabled query uint8   false 	"是否禁用状态1=是;0=否，默认:否"
 // @Success 200 {object} datamodels.User "success"
-// @Failure 400 {string} string "error message"
 // @Router /users [put]
 func (c *UserController) Put() (datamodels.User, error) {
 	return datamodels.User{}, nil
@@ -50,10 +48,9 @@ func (c *UserController) Put() (datamodels.User, error) {
 // @Produce json
 // @Param id   	  query integer  true   "用户id"
 // @Success 200 {string} string	"success"
-// @Failure 400 {string} string "error message"
 // @Router /users [delete]
 func (c *UserController) Delete() error {
-	return errors.Errors("param_err")
+	return errors.Error("param_err")
 }
 
 // @Summary 设置用户禁用状态
@@ -63,7 +60,6 @@ func (c *UserController) Delete() error {
 // @Param id query integer true "用户id"
 // @Param disabled query integer true "0=启用；1=禁用"
 // @Success 200 {string} string	"success"
-// @Failure 400 {string} string "error message"
 // @Router /users/disabled [put]
 func (c *UserController) PutDisabled() error {
 	return nil
@@ -75,7 +71,6 @@ func (c *UserController) PutDisabled() error {
 // @Produce json
 // @Param password query string true "密码"
 // @Success 200 {string} string	"ok"
-// @Failure 400 {string} string "error message"
 // @Router /users/password [put]
 func (c *UserController) PutPassword() error {
 	return nil
@@ -86,8 +81,7 @@ func (c *UserController) PutPassword() error {
 // @Accept json
 // @Produce json
 // @Param id   	  query integer  true   "用户id"
-// @Success 200 {string} string	"ok"
-// @Failure 404 {object} response.Error "error message"
+// @Success 200 {object} datamodels.User "ok"
 // @Router /users [get]
 func (c *UserController) Get() (datamodels.User, bool) {
 	return datamodels.User{}, true
@@ -99,8 +93,8 @@ func (c *UserController) Get() (datamodels.User, bool) {
 // @Produce json
 // @Param uuid query integer  true   "用户uuid"
 // @Success 200 {string} string	"ok"
-// @Failure 404 {object} response.Error "error message"
+// @Failure 400 {object} errors.Errors "error message"
 // @Router /users/uuid [get]
 func (c *UserController) GetUuid() error {
-	return errors.Errors("param_err")
+	return errors.Error("param_err")
 }
