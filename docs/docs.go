@@ -42,6 +42,9 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "用户管理"
+                ],
                 "summary": "获取用户信息",
                 "parameters": [
                     {
@@ -68,6 +71,9 @@ var doc = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "用户管理"
                 ],
                 "summary": "更新用户",
                 "parameters": [
@@ -114,46 +120,19 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "用户管理"
+                ],
                 "summary": "创建用户",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "账号",
-                        "name": "account",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "密码",
-                        "name": "password",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "昵称",
-                        "name": "nickname",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "手机号",
-                        "name": "phone",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "有效期，0=永久/指定过期时间，默认:否",
-                        "name": "expired",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "是否禁用状态1=是;0=否，默认:否",
-                        "name": "disabled",
-                        "in": "query"
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/datamodels.User"
+                        }
                     }
                 ],
                 "responses": {
@@ -172,6 +151,9 @@ var doc = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "用户管理"
                 ],
                 "summary": "删除用户",
                 "parameters": [
@@ -201,6 +183,9 @@ var doc = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "用户管理"
                 ],
                 "summary": "设置用户禁用状态",
                 "parameters": [
@@ -238,6 +223,9 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "用户管理"
+                ],
                 "summary": "修改当前用户密码",
                 "parameters": [
                     {
@@ -266,6 +254,9 @@ var doc = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "用户管理"
                 ],
                 "summary": "获取用户信息",
                 "parameters": [
@@ -297,26 +288,42 @@ var doc = `{
     "definitions": {
         "datamodels.User": {
             "type": "object",
+            "required": [
+                "account",
+                "nickname",
+                "password"
+            ],
             "properties": {
                 "account": {
+                    "description": "帐号",
                     "type": "string"
                 },
                 "create_time": {
-                    "type": "string"
+                    "type": "string",
+                    "readOnly": true
                 },
                 "deleted": {
-                    "type": "integer"
+                    "description": "删除标志1=是，0=否",
+                    "type": "integer",
+                    "default": 0
                 },
                 "disabled": {
-                    "type": "integer"
+                    "description": "禁用状态1=是，0=否",
+                    "type": "integer",
+                    "default": 0
                 },
                 "expired": {
-                    "type": "integer"
+                    "description": "有效期0=永久，unix时间戳",
+                    "type": "integer",
+                    "default": 0
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "readOnly": true,
+                    "example": 1
                 },
                 "nickname": {
+                    "description": "昵称",
                     "type": "string"
                 },
                 "password": {
@@ -326,10 +333,13 @@ var doc = `{
                     "type": "string"
                 },
                 "update_time": {
-                    "type": "string"
+                    "type": "string",
+                    "readOnly": true
                 },
                 "uuid": {
-                    "type": "string"
+                    "type": "string",
+                    "readOnly": true,
+                    "example": "5bbc-4ala-3dja-1djs-0aja"
                 }
             }
         },

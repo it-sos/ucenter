@@ -3,27 +3,45 @@ definitions:
   datamodels.User:
     properties:
       account:
+        description: 帐号
         type: string
       create_time:
+        readOnly: true
         type: string
       deleted:
+        default: 0
+        description: 删除标志1=是，0=否
         type: integer
       disabled:
+        default: 0
+        description: 禁用状态1=是，0=否
         type: integer
       expired:
+        default: 0
+        description: 有效期0=永久，unix时间戳
         type: integer
       id:
+        example: 1
+        readOnly: true
         type: integer
       nickname:
+        description: 昵称
         type: string
       password:
         type: string
       phone:
         type: string
       update_time:
+        readOnly: true
         type: string
       uuid:
+        example: 5bbc-4ala-3dja-1djs-0aja
+        readOnly: true
         type: string
+    required:
+    - account
+    - nickname
+    - password
     type: object
   errors.Errors:
     properties:
@@ -65,6 +83,8 @@ paths:
           schema:
             type: string
       summary: 删除用户
+      tags:
+      - 用户管理
     get:
       consumes:
       - application/json
@@ -83,38 +103,19 @@ paths:
           schema:
             $ref: '#/definitions/datamodels.User'
       summary: 获取用户信息
+      tags:
+      - 用户管理
     post:
       consumes:
       - application/json
       description: 创建用户
       parameters:
-      - description: 账号
-        in: query
-        name: account
+      - description: body
+        in: body
+        name: body
         required: true
-        type: string
-      - description: 密码
-        in: query
-        name: password
-        required: true
-        type: string
-      - description: 昵称
-        in: query
-        name: nickname
-        required: true
-        type: string
-      - description: 手机号
-        in: query
-        name: phone
-        type: string
-      - description: 有效期，0=永久/指定过期时间，默认:否
-        in: query
-        name: expired
-        type: string
-      - description: 是否禁用状态1=是;0=否，默认:否
-        in: query
-        name: disabled
-        type: integer
+        schema:
+          $ref: '#/definitions/datamodels.User'
       produces:
       - application/json
       responses:
@@ -123,6 +124,8 @@ paths:
           schema:
             $ref: '#/definitions/datamodels.User'
       summary: 创建用户
+      tags:
+      - 用户管理
     put:
       consumes:
       - application/json
@@ -153,6 +156,8 @@ paths:
           schema:
             $ref: '#/definitions/datamodels.User'
       summary: 更新用户
+      tags:
+      - 用户管理
   /users/disabled:
     put:
       consumes:
@@ -177,6 +182,8 @@ paths:
           schema:
             type: string
       summary: 设置用户禁用状态
+      tags:
+      - 用户管理
   /users/password:
     put:
       consumes:
@@ -196,6 +203,8 @@ paths:
           schema:
             type: string
       summary: 修改当前用户密码
+      tags:
+      - 用户管理
   /users/uuid:
     get:
       consumes:
@@ -219,4 +228,6 @@ paths:
           schema:
             $ref: '#/definitions/errors.Errors'
       summary: 获取用户信息
+      tags:
+      - 用户管理
 swagger: "2.0"
