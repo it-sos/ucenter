@@ -35,6 +35,13 @@ var doc = `{
     "paths": {
         "/users": {
             "get": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
                 "description": "通过用户ID获取用户信息",
                 "consumes": [
                     "application/json"
@@ -61,10 +68,23 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/datamodels.User"
                         }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
                     }
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
                 "description": "更新用户",
                 "consumes": [
                     "application/json"
@@ -78,29 +98,13 @@ var doc = `{
                 "summary": "更新用户",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "昵称",
-                        "name": "nickname",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "手机号",
-                        "name": "phone",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "有效期，0=永久/指定过期时间，默认:0",
-                        "name": "expired",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "是否禁用状态1=是;0=否，默认:否",
-                        "name": "disabled",
-                        "in": "query"
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/parameter.User"
+                        }
                     }
                 ],
                 "responses": {
@@ -109,10 +113,23 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/datamodels.User"
                         }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
                     }
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
                 "description": "创建用户",
                 "consumes": [
                     "application/json"
@@ -126,12 +143,12 @@ var doc = `{
                 "summary": "创建用户",
                 "parameters": [
                     {
-                        "description": "body",
+                        "description": "request body",
                         "name": "body",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/datamodels.User"
+                            "$ref": "#/definitions/parameter.User"
                         }
                     }
                 ],
@@ -141,10 +158,23 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/datamodels.User"
                         }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
                     }
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
                 "description": "删除用户",
                 "consumes": [
                     "application/json"
@@ -158,11 +188,13 @@ var doc = `{
                 "summary": "删除用户",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "description": "用户id",
-                        "name": "id",
-                        "in": "query",
-                        "required": true
+                        "description": "request body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/parameter.Deleted"
+                        }
                     }
                 ],
                 "responses": {
@@ -171,12 +203,25 @@ var doc = `{
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
                     }
                 }
             }
         },
         "/users/disabled": {
             "put": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
                 "description": "设置用户禁用状态",
                 "consumes": [
                     "application/json"
@@ -190,18 +235,13 @@ var doc = `{
                 "summary": "设置用户禁用状态",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "description": "用户id",
-                        "name": "id",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "0=启用；1=禁用",
-                        "name": "disabled",
-                        "in": "query",
-                        "required": true
+                        "description": "request body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/parameter.Disabled"
+                        }
                     }
                 ],
                 "responses": {
@@ -210,12 +250,25 @@ var doc = `{
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
                     }
                 }
             }
         },
         "/users/password": {
             "put": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
                 "description": "修改当前用户密码",
                 "consumes": [
                     "application/json"
@@ -229,11 +282,13 @@ var doc = `{
                 "summary": "修改当前用户密码",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "密码",
-                        "name": "password",
-                        "in": "query",
-                        "required": true
+                        "description": "request body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/parameter.Password"
+                        }
                     }
                 ],
                 "responses": {
@@ -242,12 +297,25 @@ var doc = `{
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
                     }
                 }
             }
         },
         "/users/uuid": {
             "get": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
                 "description": "通过用户ID获取用户信息",
                 "consumes": [
                     "application/json"
@@ -272,11 +340,11 @@ var doc = `{
                     "200": {
                         "description": "ok",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/datamodels.User"
                         }
                     },
                     "400": {
-                        "description": "error message",
+                        "description": "error",
                         "schema": {
                             "$ref": "#/definitions/errors.Errors"
                         }
@@ -288,6 +356,112 @@ var doc = `{
     "definitions": {
         "datamodels.User": {
             "type": "object",
+            "properties": {
+                "account": {
+                    "description": "帐号",
+                    "type": "string"
+                },
+                "create_time": {
+                    "type": "string",
+                    "readOnly": true
+                },
+                "deleted": {
+                    "description": "删除标志1=是，0=否",
+                    "type": "integer"
+                },
+                "disabled": {
+                    "description": "禁用状态1=是，0=否",
+                    "type": "integer"
+                },
+                "expired": {
+                    "description": "有效期0=永久，unix时间戳",
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "nickname": {
+                    "description": "昵称",
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "update_time": {
+                    "type": "string",
+                    "readOnly": true
+                },
+                "uuid": {
+                    "type": "string",
+                    "example": "5bbc-4ala-3dja-1djs-0aja"
+                }
+            }
+        },
+        "errors.Errors": {
+            "type": "object",
+            "properties": {
+                "errorCode": {
+                    "type": "integer"
+                },
+                "errorMessage": {
+                    "type": "string"
+                }
+            }
+        },
+        "parameter.Deleted": {
+            "type": "object",
+            "required": [
+                "deleted",
+                "id"
+            ],
+            "properties": {
+                "deleted": {
+                    "description": "删除标志0=否，1=是",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "用户id",
+                    "type": "integer"
+                }
+            }
+        },
+        "parameter.Disabled": {
+            "type": "object",
+            "required": [
+                "disabled",
+                "id"
+            ],
+            "properties": {
+                "disabled": {
+                    "description": "禁用标志0=否，1=是",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "用户id",
+                    "type": "integer"
+                }
+            }
+        },
+        "parameter.Password": {
+            "type": "object",
+            "required": [
+                "id",
+                "password"
+            ],
+            "properties": {
+                "id": {
+                    "description": "用户id",
+                    "type": "integer"
+                },
+                "password": {
+                    "description": "密码",
+                    "type": "string"
+                }
+            }
+        },
+        "parameter.User": {
+            "type": "object",
             "required": [
                 "account",
                 "nickname",
@@ -297,10 +471,6 @@ var doc = `{
                 "account": {
                     "description": "帐号",
                     "type": "string"
-                },
-                "create_time": {
-                    "type": "string",
-                    "readOnly": true
                 },
                 "deleted": {
                     "description": "删除标志1=是，0=否",
@@ -317,11 +487,6 @@ var doc = `{
                     "type": "integer",
                     "default": 0
                 },
-                "id": {
-                    "type": "integer",
-                    "readOnly": true,
-                    "example": 1
-                },
                 "nickname": {
                     "description": "昵称",
                     "type": "string"
@@ -330,26 +495,6 @@ var doc = `{
                     "type": "string"
                 },
                 "phone": {
-                    "type": "string"
-                },
-                "update_time": {
-                    "type": "string",
-                    "readOnly": true
-                },
-                "uuid": {
-                    "type": "string",
-                    "readOnly": true,
-                    "example": "5bbc-4ala-3dja-1djs-0aja"
-                }
-            }
-        },
-        "errors.Errors": {
-            "type": "object",
-            "properties": {
-                "errorCode": {
-                    "type": "integer"
-                },
-                "errorMessage": {
                     "type": "string"
                 }
             }
