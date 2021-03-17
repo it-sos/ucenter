@@ -75,8 +75,14 @@ func (b *Bootstrapper) SetupErrorHandlers() {
 
 	b.OnAnyErrorCode(func(ctx iris.Context) {
 		err := iris.Map{
-			"status":  ctx.GetStatusCode(),
-			"message": ctx.Values().GetString("message"),
+			"status":       ctx.GetStatusCode(),
+			"errorCode:":   ctx.GetStatusCode(),
+			"errorMessage": ctx.Values().Get("message"),
+		}
+		if _, isErrPanic := ctx.IsRecovered(); isErrPanic {
+			err["errorCode"] = 5000000
+			err["errorMessage"] = "Internal Error."
+			//err["errorMessage"] = errPanicRecovery.Cause
 		}
 
 		if isOutJson(ctx) {

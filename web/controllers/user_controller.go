@@ -92,8 +92,9 @@ func (c *UserController) PutPassword() error {
 // @Failure 400 {object} errors.Errors "error"
 // @Security token[read]
 // @Router /users [get]
-func (c *UserController) Get() datamodels.User {
-	return datamodels.User{}
+func (c *UserController) Get() (datamodels.User, error) {
+	panic("hello world.")
+	return datamodels.User{}, nil
 }
 
 // @Tags 用户管理
