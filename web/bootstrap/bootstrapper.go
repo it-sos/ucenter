@@ -10,6 +10,7 @@ import (
 	"github.com/spf13/viper"
 	"time"
 	"ucenter/s/core"
+	"ucenter/s/errors"
 )
 
 type Configurator func(*Bootstrapper)
@@ -75,18 +76,19 @@ func (b *Bootstrapper) SetupErrorHandlers() {
 
 	b.OnAnyErrorCode(func(ctx iris.Context) {
 		err := iris.Map{
-			"status":       ctx.GetStatusCode(),
-			"errorCode:":   ctx.GetStatusCode(),
-			"errorMessage": ctx.Values().Get("message"),
+			"errCode": ctx.GetStatusCode(),
 		}
-		if _, isErrPanic := ctx.IsRecovered(); isErrPanic {
-			err["errorCode"] = 5000000
-			err["errorMessage"] = "Internal Error."
-			//err["errorMessage"] = errPanicRecovery.Cause
+		res := errors.Errors{}
+		res.SetErrCode(ctx.GetStatusCode())
+
+		if ctx.GetStatusCode() == 404 {
+			res.SetMessage("Not Found.")
+		} else if _, isErrPanic := ctx.IsRecovered(); isErrPanic {
+			res.SetMessage("Server Internal Error.")
 		}
 
 		if isOutJson(ctx) {
-			ctx.JSON(err)
+			ctx.JSON(res)
 			return
 		}
 
@@ -97,9 +99,10 @@ func (b *Bootstrapper) SetupErrorHandlers() {
 }
 
 func isOutJson(ctx iris.Context) bool {
-	return ctx.IsAjax() ||
-		ctx.URLParamExists("json") ||
-		ctx.GetHeader("Accept") == context.ContentJSONHeaderValue
+	return true
+	//return ctx.IsAjax() ||
+	//	ctx.URLParamExists("json") ||
+	//	ctx.GetHeader("Accept") == context.ContentJSONHeaderValue
 }
 
 const (

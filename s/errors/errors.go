@@ -6,8 +6,8 @@ import (
 )
 
 type Errors struct {
-	ErrorCode    int    `json:"errorCode"`
-	ErrorMessage string `json:"errorMessage"`
+	ErrCode int    `json:"errCode"`
+	Message string `json:"message"`
 }
 
 var errorResponse = map[string]Errors{
@@ -17,4 +17,17 @@ var errorResponse = map[string]Errors{
 func Error(key string) error {
 	ret, _ := json.Marshal(errorResponse[key])
 	return errors.New(string(ret))
+}
+
+func (e *Errors) Error() string {
+	ret, _ := json.Marshal(e)
+	return string(ret)
+}
+
+func (e *Errors) SetErrCode(errCode int) {
+	e.ErrCode = errCode
+}
+
+func (e *Errors) SetMessage(message string) {
+	e.Message = message
 }

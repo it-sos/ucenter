@@ -92,9 +92,8 @@ func (c *UserController) PutPassword() error {
 // @Failure 400 {object} errors.Errors "error"
 // @Security token[read]
 // @Router /users [get]
-func (c *UserController) Get() (datamodels.User, error) {
-	panic("hello world.")
-	return datamodels.User{}, nil
+func (c *UserController) Get() error {
+	return errors.Error("param_err")
 }
 
 // @Tags 用户管理
@@ -107,6 +106,6 @@ func (c *UserController) Get() (datamodels.User, error) {
 // @Failure 400 {object} errors.Errors "error"
 // @Security token[read]
 // @Router /users/uuid [get]
-func (c *UserController) GetUuid() error {
-	return errors.Error("param_err")
+func (c *UserController) GetUuid() (datamodels.User, error) {
+	return datamodels.User{}, nil
 }
