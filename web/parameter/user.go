@@ -1,11 +1,21 @@
 package parameter
 
-type Id struct {
+type UserId struct {
 	Id uint `json:"id" binding:"required"` // 用户id
 }
 
+type UserDisabled struct {
+	*UserId
+	IsDisabled string `json:"disabled" binding:"required"` // 禁用标志0=否，1=是
+}
+
+type UserDeleted struct {
+	*UserId
+	IsDeleted string `json:"deleted" binding:"required"` // 删除标志0=否，1=是
+}
+
 type Password struct {
-	*Id
+	*UserId
 	Password string `json:"password" binding:"required"` // 密码
 }
 

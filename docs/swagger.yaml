@@ -40,30 +40,6 @@ definitions:
       message:
         type: string
     type: object
-  parameter.Deleted:
-    properties:
-      deleted:
-        description: 删除标志0=否，1=是
-        type: string
-      id:
-        description: 用户id
-        type: integer
-    required:
-    - deleted
-    - id
-    type: object
-  parameter.Disabled:
-    properties:
-      disabled:
-        description: 禁用标志0=否，1=是
-        type: string
-      id:
-        description: 用户id
-        type: integer
-    required:
-    - disabled
-    - id
-    type: object
   parameter.Page:
     properties:
       page:
@@ -113,6 +89,30 @@ definitions:
     - account
     - nickname
     - password
+    type: object
+  parameter.UserDeleted:
+    properties:
+      deleted:
+        description: 删除标志0=否，1=是
+        type: string
+      id:
+        description: 用户id
+        type: integer
+    required:
+    - deleted
+    - id
+    type: object
+  parameter.UserDisabled:
+    properties:
+      disabled:
+        description: 禁用标志0=否，1=是
+        type: string
+      id:
+        description: 用户id
+        type: integer
+    required:
+    - disabled
+    - id
     type: object
   vo.User:
     properties:
@@ -184,14 +184,14 @@ paths:
     delete:
       consumes:
       - application/json
-      description: 删除用户
+      description: 删除用户信息
       parameters:
       - description: request body
         in: body
         name: body
         required: true
         schema:
-          $ref: '#/definitions/parameter.Deleted'
+          $ref: '#/definitions/parameter.UserDeleted'
       produces:
       - application/json
       responses:
@@ -206,7 +206,7 @@ paths:
       security:
       - token:
         - read
-      summary: 删除用户
+      summary: 删除用户信息
       tags:
       - 用户管理
     get:
@@ -239,7 +239,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: 创建用户
+      description: 创建用户信息
       parameters:
       - description: request body
         in: body
@@ -261,13 +261,13 @@ paths:
       security:
       - token:
         - read
-      summary: 创建用户
+      summary: 创建用户信息
       tags:
       - 用户管理
     put:
       consumes:
       - application/json
-      description: 更新用户
+      description: 更新用户信息
       parameters:
       - description: request body
         in: body
@@ -289,14 +289,14 @@ paths:
       security:
       - token:
         - read
-      summary: 更新用户
+      summary: 更新用户信息
       tags:
       - 用户管理
   /users/byuuid:
     get:
       consumes:
       - application/json
-      description: 通过用户ID获取用户信息
+      description: 通过用户uuid获取用户信息
       parameters:
       - description: 用户uuid
         in: query
@@ -331,7 +331,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/parameter.Disabled'
+          $ref: '#/definitions/parameter.UserDisabled'
       produces:
       - application/json
       responses:
@@ -375,14 +375,14 @@ paths:
       security:
       - token:
         - read
-      summary: 获取用户列表
+      summary: 获取用户分页列表
       tags:
       - 用户管理
   /users/password:
     put:
       consumes:
       - application/json
-      description: 修改当前用户密码
+      description: 修改登陆用户密码
       parameters:
       - description: request body
         in: body
@@ -404,7 +404,7 @@ paths:
       security:
       - token:
         - read
-      summary: 修改当前用户密码
+      summary: 修改登陆用户密码
       tags:
       - 用户管理
 swagger: "2.0"

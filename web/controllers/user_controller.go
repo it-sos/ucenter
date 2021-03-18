@@ -12,8 +12,8 @@ type UserController struct {
 }
 
 // @Tags 用户管理
-// @Summary 创建用户
-// @Description 创建用户
+// @Summary 创建用户信息
+// @Description 创建用户信息
 // @Accept json
 // @Produce json
 // @Param body body parameter.User true "request body"
@@ -26,8 +26,8 @@ func (c *UserController) Post() (datamodels.User, error) {
 }
 
 // @Tags 用户管理
-// @Summary 更新用户
-// @Description 更新用户
+// @Summary 更新用户信息
+// @Description 更新用户信息
 // @Accept json
 // @Produce json
 // @Param body body parameter.User true "request body"
@@ -40,11 +40,11 @@ func (c *UserController) Put() (datamodels.User, error) {
 }
 
 // @Tags 用户管理
-// @Summary 删除用户
-// @Description 删除用户
+// @Summary 删除用户信息
+// @Description 删除用户信息
 // @Accept json
 // @Produce json
-// @Param body body parameter.Deleted true "request body"
+// @Param body body parameter.UserDeleted true "request body"
 // @Success 200 {string} string	"success"
 // @Failure 400 {object} errors.Errors "error"
 // @Security token[read]
@@ -58,7 +58,7 @@ func (c *UserController) Delete() error {
 // @Description 设置用户禁用状态
 // @Accept json
 // @Produce json
-// @Param body body parameter.Disabled true "request body"
+// @Param body body parameter.UserDisabled true "request body"
 // @Success 200 {string} string	"success"
 // @Failure 400 {object} errors.Errors "error"
 // @Security token[read]
@@ -68,8 +68,8 @@ func (c *UserController) PutDisabled() error {
 }
 
 // @Tags 用户管理
-// @Summary 修改当前用户密码
-// @Description 修改当前用户密码
+// @Summary 修改登陆用户密码
+// @Description 修改登陆用户密码
 // @Accept json
 // @Produce json
 // @Param body body parameter.Password true "request body"
@@ -97,7 +97,7 @@ func (c *UserController) Get() (datamodels.User, error) {
 
 // @Tags 用户管理
 // @Summary 获取用户信息
-// @Description 通过用户ID获取用户信息
+// @Description 通过用户uuid获取用户信息
 // @Accept json
 // @Produce json
 // @Param uuid query integer true "用户uuid"
@@ -110,7 +110,7 @@ func (c *UserController) GetByUuid() (datamodels.User, error) {
 }
 
 // @Tags 用户管理
-// @Summary 获取用户列表
+// @Summary 获取用户分页列表
 // @Description 获取全部用户分页列表
 // @Accept json
 // @Produce json

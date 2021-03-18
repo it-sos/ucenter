@@ -85,7 +85,7 @@ var doc = `{
                         ]
                     }
                 ],
-                "description": "更新用户",
+                "description": "更新用户信息",
                 "consumes": [
                     "application/json"
                 ],
@@ -95,7 +95,7 @@ var doc = `{
                 "tags": [
                     "用户管理"
                 ],
-                "summary": "更新用户",
+                "summary": "更新用户信息",
                 "parameters": [
                     {
                         "description": "request body",
@@ -130,7 +130,7 @@ var doc = `{
                         ]
                     }
                 ],
-                "description": "创建用户",
+                "description": "创建用户信息",
                 "consumes": [
                     "application/json"
                 ],
@@ -140,7 +140,7 @@ var doc = `{
                 "tags": [
                     "用户管理"
                 ],
-                "summary": "创建用户",
+                "summary": "创建用户信息",
                 "parameters": [
                     {
                         "description": "request body",
@@ -175,7 +175,7 @@ var doc = `{
                         ]
                     }
                 ],
-                "description": "删除用户",
+                "description": "删除用户信息",
                 "consumes": [
                     "application/json"
                 ],
@@ -185,7 +185,7 @@ var doc = `{
                 "tags": [
                     "用户管理"
                 ],
-                "summary": "删除用户",
+                "summary": "删除用户信息",
                 "parameters": [
                     {
                         "description": "request body",
@@ -193,7 +193,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/parameter.Deleted"
+                            "$ref": "#/definitions/parameter.UserDeleted"
                         }
                     }
                 ],
@@ -222,7 +222,7 @@ var doc = `{
                         ]
                     }
                 ],
-                "description": "通过用户ID获取用户信息",
+                "description": "通过用户uuid获取用户信息",
                 "consumes": [
                     "application/json"
                 ],
@@ -285,7 +285,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/parameter.Disabled"
+                            "$ref": "#/definitions/parameter.UserDisabled"
                         }
                     }
                 ],
@@ -324,7 +324,7 @@ var doc = `{
                 "tags": [
                     "用户管理"
                 ],
-                "summary": "获取用户列表",
+                "summary": "获取用户分页列表",
                 "parameters": [
                     {
                         "description": "request body",
@@ -361,7 +361,7 @@ var doc = `{
                         ]
                     }
                 ],
-                "description": "修改当前用户密码",
+                "description": "修改登陆用户密码",
                 "consumes": [
                     "application/json"
                 ],
@@ -371,7 +371,7 @@ var doc = `{
                 "tags": [
                     "用户管理"
                 ],
-                "summary": "修改当前用户密码",
+                "summary": "修改登陆用户密码",
                 "parameters": [
                     {
                         "description": "request body",
@@ -457,40 +457,6 @@ var doc = `{
                 }
             }
         },
-        "parameter.Deleted": {
-            "type": "object",
-            "required": [
-                "deleted",
-                "id"
-            ],
-            "properties": {
-                "deleted": {
-                    "description": "删除标志0=否，1=是",
-                    "type": "string"
-                },
-                "id": {
-                    "description": "用户id",
-                    "type": "integer"
-                }
-            }
-        },
-        "parameter.Disabled": {
-            "type": "object",
-            "required": [
-                "disabled",
-                "id"
-            ],
-            "properties": {
-                "disabled": {
-                    "description": "禁用标志0=否，1=是",
-                    "type": "string"
-                },
-                "id": {
-                    "description": "用户id",
-                    "type": "integer"
-                }
-            }
-        },
         "parameter.Page": {
             "type": "object",
             "properties": {
@@ -557,6 +523,40 @@ var doc = `{
                 },
                 "phone": {
                     "type": "string"
+                }
+            }
+        },
+        "parameter.UserDeleted": {
+            "type": "object",
+            "required": [
+                "deleted",
+                "id"
+            ],
+            "properties": {
+                "deleted": {
+                    "description": "删除标志0=否，1=是",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "用户id",
+                    "type": "integer"
+                }
+            }
+        },
+        "parameter.UserDisabled": {
+            "type": "object",
+            "required": [
+                "disabled",
+                "id"
+            ],
+            "properties": {
+                "disabled": {
+                    "description": "禁用标志0=否，1=是",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "用户id",
+                    "type": "integer"
                 }
             }
         },
