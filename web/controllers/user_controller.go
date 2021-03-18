@@ -3,7 +3,6 @@ package controllers
 import (
 	"github.com/kataras/iris/v12"
 	"ucenter/datamodels"
-	"ucenter/s/errors"
 	"ucenter/services"
 )
 
@@ -31,7 +30,7 @@ func (c *UserController) Post() (datamodels.User, error) {
 // @Description 更新用户
 // @Accept json
 // @Produce json
-// @Param body body parameter.User true "body"
+// @Param body body parameter.User true "request body"
 // @Success 200 {object} datamodels.User "success"
 // @Failure 400 {object} errors.Errors "error"
 // @Security token[read]
@@ -51,7 +50,7 @@ func (c *UserController) Put() (datamodels.User, error) {
 // @Security token[read]
 // @Router /users [delete]
 func (c *UserController) Delete() error {
-	return errors.Error("param_err")
+	return nil
 }
 
 // @Tags 用户管理
@@ -74,7 +73,7 @@ func (c *UserController) PutDisabled() error {
 // @Accept json
 // @Produce json
 // @Param body body parameter.Password true "request body"
-// @Success 200 {string} string	"ok"
+// @Success 200 {string} string	"success"
 // @Failure 400 {object} errors.Errors "error"
 // @Security token[read]
 // @Router /users/password [put]
@@ -88,12 +87,12 @@ func (c *UserController) PutPassword() error {
 // @Accept json
 // @Produce json
 // @Param id query integer true "用户id"
-// @Success 200 {object} datamodels.User "ok"
+// @Success 200 {object} datamodels.User "success"
 // @Failure 400 {object} errors.Errors "error"
 // @Security token[read]
 // @Router /users [get]
-func (c *UserController) Get() error {
-	return errors.Error("param_err")
+func (c *UserController) Get() (datamodels.User, error) {
+	return datamodels.User{}, nil
 }
 
 // @Tags 用户管理
@@ -102,10 +101,24 @@ func (c *UserController) Get() error {
 // @Accept json
 // @Produce json
 // @Param uuid query integer true "用户uuid"
-// @Success 200 {object} datamodels.User "ok"
+// @Success 200 {object} datamodels.User "success"
 // @Failure 400 {object} errors.Errors "error"
 // @Security token[read]
-// @Router /users/uuid [get]
-func (c *UserController) GetUuid() (datamodels.User, error) {
+// @Router /users/byuuid [get]
+func (c *UserController) GetByUuid() (datamodels.User, error) {
+	return datamodels.User{}, nil
+}
+
+// @Tags 用户管理
+// @Summary 获取用户列表
+// @Description 获取全部用户分页列表
+// @Accept json
+// @Produce json
+// @Param body body parameter.Page true "request body"
+// @Success 200 {object} vo.UserVO "success"
+// @Failure 400 {object} errors.Errors "error"
+// @Security token[read]
+// @Router /users/list [get]
+func (c *UserController) GetList() (datamodels.User, error) {
 	return datamodels.User{}, nil
 }

@@ -6,16 +6,16 @@ import (
 )
 
 type Errors struct {
-	ErrCode int    `json:"errCode"`
+	ErrCode int    `json:"errCode" example:"4000000"`
 	Message string `json:"message"`
 }
 
-var errorResponse = map[string]Errors{
+var errCodeList = map[string]Errors{
 	"param_err": {4001001, "参数异常"},
 }
 
 func Error(key string) error {
-	ret, _ := json.Marshal(errorResponse[key])
+	ret, _ := json.Marshal(errCodeList[key])
 	return errors.New(string(ret))
 }
 
@@ -30,4 +30,12 @@ func (e *Errors) SetErrCode(errCode int) {
 
 func (e *Errors) SetMessage(message string) {
 	e.Message = message
+}
+
+func (e *Errors) GetErrCode() int {
+	return e.ErrCode
+}
+
+func (e *Errors) GetMessage() string {
+	return e.Message
 }

@@ -9,16 +9,6 @@ type Password struct {
 	Password string `json:"password" binding:"required"` // 密码
 }
 
-type Disabled struct {
-	*Id
-	IsDisabled string `json:"disabled" binding:"required"` // 禁用标志0=否，1=是
-}
-
-type Deleted struct {
-	*Id
-	IsDeleted string `json:"deleted" binding:"required"` // 删除标志0=否，1=是
-}
-
 type User struct {
 	Account    string `json:"account" binding:"required"` // 帐号
 	Password   string `json:"password" binding:"required"`

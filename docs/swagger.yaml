@@ -34,9 +34,10 @@ definitions:
     type: object
   errors.Errors:
     properties:
-      errorCode:
+      errCode:
+        example: 4000000
         type: integer
-      errorMessage:
+      message:
         type: string
     type: object
   parameter.Deleted:
@@ -62,6 +63,15 @@ definitions:
     required:
     - disabled
     - id
+    type: object
+  parameter.Page:
+    properties:
+      page:
+        description: 页码
+        type: integer
+      size:
+        description: 每页条数
+        type: integer
     type: object
   parameter.Password:
     properties:
@@ -103,6 +113,58 @@ definitions:
     - account
     - nickname
     - password
+    type: object
+  vo.User:
+    properties:
+      account:
+        description: 帐号
+        type: string
+      create_time:
+        readOnly: true
+        type: string
+      deleted:
+        description: 删除标志1=是，0=否
+        type: integer
+      disabled:
+        description: 禁用状态1=是，0=否
+        type: integer
+      disabledName:
+        example: 已禁用
+        type: string
+      expired:
+        description: 有效期0=永久，unix时间戳
+        type: integer
+      id:
+        example: 1
+        type: integer
+      nickname:
+        description: 昵称
+        type: string
+      phone:
+        type: string
+      update_time:
+        readOnly: true
+        type: string
+      uuid:
+        example: 5bbc-4ala-3dja-1djs-0aja
+        type: string
+    type: object
+  vo.UserVO:
+    properties:
+      data:
+        description: 每页数据
+        items:
+          $ref: '#/definitions/vo.User'
+        type: array
+      page:
+        description: 当前页数
+        type: integer
+      size:
+        description: 每页条数
+        type: integer
+      totalPage:
+        description: 总页数
+        type: integer
     type: object
 host: localhost:8080
 info:
@@ -161,7 +223,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: ok
+          description: success
           schema:
             $ref: '#/definitions/datamodels.User'
         "400":
@@ -207,7 +269,7 @@ paths:
       - application/json
       description: 更新用户
       parameters:
-      - description: body
+      - description: request body
         in: body
         name: body
         required: true
@@ -228,6 +290,34 @@ paths:
       - token:
         - read
       summary: 更新用户
+      tags:
+      - 用户管理
+  /users/byuuid:
+    get:
+      consumes:
+      - application/json
+      description: 通过用户ID获取用户信息
+      parameters:
+      - description: 用户uuid
+        in: query
+        name: uuid
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/datamodels.User'
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/errors.Errors'
+      security:
+      - token:
+        - read
+      summary: 获取用户信息
       tags:
       - 用户管理
   /users/disabled:
@@ -259,6 +349,35 @@ paths:
       summary: 设置用户禁用状态
       tags:
       - 用户管理
+  /users/list:
+    get:
+      consumes:
+      - application/json
+      description: 获取全部用户分页列表
+      parameters:
+      - description: request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/parameter.Page'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/vo.UserVO'
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/errors.Errors'
+      security:
+      - token:
+        - read
+      summary: 获取用户列表
+      tags:
+      - 用户管理
   /users/password:
     put:
       consumes:
@@ -275,7 +394,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: ok
+          description: success
           schema:
             type: string
         "400":
@@ -286,34 +405,6 @@ paths:
       - token:
         - read
       summary: 修改当前用户密码
-      tags:
-      - 用户管理
-  /users/uuid:
-    get:
-      consumes:
-      - application/json
-      description: 通过用户ID获取用户信息
-      parameters:
-      - description: 用户uuid
-        in: query
-        name: uuid
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: ok
-          schema:
-            $ref: '#/definitions/datamodels.User'
-        "400":
-          description: error
-          schema:
-            $ref: '#/definitions/errors.Errors'
-      security:
-      - token:
-        - read
-      summary: 获取用户信息
       tags:
       - 用户管理
 swagger: "2.0"

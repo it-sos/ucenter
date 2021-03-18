@@ -64,7 +64,7 @@ var doc = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "ok",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/datamodels.User"
                         }
@@ -98,7 +98,7 @@ var doc = `{
                 "summary": "更新用户",
                 "parameters": [
                     {
-                        "description": "body",
+                        "description": "request body",
                         "name": "body",
                         "in": "body",
                         "required": true,
@@ -213,6 +213,51 @@ var doc = `{
                 }
             }
         },
+        "/users/byuuid": {
+            "get": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
+                "description": "通过用户ID获取用户信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户管理"
+                ],
+                "summary": "获取用户信息",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "用户uuid",
+                        "name": "uuid",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/datamodels.User"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
+                    }
+                }
+            }
+        },
         "/users/disabled": {
             "put": {
                 "security": [
@@ -260,6 +305,53 @@ var doc = `{
                 }
             }
         },
+        "/users/list": {
+            "get": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
+                "description": "获取全部用户分页列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户管理"
+                ],
+                "summary": "获取用户列表",
+                "parameters": [
+                    {
+                        "description": "request body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/parameter.Page"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/vo.UserVO"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
+                    }
+                }
+            }
+        },
         "/users/password": {
             "put": {
                 "security": [
@@ -293,54 +385,9 @@ var doc = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "ok",
+                        "description": "success",
                         "schema": {
                             "type": "string"
-                        }
-                    },
-                    "400": {
-                        "description": "error",
-                        "schema": {
-                            "$ref": "#/definitions/errors.Errors"
-                        }
-                    }
-                }
-            }
-        },
-        "/users/uuid": {
-            "get": {
-                "security": [
-                    {
-                        "token": [
-                            "read"
-                        ]
-                    }
-                ],
-                "description": "通过用户ID获取用户信息",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "用户管理"
-                ],
-                "summary": "获取用户信息",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "用户uuid",
-                        "name": "uuid",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "ok",
-                        "schema": {
-                            "$ref": "#/definitions/datamodels.User"
                         }
                     },
                     "400": {
@@ -401,10 +448,11 @@ var doc = `{
         "errors.Errors": {
             "type": "object",
             "properties": {
-                "errorCode": {
-                    "type": "integer"
+                "errCode": {
+                    "type": "integer",
+                    "example": 4000000
                 },
-                "errorMessage": {
+                "message": {
                     "type": "string"
                 }
             }
@@ -439,6 +487,19 @@ var doc = `{
                 },
                 "id": {
                     "description": "用户id",
+                    "type": "integer"
+                }
+            }
+        },
+        "parameter.Page": {
+            "type": "object",
+            "properties": {
+                "page": {
+                    "description": "页码",
+                    "type": "integer"
+                },
+                "size": {
+                    "description": "每页条数",
                     "type": "integer"
                 }
             }
@@ -496,6 +557,78 @@ var doc = `{
                 },
                 "phone": {
                     "type": "string"
+                }
+            }
+        },
+        "vo.User": {
+            "type": "object",
+            "properties": {
+                "account": {
+                    "description": "帐号",
+                    "type": "string"
+                },
+                "create_time": {
+                    "type": "string",
+                    "readOnly": true
+                },
+                "deleted": {
+                    "description": "删除标志1=是，0=否",
+                    "type": "integer"
+                },
+                "disabled": {
+                    "description": "禁用状态1=是，0=否",
+                    "type": "integer"
+                },
+                "disabledName": {
+                    "type": "string",
+                    "example": "已禁用"
+                },
+                "expired": {
+                    "description": "有效期0=永久，unix时间戳",
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "nickname": {
+                    "description": "昵称",
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "update_time": {
+                    "type": "string",
+                    "readOnly": true
+                },
+                "uuid": {
+                    "type": "string",
+                    "example": "5bbc-4ala-3dja-1djs-0aja"
+                }
+            }
+        },
+        "vo.UserVO": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "description": "每页数据",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/vo.User"
+                    }
+                },
+                "page": {
+                    "description": "当前页数",
+                    "type": "integer"
+                },
+                "size": {
+                    "description": "每页条数",
+                    "type": "integer"
+                },
+                "totalPage": {
+                    "description": "总页数",
+                    "type": "integer"
                 }
             }
         }

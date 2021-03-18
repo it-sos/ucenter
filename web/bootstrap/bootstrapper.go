@@ -64,10 +64,9 @@ func (b *Bootstrapper) SetupErrorHandlers() {
 				}
 
 				if isOutJson(ctx) {
-					ctx.JSON(err.Error())
-				} else {
-					_, _ = ctx.WriteString(err.Error())
+					ctx.ContentType(context.ContentJSONHeaderValue)
 				}
+				_, _ = ctx.WriteString(err.Error())
 			}
 
 			ctx.StopExecution()
@@ -75,23 +74,19 @@ func (b *Bootstrapper) SetupErrorHandlers() {
 	}
 
 	b.OnAnyErrorCode(func(ctx iris.Context) {
-		err := iris.Map{
-			"errCode": ctx.GetStatusCode(),
-		}
 		res := errors.Errors{}
 		res.SetErrCode(ctx.GetStatusCode())
-
-		if ctx.GetStatusCode() == 404 {
-			res.SetMessage("Not Found.")
-		} else if _, isErrPanic := ctx.IsRecovered(); isErrPanic {
-			res.SetMessage("Server Internal Error.")
-		}
+		res.SetMessage(iris.StatusText(ctx.GetStatusCode()))
 
 		if isOutJson(ctx) {
 			ctx.JSON(res)
 			return
 		}
 
+		err := iris.Map{
+			"errCode": res.GetErrCode(),
+			"message": res.GetMessage(),
+		}
 		ctx.ViewData("Err", err)
 		ctx.ViewData("Title", "Error")
 		ctx.View("shared/error.html")
@@ -99,10 +94,9 @@ func (b *Bootstrapper) SetupErrorHandlers() {
 }
 
 func isOutJson(ctx iris.Context) bool {
-	return true
-	//return ctx.IsAjax() ||
-	//	ctx.URLParamExists("json") ||
-	//	ctx.GetHeader("Accept") == context.ContentJSONHeaderValue
+	return ctx.IsAjax() ||
+		ctx.URLParamExists("json") ||
+		ctx.GetHeader("Accept") == context.ContentJSONHeaderValue
 }
 
 const (
