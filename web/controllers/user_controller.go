@@ -3,6 +3,7 @@ package controllers
 import (
 	"github.com/kataras/iris/v12"
 	"ucenter/datamodels"
+	"ucenter/datamodels/vo"
 	"ucenter/services"
 )
 
@@ -91,8 +92,8 @@ func (c *UserController) PutPassword() error {
 // @Failure 400 {object} errors.Errors "error"
 // @Security token[read]
 // @Router /users [get]
-func (c *UserController) Get() (datamodels.User, error) {
-	return datamodels.User{}, nil
+func (c *UserController) Get() (vo.UserVO, error) {
+	return vo.UserVO{}, nil
 }
 
 // @Tags 用户管理
@@ -105,8 +106,8 @@ func (c *UserController) Get() (datamodels.User, error) {
 // @Failure 400 {object} errors.Errors "error"
 // @Security token[read]
 // @Router /users/byuuid [get]
-func (c *UserController) GetByUuid() (datamodels.User, error) {
-	return datamodels.User{}, nil
+func (c *UserController) GetByUuid() (vo.UserVO, error) {
+	return vo.UserVO{}, nil
 }
 
 // @Tags 用户管理
@@ -115,10 +116,24 @@ func (c *UserController) GetByUuid() (datamodels.User, error) {
 // @Accept json
 // @Produce json
 // @Param body body parameter.Page true "request body"
-// @Success 200 {object} vo.UserVO "success"
+// @Success 200 {object} vo.UserPageVO "success"
 // @Failure 400 {object} errors.Errors "error"
 // @Security token[read]
 // @Router /users/list [get]
-func (c *UserController) GetList() (datamodels.User, error) {
+func (c *UserController) GetList() (vo.UserPageVO, error) {
+	return vo.UserPageVO{}, nil
+}
+
+// @Tags 用户管理
+// @Summary 获取用户及关联应用角色信息
+// @Description 通过用户ID获取用户及关联应用角色信息
+// @Accept json
+// @Produce json
+// @Param id query integer true "用户id"
+// @Success 200 {object} datamodels.User "success"
+// @Failure 400 {object} errors.Errors "error"
+// @Security token[read]
+// @Router /users/userapprole [get]
+func (c *UserController) GetUserAppRole() (datamodels.User, error) {
 	return datamodels.User{}, nil
 }

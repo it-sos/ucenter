@@ -4,7 +4,7 @@ import "time"
 
 // 用户表
 type User struct {
-	Id         uint      `json:"id" example:"1" xorm:"notnull autoincr pk id"`
+	Id         uint      `json:"id" readonly:"true" example:"1" xorm:"notnull autoincr pk id"`
 	Uuid       string    `json:"uuid" example:"5bbc-4ala-3dja-1djs-0aja" xorm:"varchar(64) notnull index comment('uuid')"`
 	Account    string    `json:"account" xorm:"varchar(32) notnull index comment('账号')"` // 帐号
 	Password   string    `json:"-" xorm:"varchar(64) notnull"`

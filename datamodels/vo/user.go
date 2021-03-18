@@ -4,12 +4,13 @@ import (
 	"ucenter/datamodels"
 )
 
-type User struct {
+type UserVO struct {
 	datamodels.User
-	DisabledName string `json:"disabledName" example:"已禁用"`
+	DisabledName string `json:"disabledName" example:"已禁用"`      // 禁用状态
+	ExpireDate   string `json:"expireDate" example:"2022-12-14"` // 用户有效期
 }
 
-type UserVO struct {
+type UserPageVO struct {
 	Paging
-	Data []User `json:"data"` // 每页数据
+	Data []UserVO `json:"data"` // 每页数据
 }
