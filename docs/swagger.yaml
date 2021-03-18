@@ -1,10 +1,90 @@
 basePath: /
 definitions:
-  datamodels.User:
+  errors.Errors:
+    properties:
+      errCode:
+        example: 4000000
+        type: integer
+      message:
+        type: string
+    type: object
+  vo.PageVO:
+    properties:
+      page:
+        description: 页码
+        type: integer
+      size:
+        description: 每页条数
+        type: integer
+    type: object
+  vo.PasswordVO:
+    properties:
+      password:
+        description: 密码
+        type: string
+    required:
+    - password
+    type: object
+  vo.RolePageVO:
+    properties:
+      data:
+        description: 每页数据
+        items:
+          $ref: '#/definitions/vo.RoleVO'
+        type: array
+      page:
+        description: 当前页数
+        type: integer
+      size:
+        description: 每页条数
+        type: integer
+      totalPage:
+        description: 总页数
+        type: integer
+    type: object
+  vo.RoleParamsVO:
+    properties:
+      info:
+        description: 角色描述
+        type: string
+      name:
+        description: 角色名称
+        type: string
+    required:
+    - info
+    - name
+    type: object
+  vo.RoleVO:
+    properties:
+      create_time:
+        readOnly: true
+        type: string
+      id:
+        description: 角色id
+        readOnly: true
+        type: integer
+      info:
+        description: 描述
+        type: string
+      name:
+        description: 角色名称
+        type: string
+      update_time:
+        readOnly: true
+        type: string
+    type: object
+  vo.UserAppRolesVO:
     properties:
       account:
         description: 帐号
         type: string
+      appRole:
+        additionalProperties:
+          items:
+            type: string
+          type: array
+        description: 用户应用角色
+        type: object
       create_time:
         readOnly: true
         type: string
@@ -14,11 +94,20 @@ definitions:
       disabled:
         description: 禁用状态1=是，0=否
         type: integer
+      disabledName:
+        description: 禁用状态
+        example: 禁用
+        type: string
+      expireDate:
+        description: 用户有效期
+        example: "2022-12-14"
+        type: string
       expired:
         description: 有效期0=永久，unix时间戳
         type: integer
       id:
         example: 1
+        readOnly: true
         type: integer
       nickname:
         description: 昵称
@@ -32,36 +121,40 @@ definitions:
         example: 5bbc-4ala-3dja-1djs-0aja
         type: string
     type: object
-  errors.Errors:
+  vo.UserDeletedVO:
     properties:
-      errCode:
-        example: 4000000
-        type: integer
-      message:
+      deleted:
+        description: 删除标志0=否，1=是
         type: string
+    required:
+    - deleted
     type: object
-  parameter.Page:
+  vo.UserDisabledVO:
     properties:
+      disabled:
+        description: 禁用标志0=否，1=是
+        type: string
+    required:
+    - disabled
+    type: object
+  vo.UserPageVO:
+    properties:
+      data:
+        description: 每页数据
+        items:
+          $ref: '#/definitions/vo.UserVO'
+        type: array
       page:
-        description: 页码
+        description: 当前页数
         type: integer
       size:
         description: 每页条数
         type: integer
-    type: object
-  parameter.Password:
-    properties:
-      id:
-        description: 用户id
+      totalPage:
+        description: 总页数
         type: integer
-      password:
-        description: 密码
-        type: string
-    required:
-    - id
-    - password
     type: object
-  parameter.User:
+  vo.UserParamsVO:
     properties:
       account:
         description: 帐号
@@ -90,31 +183,7 @@ definitions:
     - nickname
     - password
     type: object
-  parameter.UserDeleted:
-    properties:
-      deleted:
-        description: 删除标志0=否，1=是
-        type: string
-      id:
-        description: 用户id
-        type: integer
-    required:
-    - deleted
-    - id
-    type: object
-  parameter.UserDisabled:
-    properties:
-      disabled:
-        description: 禁用标志0=否，1=是
-        type: string
-      id:
-        description: 用户id
-        type: integer
-    required:
-    - disabled
-    - id
-    type: object
-  vo.User:
+  vo.UserVO:
     properties:
       account:
         description: 帐号
@@ -129,13 +198,19 @@ definitions:
         description: 禁用状态1=是，0=否
         type: integer
       disabledName:
-        example: 已禁用
+        description: 禁用状态
+        example: 禁用
+        type: string
+      expireDate:
+        description: 用户有效期
+        example: "2022-12-14"
         type: string
       expired:
         description: 有效期0=永久，unix时间戳
         type: integer
       id:
         example: 1
+        readOnly: true
         type: integer
       nickname:
         description: 昵称
@@ -148,23 +223,6 @@ definitions:
       uuid:
         example: 5bbc-4ala-3dja-1djs-0aja
         type: string
-    type: object
-  vo.UserVO:
-    properties:
-      data:
-        description: 每页数据
-        items:
-          $ref: '#/definitions/vo.User'
-        type: array
-      page:
-        description: 当前页数
-        type: integer
-      size:
-        description: 每页条数
-        type: integer
-      totalPage:
-        description: 总页数
-        type: integer
     type: object
 host: localhost:8080
 info:
@@ -180,18 +238,168 @@ info:
   title: ucenter api
   version: "1.0"
 paths:
-  /users:
+  /roles:
     delete:
       consumes:
       - application/json
-      description: 删除用户信息
+      description: 删除角色信息
+      parameters:
+      - description: 角色id
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            type: string
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/errors.Errors'
+      security:
+      - token:
+        - read
+      summary: 删除角色信息
+      tags:
+      - 角色管理
+    get:
+      consumes:
+      - application/json
+      description: 通过角色ID获取角色信息
+      parameters:
+      - description: 角色id
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/vo.RoleVO'
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/errors.Errors'
+      security:
+      - token:
+        - read
+      summary: 获取角色信息
+      tags:
+      - 角色管理
+    post:
+      consumes:
+      - application/json
+      description: 创建角色信息
       parameters:
       - description: request body
         in: body
         name: body
         required: true
         schema:
-          $ref: '#/definitions/parameter.UserDeleted'
+          $ref: '#/definitions/vo.RoleParamsVO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/vo.RoleVO'
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/errors.Errors'
+      security:
+      - token:
+        - read
+      summary: 创建角色信息
+      tags:
+      - 角色管理
+    put:
+      consumes:
+      - application/json
+      description: 更新角色信息
+      parameters:
+      - description: 角色id
+        in: query
+        name: id
+        required: true
+        type: integer
+      - description: request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/vo.RoleParamsVO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/vo.RoleVO'
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/errors.Errors'
+      security:
+      - token:
+        - read
+      summary: 更新角色信息
+      tags:
+      - 角色管理
+  /roles/list:
+    get:
+      consumes:
+      - application/json
+      description: 获取全部角色分页列表
+      parameters:
+      - description: request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/vo.PageVO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/vo.RolePageVO'
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/errors.Errors'
+      security:
+      - token:
+        - read
+      summary: 获取角色分页列表
+      tags:
+      - 角色管理
+  /users:
+    delete:
+      consumes:
+      - application/json
+      description: 删除用户信息
+      parameters:
+      - description: 用户id
+        in: query
+        name: id
+        required: true
+        type: integer
+      - description: request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/vo.UserDeletedVO'
       produces:
       - application/json
       responses:
@@ -217,15 +425,18 @@ paths:
       - description: 用户id
         in: query
         name: id
-        required: true
         type: integer
+      - description: 用户uuid
+        in: query
+        name: uuid
+        type: string
       produces:
       - application/json
       responses:
         "200":
           description: success
           schema:
-            $ref: '#/definitions/datamodels.User'
+            $ref: '#/definitions/vo.UserVO'
         "400":
           description: error
           schema:
@@ -246,14 +457,14 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/parameter.User'
+          $ref: '#/definitions/vo.UserParamsVO'
       produces:
       - application/json
       responses:
         "200":
           description: success
           schema:
-            $ref: '#/definitions/datamodels.User'
+            $ref: '#/definitions/vo.UserVO'
         "400":
           description: error
           schema:
@@ -269,19 +480,24 @@ paths:
       - application/json
       description: 更新用户信息
       parameters:
+      - description: 用户id
+        in: query
+        name: id
+        required: true
+        type: integer
       - description: request body
         in: body
         name: body
         required: true
         schema:
-          $ref: '#/definitions/parameter.User'
+          $ref: '#/definitions/vo.UserParamsVO'
       produces:
       - application/json
       responses:
         "200":
           description: success
           schema:
-            $ref: '#/definitions/datamodels.User'
+            $ref: '#/definitions/vo.UserVO'
         "400":
           description: error
           schema:
@@ -292,46 +508,23 @@ paths:
       summary: 更新用户信息
       tags:
       - 用户管理
-  /users/byuuid:
-    get:
-      consumes:
-      - application/json
-      description: 通过用户uuid获取用户信息
-      parameters:
-      - description: 用户uuid
-        in: query
-        name: uuid
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: success
-          schema:
-            $ref: '#/definitions/datamodels.User'
-        "400":
-          description: error
-          schema:
-            $ref: '#/definitions/errors.Errors'
-      security:
-      - token:
-        - read
-      summary: 获取用户信息
-      tags:
-      - 用户管理
   /users/disabled:
     put:
       consumes:
       - application/json
       description: 设置用户禁用状态
       parameters:
+      - description: 用户id
+        in: query
+        name: id
+        required: true
+        type: integer
       - description: request body
         in: body
         name: body
         required: true
         schema:
-          $ref: '#/definitions/parameter.UserDisabled'
+          $ref: '#/definitions/vo.UserDisabledVO'
       produces:
       - application/json
       responses:
@@ -360,14 +553,14 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/parameter.Page'
+          $ref: '#/definitions/vo.PageVO'
       produces:
       - application/json
       responses:
         "200":
           description: success
           schema:
-            $ref: '#/definitions/vo.UserVO'
+            $ref: '#/definitions/vo.UserPageVO'
         "400":
           description: error
           schema:
@@ -384,12 +577,17 @@ paths:
       - application/json
       description: 修改登陆用户密码
       parameters:
+      - description: 用户id
+        in: query
+        name: id
+        required: true
+        type: integer
       - description: request body
         in: body
         name: body
         required: true
         schema:
-          $ref: '#/definitions/parameter.Password'
+          $ref: '#/definitions/vo.PasswordVO'
       produces:
       - application/json
       responses:
@@ -405,6 +603,34 @@ paths:
       - token:
         - read
       summary: 修改登陆用户密码
+      tags:
+      - 用户管理
+  /users/userapprole:
+    get:
+      consumes:
+      - application/json
+      description: 通过用户ID获取用户及关联应用角色信息
+      parameters:
+      - description: 用户id
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/vo.UserAppRolesVO'
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/errors.Errors'
+      security:
+      - token:
+        - read
+      summary: 获取用户及关联应用角色信息
       tags:
       - 用户管理
 swagger: "2.0"

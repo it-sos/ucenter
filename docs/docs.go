@@ -33,6 +33,238 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/roles": {
+            "get": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
+                "description": "通过角色ID获取角色信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "角色管理"
+                ],
+                "summary": "获取角色信息",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "角色id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/vo.RoleVO"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
+                "description": "更新角色信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "角色管理"
+                ],
+                "summary": "更新角色信息",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "角色id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "request body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/vo.RoleParamsVO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/vo.RoleVO"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
+                "description": "创建角色信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "角色管理"
+                ],
+                "summary": "创建角色信息",
+                "parameters": [
+                    {
+                        "description": "request body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/vo.RoleParamsVO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/vo.RoleVO"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
+                "description": "删除角色信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "角色管理"
+                ],
+                "summary": "删除角色信息",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "角色id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
+                    }
+                }
+            }
+        },
+        "/roles/list": {
+            "get": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
+                "description": "获取全部角色分页列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "角色管理"
+                ],
+                "summary": "获取角色分页列表",
+                "parameters": [
+                    {
+                        "description": "request body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/vo.PageVO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/vo.RolePageVO"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
+                    }
+                }
+            }
+        },
         "/users": {
             "get": {
                 "security": [
@@ -58,15 +290,20 @@ var doc = `{
                         "type": "integer",
                         "description": "用户id",
                         "name": "id",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "用户uuid",
+                        "name": "uuid",
+                        "in": "query"
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "success",
                         "schema": {
-                            "$ref": "#/definitions/datamodels.User"
+                            "$ref": "#/definitions/vo.UserVO"
                         }
                     },
                     "400": {
@@ -98,12 +335,19 @@ var doc = `{
                 "summary": "更新用户信息",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "用户id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
                         "description": "request body",
                         "name": "body",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/parameter.User"
+                            "$ref": "#/definitions/vo.UserParamsVO"
                         }
                     }
                 ],
@@ -111,7 +355,7 @@ var doc = `{
                     "200": {
                         "description": "success",
                         "schema": {
-                            "$ref": "#/definitions/datamodels.User"
+                            "$ref": "#/definitions/vo.UserVO"
                         }
                     },
                     "400": {
@@ -148,7 +392,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/parameter.User"
+                            "$ref": "#/definitions/vo.UserParamsVO"
                         }
                     }
                 ],
@@ -156,7 +400,7 @@ var doc = `{
                     "200": {
                         "description": "success",
                         "schema": {
-                            "$ref": "#/definitions/datamodels.User"
+                            "$ref": "#/definitions/vo.UserVO"
                         }
                     },
                     "400": {
@@ -188,12 +432,19 @@ var doc = `{
                 "summary": "删除用户信息",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "用户id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
                         "description": "request body",
                         "name": "body",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/parameter.UserDeleted"
+                            "$ref": "#/definitions/vo.UserDeletedVO"
                         }
                     }
                 ],
@@ -202,51 +453,6 @@ var doc = `{
                         "description": "success",
                         "schema": {
                             "type": "string"
-                        }
-                    },
-                    "400": {
-                        "description": "error",
-                        "schema": {
-                            "$ref": "#/definitions/errors.Errors"
-                        }
-                    }
-                }
-            }
-        },
-        "/users/byuuid": {
-            "get": {
-                "security": [
-                    {
-                        "token": [
-                            "read"
-                        ]
-                    }
-                ],
-                "description": "通过用户uuid获取用户信息",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "用户管理"
-                ],
-                "summary": "获取用户信息",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "用户uuid",
-                        "name": "uuid",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "success",
-                        "schema": {
-                            "$ref": "#/definitions/datamodels.User"
                         }
                     },
                     "400": {
@@ -280,12 +486,19 @@ var doc = `{
                 "summary": "设置用户禁用状态",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "用户id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
                         "description": "request body",
                         "name": "body",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/parameter.UserDisabled"
+                            "$ref": "#/definitions/vo.UserDisabledVO"
                         }
                     }
                 ],
@@ -332,7 +545,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/parameter.Page"
+                            "$ref": "#/definitions/vo.PageVO"
                         }
                     }
                 ],
@@ -340,7 +553,7 @@ var doc = `{
                     "200": {
                         "description": "success",
                         "schema": {
-                            "$ref": "#/definitions/vo.UserVO"
+                            "$ref": "#/definitions/vo.UserPageVO"
                         }
                     },
                     "400": {
@@ -374,12 +587,19 @@ var doc = `{
                 "summary": "修改登陆用户密码",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "用户id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
                         "description": "request body",
                         "name": "body",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/parameter.Password"
+                            "$ref": "#/definitions/vo.PasswordVO"
                         }
                     }
                 ],
@@ -398,15 +618,174 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/users/userapprole": {
+            "get": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
+                "description": "通过用户ID获取用户及关联应用角色信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户管理"
+                ],
+                "summary": "获取用户及关联应用角色信息",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "用户id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/vo.UserAppRolesVO"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
-        "datamodels.User": {
+        "errors.Errors": {
+            "type": "object",
+            "properties": {
+                "errCode": {
+                    "type": "integer",
+                    "example": 4000000
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "vo.PageVO": {
+            "type": "object",
+            "properties": {
+                "page": {
+                    "description": "页码",
+                    "type": "integer"
+                },
+                "size": {
+                    "description": "每页条数",
+                    "type": "integer"
+                }
+            }
+        },
+        "vo.PasswordVO": {
+            "type": "object",
+            "required": [
+                "password"
+            ],
+            "properties": {
+                "password": {
+                    "description": "密码",
+                    "type": "string"
+                }
+            }
+        },
+        "vo.RolePageVO": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "description": "每页数据",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/vo.RoleVO"
+                    }
+                },
+                "page": {
+                    "description": "当前页数",
+                    "type": "integer"
+                },
+                "size": {
+                    "description": "每页条数",
+                    "type": "integer"
+                },
+                "totalPage": {
+                    "description": "总页数",
+                    "type": "integer"
+                }
+            }
+        },
+        "vo.RoleParamsVO": {
+            "type": "object",
+            "required": [
+                "info",
+                "name"
+            ],
+            "properties": {
+                "info": {
+                    "description": "角色描述",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "角色名称",
+                    "type": "string"
+                }
+            }
+        },
+        "vo.RoleVO": {
+            "type": "object",
+            "properties": {
+                "create_time": {
+                    "type": "string",
+                    "readOnly": true
+                },
+                "id": {
+                    "description": "角色id",
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "info": {
+                    "description": "描述",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "角色名称",
+                    "type": "string"
+                },
+                "update_time": {
+                    "type": "string",
+                    "readOnly": true
+                }
+            }
+        },
+        "vo.UserAppRolesVO": {
             "type": "object",
             "properties": {
                 "account": {
                     "description": "帐号",
                     "type": "string"
+                },
+                "appRole": {
+                    "description": "用户应用角色",
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
                 },
                 "create_time": {
                     "type": "string",
@@ -420,12 +799,23 @@ var doc = `{
                     "description": "禁用状态1=是，0=否",
                     "type": "integer"
                 },
+                "disabledName": {
+                    "description": "禁用状态",
+                    "type": "string",
+                    "example": "禁用"
+                },
+                "expireDate": {
+                    "description": "用户有效期",
+                    "type": "string",
+                    "example": "2022-12-14"
+                },
                 "expired": {
                     "description": "有效期0=永久，unix时间戳",
                     "type": "integer"
                 },
                 "id": {
                     "type": "integer",
+                    "readOnly": true,
                     "example": 1
                 },
                 "nickname": {
@@ -445,49 +835,55 @@ var doc = `{
                 }
             }
         },
-        "errors.Errors": {
+        "vo.UserDeletedVO": {
             "type": "object",
+            "required": [
+                "deleted"
+            ],
             "properties": {
-                "errCode": {
-                    "type": "integer",
-                    "example": 4000000
-                },
-                "message": {
+                "deleted": {
+                    "description": "删除标志0=否，1=是",
                     "type": "string"
                 }
             }
         },
-        "parameter.Page": {
+        "vo.UserDisabledVO": {
+            "type": "object",
+            "required": [
+                "disabled"
+            ],
+            "properties": {
+                "disabled": {
+                    "description": "禁用标志0=否，1=是",
+                    "type": "string"
+                }
+            }
+        },
+        "vo.UserPageVO": {
             "type": "object",
             "properties": {
+                "data": {
+                    "description": "每页数据",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/vo.UserVO"
+                    }
+                },
                 "page": {
-                    "description": "页码",
+                    "description": "当前页数",
                     "type": "integer"
                 },
                 "size": {
                     "description": "每页条数",
                     "type": "integer"
-                }
-            }
-        },
-        "parameter.Password": {
-            "type": "object",
-            "required": [
-                "id",
-                "password"
-            ],
-            "properties": {
-                "id": {
-                    "description": "用户id",
-                    "type": "integer"
                 },
-                "password": {
-                    "description": "密码",
-                    "type": "string"
+                "totalPage": {
+                    "description": "总页数",
+                    "type": "integer"
                 }
             }
         },
-        "parameter.User": {
+        "vo.UserParamsVO": {
             "type": "object",
             "required": [
                 "account",
@@ -526,41 +922,7 @@ var doc = `{
                 }
             }
         },
-        "parameter.UserDeleted": {
-            "type": "object",
-            "required": [
-                "deleted",
-                "id"
-            ],
-            "properties": {
-                "deleted": {
-                    "description": "删除标志0=否，1=是",
-                    "type": "string"
-                },
-                "id": {
-                    "description": "用户id",
-                    "type": "integer"
-                }
-            }
-        },
-        "parameter.UserDisabled": {
-            "type": "object",
-            "required": [
-                "disabled",
-                "id"
-            ],
-            "properties": {
-                "disabled": {
-                    "description": "禁用标志0=否，1=是",
-                    "type": "string"
-                },
-                "id": {
-                    "description": "用户id",
-                    "type": "integer"
-                }
-            }
-        },
-        "vo.User": {
+        "vo.UserVO": {
             "type": "object",
             "properties": {
                 "account": {
@@ -580,8 +942,14 @@ var doc = `{
                     "type": "integer"
                 },
                 "disabledName": {
+                    "description": "禁用状态",
                     "type": "string",
-                    "example": "已禁用"
+                    "example": "禁用"
+                },
+                "expireDate": {
+                    "description": "用户有效期",
+                    "type": "string",
+                    "example": "2022-12-14"
                 },
                 "expired": {
                     "description": "有效期0=永久，unix时间戳",
@@ -589,6 +957,7 @@ var doc = `{
                 },
                 "id": {
                     "type": "integer",
+                    "readOnly": true,
                     "example": 1
                 },
                 "nickname": {
@@ -605,30 +974,6 @@ var doc = `{
                 "uuid": {
                     "type": "string",
                     "example": "5bbc-4ala-3dja-1djs-0aja"
-                }
-            }
-        },
-        "vo.UserVO": {
-            "type": "object",
-            "properties": {
-                "data": {
-                    "description": "每页数据",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/vo.User"
-                    }
-                },
-                "page": {
-                    "description": "当前页数",
-                    "type": "integer"
-                },
-                "size": {
-                    "description": "每页条数",
-                    "type": "integer"
-                },
-                "totalPage": {
-                    "description": "总页数",
-                    "type": "integer"
                 }
             }
         }

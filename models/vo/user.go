@@ -1,25 +1,38 @@
-package parameter
+package vo
 
-type UserId struct {
-	Id uint `json:"id" binding:"required"` // 用户id
+import (
+	"ucenter/datamodels"
+)
+
+type UserVO struct {
+	datamodels.User
+	DisabledName string `json:"disabledName" example:"禁用"`       // 禁用状态
+	ExpireDate   string `json:"expireDate" example:"2022-12-14"` // 用户有效期
 }
 
-type UserDisabled struct {
-	*UserId
+type UserPageVO struct {
+	PagingVO
+	Data []UserVO `json:"data"` // 每页数据
+}
+
+type UserAppRolesVO struct {
+	UserVO
+	AppRole map[string][]string `json:"appRole"` // 用户应用角色
+}
+
+type UserDisabledVO struct {
 	IsDisabled string `json:"disabled" binding:"required"` // 禁用标志0=否，1=是
 }
 
-type UserDeleted struct {
-	*UserId
+type UserDeletedVO struct {
 	IsDeleted string `json:"deleted" binding:"required"` // 删除标志0=否，1=是
 }
 
-type Password struct {
-	*UserId
+type PasswordVO struct {
 	Password string `json:"password" binding:"required"` // 密码
 }
 
-type User struct {
+type UserParamsVO struct {
 	Account    string `json:"account" binding:"required"` // 帐号
 	Password   string `json:"password" binding:"required"`
 	Nickname   string `json:"nickname" binding:"required"` // 昵称
