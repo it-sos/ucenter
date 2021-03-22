@@ -25,6 +25,34 @@ definitions:
     required:
     - password
     type: object
+  vo.RoleAppUserVO:
+    properties:
+      app_id:
+        description: 应用id
+        type: string
+      role_id:
+        description: 角色id
+        type: string
+      user_id:
+        description: 用户id
+        type: string
+    required:
+    - app_id
+    - role_id
+    - user_id
+    type: object
+  vo.RoleAppVO:
+    properties:
+      app_id:
+        description: 应用id
+        type: string
+      role_id:
+        description: 角色id
+        type: string
+    required:
+    - app_id
+    - role_id
+    type: object
   vo.RolePageVO:
     properties:
       data:
@@ -242,11 +270,26 @@ paths:
     delete:
       consumes:
       - application/json
-      description: 删除角色信息
+      description: 删除角色应用用户关联信息
       parameters:
+      - description: token认证
+        in: header
+        name: token
+        required: true
+        type: string
       - description: 角色id
         in: query
-        name: id
+        name: role_id
+        required: true
+        type: integer
+      - description: 用户id
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      - description: 应用id
+        in: query
+        name: app_id
         required: true
         type: integer
       produces:
@@ -263,7 +306,7 @@ paths:
       security:
       - token:
         - read
-      summary: 删除角色信息
+      summary: 删除用户信息
       tags:
       - 角色管理
     get:
@@ -271,6 +314,11 @@ paths:
       - application/json
       description: 通过角色ID获取角色信息
       parameters:
+      - description: token认证
+        in: header
+        name: token
+        required: true
+        type: string
       - description: 角色id
         in: query
         name: id
@@ -298,6 +346,11 @@ paths:
       - application/json
       description: 创建角色信息
       parameters:
+      - description: token认证
+        in: header
+        name: token
+        required: true
+        type: string
       - description: request body
         in: body
         name: body
@@ -326,6 +379,11 @@ paths:
       - application/json
       description: 更新角色信息
       parameters:
+      - description: token认证
+        in: header
+        name: token
+        required: true
+        type: string
       - description: 角色id
         in: query
         name: id
@@ -343,7 +401,7 @@ paths:
         "200":
           description: success
           schema:
-            $ref: '#/definitions/vo.RoleVO'
+            type: string
         "400":
           description: error
           schema:
@@ -354,12 +412,85 @@ paths:
       summary: 更新角色信息
       tags:
       - 角色管理
+  /roles/app:
+    post:
+      consumes:
+      - application/json
+      description: 角色关联应用
+      parameters:
+      - description: token认证
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/vo.RoleAppVO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            type: string
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/errors.Errors'
+      security:
+      - token:
+        - read
+      summary: 关联应用
+      tags:
+      - 角色管理
+  /roles/appuser:
+    post:
+      consumes:
+      - application/json
+      description: 用户加入到应用角色
+      parameters:
+      - description: token认证
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/vo.RoleAppUserVO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            type: string
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/errors.Errors'
+      security:
+      - token:
+        - read
+      summary: 关联用户
+      tags:
+      - 角色管理
   /roles/list:
     get:
       consumes:
       - application/json
       description: 获取全部角色分页列表
       parameters:
+      - description: token认证
+        in: header
+        name: token
+        required: true
+        type: string
       - description: request body
         in: body
         name: body
@@ -383,12 +514,93 @@ paths:
       summary: 获取角色分页列表
       tags:
       - 角色管理
+  /roles/listbyappid:
+    get:
+      consumes:
+      - application/json
+      description: 通过应用ID获取角色列表
+      parameters:
+      - description: token认证
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 角色id
+        in: query
+        name: role_id
+        required: true
+        type: integer
+      - description: 应用id
+        in: query
+        name: app_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/vo.UserVO'
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/errors.Errors'
+      security:
+      - token:
+        - read
+      summary: 获取应用角色列表
+      tags:
+      - 角色管理
+  /roles/users:
+    get:
+      consumes:
+      - application/json
+      description: 通过角色ID和应用ID获取用户列表
+      parameters:
+      - description: token认证
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 角色id
+        in: query
+        name: role_id
+        required: true
+        type: integer
+      - description: 应用id
+        in: query
+        name: app_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/vo.UserVO'
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/errors.Errors'
+      security:
+      - token:
+        - read
+      summary: 获取用户列表
+      tags:
+      - 角色管理
   /users:
     delete:
       consumes:
       - application/json
       description: 删除用户信息
       parameters:
+      - description: token认证
+        in: header
+        name: token
+        required: true
+        type: string
       - description: 用户id
         in: query
         name: id
@@ -422,6 +634,11 @@ paths:
       - application/json
       description: 通过用户ID获取用户信息
       parameters:
+      - description: token认证
+        in: header
+        name: token
+        required: true
+        type: string
       - description: 用户id
         in: query
         name: id
@@ -452,6 +669,11 @@ paths:
       - application/json
       description: 创建用户信息
       parameters:
+      - description: token认证
+        in: header
+        name: token
+        required: true
+        type: string
       - description: request body
         in: body
         name: body
@@ -480,6 +702,11 @@ paths:
       - application/json
       description: 更新用户信息
       parameters:
+      - description: token认证
+        in: header
+        name: token
+        required: true
+        type: string
       - description: 用户id
         in: query
         name: id
@@ -514,6 +741,11 @@ paths:
       - application/json
       description: 设置用户禁用状态
       parameters:
+      - description: token认证
+        in: header
+        name: token
+        required: true
+        type: string
       - description: 用户id
         in: query
         name: id
@@ -548,6 +780,11 @@ paths:
       - application/json
       description: 获取全部用户分页列表
       parameters:
+      - description: token认证
+        in: header
+        name: token
+        required: true
+        type: string
       - description: request body
         in: body
         name: body
@@ -577,6 +814,11 @@ paths:
       - application/json
       description: 修改登陆用户密码
       parameters:
+      - description: token认证
+        in: header
+        name: token
+        required: true
+        type: string
       - description: 用户id
         in: query
         name: id
@@ -611,6 +853,11 @@ paths:
       - application/json
       description: 通过用户ID获取用户及关联应用角色信息
       parameters:
+      - description: token认证
+        in: header
+        name: token
+        required: true
+        type: string
       - description: 用户id
         in: query
         name: id

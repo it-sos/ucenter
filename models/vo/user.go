@@ -41,3 +41,10 @@ type UserParamsVO struct {
 	IsDisabled uint8  `json:"disabled" default:"0"` // 禁用状态1=是，0=否
 	IsDeleted  uint8  `json:"deleted" default:"0"`  // 删除标志1=是，0=否
 }
+
+// 关联角色
+type UserAppRoleVO struct {
+	UserId string `json:"user_id" binding:"required"` // 用户id
+	RoleId string `json:"role_id" binding:"required"` // 角色id
+	AppId  string `json:"app_id" binding:"required"`  // 应用id
+}

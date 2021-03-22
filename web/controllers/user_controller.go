@@ -16,6 +16,7 @@ type UserController struct {
 // @Description 创建用户信息
 // @Accept json
 // @Produce json
+// @Param token header string true "token认证"
 // @Param body body vo.UserParamsVO true "request body"
 // @Success 200 {object} vo.UserVO "success"
 // @Failure 400 {object} errors.Errors "error"
@@ -30,6 +31,7 @@ func (c *UserController) Post() (vo.UserVO, error) {
 // @Description 更新用户信息
 // @Accept json
 // @Produce json
+// @Param token header string true "token认证"
 // @Param id query integer true "用户id"
 // @Param body body vo.UserParamsVO true "request body"
 // @Success 200 {object} vo.UserVO "success"
@@ -45,6 +47,7 @@ func (c *UserController) Put() (vo.UserVO, error) {
 // @Description 删除用户信息
 // @Accept json
 // @Produce json
+// @Param token header string true "token认证"
 // @Param id query integer true "用户id"
 // @Param body body vo.UserDeletedVO true "request body"
 // @Success 200 {object} vo.UserVO "success"
@@ -61,6 +64,7 @@ func (c *UserController) Delete() error {
 // @Description 设置用户禁用状态
 // @Accept json
 // @Produce json
+// @Param token header string true "token认证"
 // @Param id query integer true "用户id"
 // @Param body body vo.UserDisabledVO true "request body"
 // @Success 200 {string} string	"success"
@@ -76,6 +80,7 @@ func (c *UserController) PutDisabled() error {
 // @Description 修改登陆用户密码
 // @Accept json
 // @Produce json
+// @Param token header string true "token认证"
 // @Param id query integer true "用户id"
 // @Param body body vo.PasswordVO true "request body"
 // @Success 200 {string} string	"success"
@@ -91,6 +96,7 @@ func (c *UserController) PutPassword() error {
 // @Description 通过用户ID获取用户信息
 // @Accept json
 // @Produce json
+// @Param token header string true "token认证"
 // @Param id query integer false "用户id"
 // @Param uuid query string false "用户uuid"
 // @Success 200 {object} vo.UserVO "success"
@@ -106,6 +112,7 @@ func (c *UserController) Get() (vo.UserVO, error) {
 // @Description 获取全部用户分页列表
 // @Accept json
 // @Produce json
+// @Param token header string true "token认证"
 // @Param body body vo.PageVO true "request body"
 // @Success 200 {object} vo.UserPageVO "success"
 // @Failure 400 {object} errors.Errors "error"
@@ -120,11 +127,12 @@ func (c *UserController) GetList() (vo.UserPageVO, error) {
 // @Description 通过用户ID获取用户及关联应用角色信息
 // @Accept json
 // @Produce json
+// @Param token header string true "token认证"
 // @Param id query integer true "用户id"
 // @Success 200 {object} vo.UserAppRolesVO "success"
 // @Failure 400 {object} errors.Errors "error"
 // @Security token[read]
 // @Router /users/userapprole [get]
-func (c *UserController) GetUserAppRole() (vo.UserAppRolesVO, error) {
+func (c *UserController) GetUserapprole() (vo.UserAppRolesVO, error) {
 	return vo.UserAppRolesVO{}, nil
 }

@@ -55,6 +55,13 @@ var doc = `{
                 "summary": "获取角色信息",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "type": "integer",
                         "description": "角色id",
                         "name": "id",
@@ -98,6 +105,13 @@ var doc = `{
                 "summary": "更新角色信息",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "type": "integer",
                         "description": "角色id",
                         "name": "id",
@@ -118,7 +132,7 @@ var doc = `{
                     "200": {
                         "description": "success",
                         "schema": {
-                            "$ref": "#/definitions/vo.RoleVO"
+                            "type": "string"
                         }
                     },
                     "400": {
@@ -149,6 +163,13 @@ var doc = `{
                 ],
                 "summary": "创建角色信息",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "description": "request body",
                         "name": "body",
@@ -182,7 +203,7 @@ var doc = `{
                         ]
                     }
                 ],
-                "description": "删除角色信息",
+                "description": "删除角色应用用户关联信息",
                 "consumes": [
                     "application/json"
                 ],
@@ -192,14 +213,143 @@ var doc = `{
                 "tags": [
                     "角色管理"
                 ],
-                "summary": "删除角色信息",
+                "summary": "删除用户信息",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "integer",
                         "description": "角色id",
-                        "name": "id",
+                        "name": "role_id",
                         "in": "query",
                         "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "用户id",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "应用id",
+                        "name": "app_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
+                    }
+                }
+            }
+        },
+        "/roles/app": {
+            "post": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
+                "description": "角色关联应用",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "角色管理"
+                ],
+                "summary": "关联应用",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "request body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/vo.RoleAppVO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
+                    }
+                }
+            }
+        },
+        "/roles/appuser": {
+            "post": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
+                "description": "用户加入到应用角色",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "角色管理"
+                ],
+                "summary": "关联用户",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "request body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/vo.RoleAppUserVO"
+                        }
                     }
                 ],
                 "responses": {
@@ -240,6 +390,13 @@ var doc = `{
                 "summary": "获取角色分页列表",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "request body",
                         "name": "body",
                         "in": "body",
@@ -254,6 +411,124 @@ var doc = `{
                         "description": "success",
                         "schema": {
                             "$ref": "#/definitions/vo.RolePageVO"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
+                    }
+                }
+            }
+        },
+        "/roles/listbyappid": {
+            "get": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
+                "description": "通过应用ID获取角色列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "角色管理"
+                ],
+                "summary": "获取应用角色列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "角色id",
+                        "name": "role_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "应用id",
+                        "name": "app_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/vo.UserVO"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
+                    }
+                }
+            }
+        },
+        "/roles/users": {
+            "get": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
+                "description": "通过角色ID和应用ID获取用户列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "角色管理"
+                ],
+                "summary": "获取用户列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "角色id",
+                        "name": "role_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "应用id",
+                        "name": "app_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/vo.UserVO"
                         }
                     },
                     "400": {
@@ -286,6 +561,13 @@ var doc = `{
                 ],
                 "summary": "获取用户信息",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "integer",
                         "description": "用户id",
@@ -334,6 +616,13 @@ var doc = `{
                 ],
                 "summary": "更新用户信息",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "integer",
                         "description": "用户id",
@@ -387,6 +676,13 @@ var doc = `{
                 "summary": "创建用户信息",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "request body",
                         "name": "body",
                         "in": "body",
@@ -431,6 +727,13 @@ var doc = `{
                 ],
                 "summary": "删除用户信息",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "integer",
                         "description": "用户id",
@@ -486,6 +789,13 @@ var doc = `{
                 "summary": "设置用户禁用状态",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "type": "integer",
                         "description": "用户id",
                         "name": "id",
@@ -540,6 +850,13 @@ var doc = `{
                 "summary": "获取用户分页列表",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "request body",
                         "name": "body",
                         "in": "body",
@@ -586,6 +903,13 @@ var doc = `{
                 ],
                 "summary": "修改登陆用户密码",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "integer",
                         "description": "用户id",
@@ -640,6 +964,13 @@ var doc = `{
                 ],
                 "summary": "获取用户及关联应用角色信息",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "integer",
                         "description": "用户id",
@@ -699,6 +1030,45 @@ var doc = `{
             "properties": {
                 "password": {
                     "description": "密码",
+                    "type": "string"
+                }
+            }
+        },
+        "vo.RoleAppUserVO": {
+            "type": "object",
+            "required": [
+                "app_id",
+                "role_id",
+                "user_id"
+            ],
+            "properties": {
+                "app_id": {
+                    "description": "应用id",
+                    "type": "string"
+                },
+                "role_id": {
+                    "description": "角色id",
+                    "type": "string"
+                },
+                "user_id": {
+                    "description": "用户id",
+                    "type": "string"
+                }
+            }
+        },
+        "vo.RoleAppVO": {
+            "type": "object",
+            "required": [
+                "app_id",
+                "role_id"
+            ],
+            "properties": {
+                "app_id": {
+                    "description": "应用id",
+                    "type": "string"
+                },
+                "role_id": {
+                    "description": "角色id",
                     "type": "string"
                 }
             }
