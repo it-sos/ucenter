@@ -33,6 +33,493 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/apps": {
+            "get": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
+                "description": "通过应用ID获取应用信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "应用管理"
+                ],
+                "summary": "获取应用信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "应用id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/vo.AppVO"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
+                "description": "更新应用信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "应用管理"
+                ],
+                "summary": "更新应用信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "应用id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "request body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/vo.AppParamsVO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
+                "description": "创建应用信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "应用管理"
+                ],
+                "summary": "创建应用信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "request body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/vo.AppParamsVO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/vo.AppVO"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
+                "description": "删除应用信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "应用管理"
+                ],
+                "summary": "删除应用信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "应用id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
+                    }
+                }
+            }
+        },
+        "/apps/icon": {
+            "get": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
+                "description": "通过应用ID获取应用信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "应用管理"
+                ],
+                "summary": "获取应用信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "图标地址",
+                        "name": "icon",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "图片流",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
+                "description": "上传图标文件",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "应用管理"
+                ],
+                "summary": "上传图标文件",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "应用id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "request file data",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/vo.AppIconVO"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
+                    }
+                }
+            }
+        },
+        "/apps/list": {
+            "get": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
+                "description": "获取全部应用分页列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "应用管理"
+                ],
+                "summary": "获取应用分页列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "request body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/vo.PageVO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/vo.AppPageVO"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
+                    }
+                }
+            }
+        },
+        "/apps/listbyappid": {
+            "get": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
+                "description": "通过应用ID获取应用列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "应用管理"
+                ],
+                "summary": "获取应用应用列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "应用id",
+                        "name": "app_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "应用id",
+                        "name": "app_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/vo.AppPageVO"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
+                    }
+                }
+            }
+        },
+        "/apps/users": {
+            "get": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
+                "description": "通过应用ID和应用ID获取用户列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "应用管理"
+                ],
+                "summary": "获取用户列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "应用id",
+                        "name": "app_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/vo.UserPageVO"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
+                    }
+                }
+            }
+        },
         "/roles": {
             "get": {
                 "security": [
@@ -469,7 +956,7 @@ var doc = `{
                     "200": {
                         "description": "success",
                         "schema": {
-                            "$ref": "#/definitions/vo.UserVO"
+                            "$ref": "#/definitions/vo.RolePageVO"
                         }
                     },
                     "400": {
@@ -528,7 +1015,7 @@ var doc = `{
                     "200": {
                         "description": "success",
                         "schema": {
-                            "$ref": "#/definitions/vo.UserVO"
+                            "$ref": "#/definitions/vo.UserPageVO"
                         }
                     },
                     "400": {
@@ -1009,6 +1496,113 @@ var doc = `{
                 }
             }
         },
+        "vo.AppIconVO": {
+            "type": "object",
+            "required": [
+                "icon"
+            ],
+            "properties": {
+                "icon": {
+                    "description": "应用图标标志",
+                    "type": "string"
+                }
+            }
+        },
+        "vo.AppPageVO": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "description": "每页数据",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/vo.AppVO"
+                    }
+                },
+                "page": {
+                    "description": "当前页数",
+                    "type": "integer"
+                },
+                "size": {
+                    "description": "每页条数",
+                    "type": "integer"
+                },
+                "totalPage": {
+                    "description": "总页数",
+                    "type": "integer"
+                }
+            }
+        },
+        "vo.AppParamsVO": {
+            "type": "object",
+            "required": [
+                "icon",
+                "info",
+                "link",
+                "name"
+            ],
+            "properties": {
+                "icon": {
+                    "description": "应用图标",
+                    "type": "string"
+                },
+                "info": {
+                    "description": "应用描述",
+                    "type": "string"
+                },
+                "link": {
+                    "description": "应用链接",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "应用名称",
+                    "type": "string"
+                }
+            }
+        },
+        "vo.AppVO": {
+            "type": "object",
+            "properties": {
+                "appid": {
+                    "description": "应用appid",
+                    "type": "string",
+                    "readOnly": true
+                },
+                "create_time": {
+                    "type": "string",
+                    "readOnly": true
+                },
+                "deleted": {
+                    "description": "删除标志1=是，0=否",
+                    "type": "integer"
+                },
+                "icon": {
+                    "description": "应用图标",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "应用ID",
+                    "type": "integer",
+                    "readOnly": true,
+                    "example": 1
+                },
+                "info": {
+                    "description": "应用描述",
+                    "type": "string"
+                },
+                "link": {
+                    "description": "应用链接",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "应用名称",
+                    "type": "string"
+                },
+                "update_time": {
+                    "type": "string",
+                    "readOnly": true
+                }
+            }
+        },
         "vo.PageVO": {
             "type": "object",
             "properties": {
@@ -1147,7 +1741,7 @@ var doc = `{
                     "description": "帐号",
                     "type": "string"
                 },
-                "appRole": {
+                "app_role": {
                     "description": "用户应用角色",
                     "type": "object",
                     "additionalProperties": {
@@ -1161,20 +1755,12 @@ var doc = `{
                     "type": "string",
                     "readOnly": true
                 },
-                "deleted": {
-                    "description": "删除标志1=是，0=否",
-                    "type": "integer"
-                },
-                "disabled": {
-                    "description": "禁用状态1=是，0=否",
-                    "type": "integer"
-                },
-                "disabledName": {
+                "disabled_name": {
                     "description": "禁用状态",
                     "type": "string",
                     "example": "禁用"
                 },
-                "expireDate": {
+                "expire_date": {
                     "description": "用户有效期",
                     "type": "string",
                     "example": "2022-12-14"
@@ -1184,9 +1770,18 @@ var doc = `{
                     "type": "integer"
                 },
                 "id": {
+                    "description": "用户表ID",
                     "type": "integer",
                     "readOnly": true,
                     "example": 1
+                },
+                "is_deleted": {
+                    "description": "删除标志1=是，0=否",
+                    "type": "integer"
+                },
+                "is_disabled": {
+                    "description": "禁用状态1=是，0=否",
+                    "type": "integer"
                 },
                 "nickname": {
                     "description": "昵称",
@@ -1200,6 +1795,7 @@ var doc = `{
                     "readOnly": true
                 },
                 "uuid": {
+                    "description": "用户uuid",
                     "type": "string",
                     "example": "5bbc-4ala-3dja-1djs-0aja"
                 }
@@ -1208,10 +1804,10 @@ var doc = `{
         "vo.UserDeletedVO": {
             "type": "object",
             "required": [
-                "deleted"
+                "is_deleted"
             ],
             "properties": {
-                "deleted": {
+                "is_deleted": {
                     "description": "删除标志0=否，1=是",
                     "type": "string"
                 }
@@ -1220,10 +1816,10 @@ var doc = `{
         "vo.UserDisabledVO": {
             "type": "object",
             "required": [
-                "disabled"
+                "is_disabled"
             ],
             "properties": {
-                "disabled": {
+                "is_disabled": {
                     "description": "禁用标志0=否，1=是",
                     "type": "string"
                 }
@@ -1265,18 +1861,18 @@ var doc = `{
                     "description": "帐号",
                     "type": "string"
                 },
-                "deleted": {
+                "expired": {
+                    "description": "有效期0=永久，unix时间戳",
+                    "type": "integer",
+                    "default": 0
+                },
+                "is_deleted": {
                     "description": "删除标志1=是，0=否",
                     "type": "integer",
                     "default": 0
                 },
-                "disabled": {
+                "is_disabled": {
                     "description": "禁用状态1=是，0=否",
-                    "type": "integer",
-                    "default": 0
-                },
-                "expired": {
-                    "description": "有效期0=永久，unix时间戳",
                     "type": "integer",
                     "default": 0
                 },
@@ -1303,20 +1899,12 @@ var doc = `{
                     "type": "string",
                     "readOnly": true
                 },
-                "deleted": {
-                    "description": "删除标志1=是，0=否",
-                    "type": "integer"
-                },
-                "disabled": {
-                    "description": "禁用状态1=是，0=否",
-                    "type": "integer"
-                },
-                "disabledName": {
+                "disabled_name": {
                     "description": "禁用状态",
                     "type": "string",
                     "example": "禁用"
                 },
-                "expireDate": {
+                "expire_date": {
                     "description": "用户有效期",
                     "type": "string",
                     "example": "2022-12-14"
@@ -1326,9 +1914,18 @@ var doc = `{
                     "type": "integer"
                 },
                 "id": {
+                    "description": "用户表ID",
                     "type": "integer",
                     "readOnly": true,
                     "example": 1
+                },
+                "is_deleted": {
+                    "description": "删除标志1=是，0=否",
+                    "type": "integer"
+                },
+                "is_disabled": {
+                    "description": "禁用状态1=是，0=否",
+                    "type": "integer"
                 },
                 "nickname": {
                     "description": "昵称",
@@ -1342,6 +1939,7 @@ var doc = `{
                     "readOnly": true
                 },
                 "uuid": {
+                    "description": "用户uuid",
                     "type": "string",
                     "example": "5bbc-4ala-3dja-1djs-0aja"
                 }

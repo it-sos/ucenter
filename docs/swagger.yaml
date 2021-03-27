@@ -8,6 +8,84 @@ definitions:
       message:
         type: string
     type: object
+  vo.AppIconVO:
+    properties:
+      icon:
+        description: 应用图标标志
+        type: string
+    required:
+    - icon
+    type: object
+  vo.AppPageVO:
+    properties:
+      data:
+        description: 每页数据
+        items:
+          $ref: '#/definitions/vo.AppVO'
+        type: array
+      page:
+        description: 当前页数
+        type: integer
+      size:
+        description: 每页条数
+        type: integer
+      totalPage:
+        description: 总页数
+        type: integer
+    type: object
+  vo.AppParamsVO:
+    properties:
+      icon:
+        description: 应用图标
+        type: string
+      info:
+        description: 应用描述
+        type: string
+      link:
+        description: 应用链接
+        type: string
+      name:
+        description: 应用名称
+        type: string
+    required:
+    - icon
+    - info
+    - link
+    - name
+    type: object
+  vo.AppVO:
+    properties:
+      appid:
+        description: 应用appid
+        readOnly: true
+        type: string
+      create_time:
+        readOnly: true
+        type: string
+      deleted:
+        description: 删除标志1=是，0=否
+        type: integer
+      icon:
+        description: 应用图标
+        type: string
+      id:
+        description: 应用ID
+        example: 1
+        readOnly: true
+        type: integer
+      info:
+        description: 应用描述
+        type: string
+      link:
+        description: 应用链接
+        type: string
+      name:
+        description: 应用名称
+        type: string
+      update_time:
+        readOnly: true
+        type: string
+    type: object
   vo.PageVO:
     properties:
       page:
@@ -106,7 +184,7 @@ definitions:
       account:
         description: 帐号
         type: string
-      appRole:
+      app_role:
         additionalProperties:
           items:
             type: string
@@ -116,17 +194,11 @@ definitions:
       create_time:
         readOnly: true
         type: string
-      deleted:
-        description: 删除标志1=是，0=否
-        type: integer
-      disabled:
-        description: 禁用状态1=是，0=否
-        type: integer
-      disabledName:
+      disabled_name:
         description: 禁用状态
         example: 禁用
         type: string
-      expireDate:
+      expire_date:
         description: 用户有效期
         example: "2022-12-14"
         type: string
@@ -134,8 +206,15 @@ definitions:
         description: 有效期0=永久，unix时间戳
         type: integer
       id:
+        description: 用户表ID
         example: 1
         readOnly: true
+        type: integer
+      is_deleted:
+        description: 删除标志1=是，0=否
+        type: integer
+      is_disabled:
+        description: 禁用状态1=是，0=否
         type: integer
       nickname:
         description: 昵称
@@ -146,24 +225,25 @@ definitions:
         readOnly: true
         type: string
       uuid:
+        description: 用户uuid
         example: 5bbc-4ala-3dja-1djs-0aja
         type: string
     type: object
   vo.UserDeletedVO:
     properties:
-      deleted:
+      is_deleted:
         description: 删除标志0=否，1=是
         type: string
     required:
-    - deleted
+    - is_deleted
     type: object
   vo.UserDisabledVO:
     properties:
-      disabled:
+      is_disabled:
         description: 禁用标志0=否，1=是
         type: string
     required:
-    - disabled
+    - is_disabled
     type: object
   vo.UserPageVO:
     properties:
@@ -187,17 +267,17 @@ definitions:
       account:
         description: 帐号
         type: string
-      deleted:
-        default: 0
-        description: 删除标志1=是，0=否
-        type: integer
-      disabled:
-        default: 0
-        description: 禁用状态1=是，0=否
-        type: integer
       expired:
         default: 0
         description: 有效期0=永久，unix时间戳
+        type: integer
+      is_deleted:
+        default: 0
+        description: 删除标志1=是，0=否
+        type: integer
+      is_disabled:
+        default: 0
+        description: 禁用状态1=是，0=否
         type: integer
       nickname:
         description: 昵称
@@ -219,17 +299,11 @@ definitions:
       create_time:
         readOnly: true
         type: string
-      deleted:
-        description: 删除标志1=是，0=否
-        type: integer
-      disabled:
-        description: 禁用状态1=是，0=否
-        type: integer
-      disabledName:
+      disabled_name:
         description: 禁用状态
         example: 禁用
         type: string
-      expireDate:
+      expire_date:
         description: 用户有效期
         example: "2022-12-14"
         type: string
@@ -237,8 +311,15 @@ definitions:
         description: 有效期0=永久，unix时间戳
         type: integer
       id:
+        description: 用户表ID
         example: 1
         readOnly: true
+        type: integer
+      is_deleted:
+        description: 删除标志1=是，0=否
+        type: integer
+      is_disabled:
+        description: 禁用状态1=是，0=否
         type: integer
       nickname:
         description: 昵称
@@ -249,6 +330,7 @@ definitions:
         readOnly: true
         type: string
       uuid:
+        description: 用户uuid
         example: 5bbc-4ala-3dja-1djs-0aja
         type: string
     type: object
@@ -266,6 +348,317 @@ info:
   title: ucenter api
   version: "1.0"
 paths:
+  /apps:
+    delete:
+      consumes:
+      - application/json
+      description: 删除应用信息
+      parameters:
+      - description: token认证
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 应用id
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            type: string
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/errors.Errors'
+      security:
+      - token:
+        - read
+      summary: 删除应用信息
+      tags:
+      - 应用管理
+    get:
+      consumes:
+      - application/json
+      description: 通过应用ID获取应用信息
+      parameters:
+      - description: token认证
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 应用id
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/vo.AppVO'
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/errors.Errors'
+      security:
+      - token:
+        - read
+      summary: 获取应用信息
+      tags:
+      - 应用管理
+    post:
+      consumes:
+      - application/json
+      description: 创建应用信息
+      parameters:
+      - description: token认证
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/vo.AppParamsVO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/vo.AppVO'
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/errors.Errors'
+      security:
+      - token:
+        - read
+      summary: 创建应用信息
+      tags:
+      - 应用管理
+    put:
+      consumes:
+      - application/json
+      description: 更新应用信息
+      parameters:
+      - description: token认证
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 应用id
+        in: query
+        name: id
+        required: true
+        type: integer
+      - description: request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/vo.AppParamsVO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            type: string
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/errors.Errors'
+      security:
+      - token:
+        - read
+      summary: 更新应用信息
+      tags:
+      - 应用管理
+  /apps/icon:
+    get:
+      consumes:
+      - application/json
+      description: 通过应用ID获取应用信息
+      parameters:
+      - description: token认证
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 图标地址
+        in: query
+        name: icon
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 图片流
+          schema:
+            type: string
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/errors.Errors'
+      security:
+      - token:
+        - read
+      summary: 获取应用信息
+      tags:
+      - 应用管理
+    post:
+      consumes:
+      - multipart/form-data
+      description: 上传图标文件
+      parameters:
+      - description: token认证
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 应用id
+        in: query
+        name: id
+        required: true
+        type: integer
+      - description: request file data
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/vo.AppIconVO'
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/errors.Errors'
+      security:
+      - token:
+        - read
+      summary: 上传图标文件
+      tags:
+      - 应用管理
+  /apps/list:
+    get:
+      consumes:
+      - application/json
+      description: 获取全部应用分页列表
+      parameters:
+      - description: token认证
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/vo.PageVO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/vo.AppPageVO'
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/errors.Errors'
+      security:
+      - token:
+        - read
+      summary: 获取应用分页列表
+      tags:
+      - 应用管理
+  /apps/listbyappid:
+    get:
+      consumes:
+      - application/json
+      description: 通过应用ID获取应用列表
+      parameters:
+      - description: token认证
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 应用id
+        in: query
+        name: app_id
+        required: true
+        type: integer
+      - description: 应用id
+        in: query
+        name: app_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/vo.AppPageVO'
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/errors.Errors'
+      security:
+      - token:
+        - read
+      summary: 获取应用应用列表
+      tags:
+      - 应用管理
+  /apps/users:
+    get:
+      consumes:
+      - application/json
+      description: 通过应用ID和应用ID获取用户列表
+      parameters:
+      - description: token认证
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 应用id
+        in: query
+        name: app_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/vo.UserPageVO'
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/errors.Errors'
+      security:
+      - token:
+        - read
+      summary: 获取用户列表
+      tags:
+      - 应用管理
   /roles:
     delete:
       consumes:
@@ -541,7 +934,7 @@ paths:
         "200":
           description: success
           schema:
-            $ref: '#/definitions/vo.UserVO'
+            $ref: '#/definitions/vo.RolePageVO'
         "400":
           description: error
           schema:
@@ -579,7 +972,7 @@ paths:
         "200":
           description: success
           schema:
-            $ref: '#/definitions/vo.UserVO'
+            $ref: '#/definitions/vo.UserPageVO'
         "400":
           description: error
           schema:

@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/kataras/iris/v12"
+	"net/http"
 	"ucenter/models/vo"
 	"ucenter/services"
 )
@@ -29,11 +30,11 @@ func (c *AppController) Post() (vo.AppVO, error) {
 // @Tags 应用管理
 // @Summary 上传图标文件
 // @Description 上传图标文件
-// @Accept fromData
+// @Accept  multipart/form-data
 // @Produce json
 // @Param token header string true "token认证"
 // @Param id query integer true "应用id"
-// @Param file fromData file true "request file data"
+// @Param file formData file true "request file data"
 // @Success 200 {object} vo.AppIconVO "success"
 // @Failure 400 {object} errors.Errors "error"
 // @Security token[read]
@@ -80,12 +81,12 @@ func (c *AppController) Delete() error {
 // @Produce json
 // @Param token header string true "token认证"
 // @Param icon query string true "图标地址"
-// @Success 200 {formData} image_data "success"
+// @Success 200 {string} string "图片流"
 // @Failure 400 {object} errors.Errors "error"
 // @Security token[read]
-// @Router /apps/Icon [get]
-func (c *AppController) GetIcon() (vo.AppVO, error) {
-	return vo.AppVO{}, nil
+// @Router /apps/icon [get]
+func (c *AppController) GetIcon() (http.File, error) {
+	return nil, nil
 }
 
 // @Tags 应用管理
