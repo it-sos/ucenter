@@ -35,7 +35,7 @@ create table app (
     create_time datetime not null default current_timestamp comment '创建时间',
     key idx_appid(appid),
     primary key(id)
-) engine=innoDB charset=utf8mb4 comment '应用表';
+) engine=innoDB charset=utf8mb4 comment '应用';
 
 drop table if exists role;
 create table role (
@@ -50,7 +50,7 @@ create table role (
 drop table if exists route;
 create table route (
     id int unsigned not null auto_increment,
-    app_id int unsigned not null comment '应用表ID',
+    app_id int unsigned not null comment '应用ID',
     name varchar(32) not null comment '功能名称',
     info varchar(255) not null comment '功能描述',
     router varchar(255) not null comment '路由',
@@ -66,7 +66,7 @@ drop table if exists user_permission;
 create table user_permission (
     id int unsigned not null auto_increment,
     user_id int unsigned not null comment '用户表ID',
-    app_id int unsigned not null comment '应用表ID',
+    app_id int unsigned not null comment '应用ID',
     route_id int unsigned not null comment '路由表ID',
     is_allowed tinyint unsigned not null default 1 comment '是否允许访问 0=否；1=是',
     update_time datetime not null on update current_timestamp default current_timestamp comment '更新时间',
@@ -79,7 +79,7 @@ drop table if exists role_permission;
 create table role_permission (
     id int unsigned not null auto_increment,
     role_id int unsigned not null comment '角色表ID',
-    app_id int unsigned not null comment '应用表ID',
+    app_id int unsigned not null comment '应用ID',
     route_id int unsigned not null comment '路由表ID',
     is_allowed tinyint unsigned not null default 1 comment '是否允许访问 0=否；1=是',
     update_time datetime not null on update current_timestamp default current_timestamp comment '更新时间',
@@ -93,7 +93,7 @@ create table user_role (
     id int unsigned not null auto_increment,
     user_id int unsigned not null comment '用户表ID',
     role_id int unsigned not null comment '角色表ID',
-    app_id int unsigned not null comment '应用表ID',
+    app_id int unsigned not null comment '应用ID',
     update_time datetime not null on update current_timestamp default current_timestamp comment '更新时间',
     create_time datetime not null default current_timestamp comment '创建时间',
     unique uk_userid_roleid_appid(user_id, role_id, app_id),
@@ -103,7 +103,7 @@ create table user_role (
 drop table if exists app_role;
 create table app_role (
     id int unsigned not null auto_increment,
-    app_id int unsigned not null comment '应用表ID',
+    app_id int unsigned not null comment '应用ID',
     role_id int unsigned not null comment '角色表ID',
     update_time datetime not null on update current_timestamp default current_timestamp comment '更新时间',
     create_time datetime not null default current_timestamp comment '创建时间',

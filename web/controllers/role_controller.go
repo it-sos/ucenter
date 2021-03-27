@@ -157,12 +157,12 @@ func (c *RoleController) GetList() (vo.RolePageVO, error) {
 // @Param token header string true "token认证"
 // @Param role_id query integer true "角色id"
 // @Param app_id query integer true "应用id"
-// @Success 200 {object} vo.UserVO "success"
+// @Success 200 {object} vo.UserPageVO "success"
 // @Failure 400 {object} errors.Errors "error"
 // @Security token[read]
 // @Router /roles/users [get]
-func (c *RoleController) GetUsers() (vo.UserVO, error) {
-	return vo.UserVO{}, nil
+func (c *RoleController) GetUsers() (vo.UserPageVO, error) {
+	return vo.UserPageVO{}, nil
 }
 
 // @Tags 角色管理
@@ -173,10 +173,10 @@ func (c *RoleController) GetUsers() (vo.UserVO, error) {
 // @Param token header string true "token认证"
 // @Param role_id query integer true "角色id"
 // @Param app_id query integer true "应用id"
-// @Success 200 {object} vo.UserVO "success"
+// @Success 200 {object} vo.RolePageVO "success"
 // @Failure 400 {object} errors.Errors "error"
 // @Security token[read]
 // @Router /roles/listbyappid [get]
-func (c *RoleController) GetListbyappid() (vo.UserVO, error) {
-	return vo.UserVO{}, nil
+func (c *RoleController) GetListbyappid() (vo.RolePageVO, error) {
+	return vo.RolePageVO{}, nil
 }

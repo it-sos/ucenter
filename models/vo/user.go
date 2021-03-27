@@ -6,8 +6,8 @@ import (
 
 type UserVO struct {
 	datamodels.User
-	DisabledName string `json:"disabledName" example:"禁用"`       // 禁用状态
-	ExpireDate   string `json:"expireDate" example:"2022-12-14"` // 用户有效期
+	DisabledName string `json:"disabled_name" example:"禁用"`       // 禁用状态
+	ExpireDate   string `json:"expire_date" example:"2022-12-14"` // 用户有效期
 }
 
 type UserPageVO struct {
@@ -17,15 +17,15 @@ type UserPageVO struct {
 
 type UserAppRolesVO struct {
 	UserVO
-	AppRole map[string][]string `json:"appRole"` // 用户应用角色
+	AppRole map[string][]string `json:"app_role"` // 用户应用角色
 }
 
 type UserDisabledVO struct {
-	IsDisabled string `json:"disabled" binding:"required"` // 禁用标志0=否，1=是
+	IsDisabled string `json:"is_disabled" binding:"required"` // 禁用标志0=否，1=是
 }
 
 type UserDeletedVO struct {
-	IsDeleted string `json:"deleted" binding:"required"` // 删除标志0=否，1=是
+	IsDeleted string `json:"is_deleted" binding:"required"` // 删除标志0=否，1=是
 }
 
 type PasswordVO struct {
@@ -37,9 +37,9 @@ type UserParamsVO struct {
 	Password   string `json:"password" binding:"required"`
 	Nickname   string `json:"nickname" binding:"required"` // 昵称
 	Phone      string `json:"phone"`
-	Expired    uint   `json:"expired" default:"0"`  // 有效期0=永久，unix时间戳
-	IsDisabled uint8  `json:"disabled" default:"0"` // 禁用状态1=是，0=否
-	IsDeleted  uint8  `json:"deleted" default:"0"`  // 删除标志1=是，0=否
+	Expired    uint   `json:"expired" default:"0"`     // 有效期0=永久，unix时间戳
+	IsDisabled uint8  `json:"is_disabled" default:"0"` // 禁用状态1=是，0=否
+	IsDeleted  uint8  `json:"is_deleted" default:"0"`  // 删除标志1=是，0=否
 }
 
 // 关联角色
