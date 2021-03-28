@@ -119,8 +119,8 @@ func (c *AppController) GetList() (vo.AppPageVO, error) {
 }
 
 // @Tags 应用管理
-// @Summary 通过appid获取应用信息
-// @Description 通过应用appid获取应用信息
+// @Summary 通过应用id获取应用信息
+// @Description 通过应用id获取应用信息
 // @Accept json
 // @Produce json
 // @Param token header string true "token认证"
