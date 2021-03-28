@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"github.com/kataras/iris/v12"
-	"net/http"
 	"ucenter/models/vo"
 	"ucenter/services"
 )
@@ -51,12 +50,12 @@ func (c *AppController) PostIcon() (vo.AppIconVO, error) {
 // @Param token header string true "token认证"
 // @Param id query integer true "应用id"
 // @Param body body vo.AppParamsVO true "request body"
-// @Success 200 {string} string	"success"
+// @Success 200 {object} vo.AppVO	"success"
 // @Failure 400 {object} errors.Errors "error"
 // @Security token[read]
 // @Router /apps [put]
-func (c *AppController) Put() (vo.AppParamsVO, error) {
-	return vo.AppParamsVO{}, nil
+func (c *AppController) Put() (vo.AppVO, error) {
+	return vo.AppVO{}, nil
 }
 
 // @Tags 应用管理
@@ -85,8 +84,8 @@ func (c *AppController) Delete() error {
 // @Failure 400 {object} errors.Errors "error"
 // @Security token[read]
 // @Router /apps/icon [get]
-func (c *AppController) GetIcon() (http.File, error) {
-	return nil, nil
+func (c *AppController) GetIcon() error {
+	return nil
 }
 
 // @Tags 应用管理
@@ -120,32 +119,16 @@ func (c *AppController) GetList() (vo.AppPageVO, error) {
 }
 
 // @Tags 应用管理
-// @Summary 获取用户列表
-// @Description 通过应用ID和应用ID获取用户列表
+// @Summary 通过appid获取应用信息
+// @Description 通过应用appid获取应用信息
 // @Accept json
 // @Produce json
 // @Param token header string true "token认证"
-// @Param app_id query integer true "应用id"
-// @Success 200 {object} vo.UserPageVO "success"
+// @Param appid query integer true "应用appid"
+// @Success 200 {object} vo.AppVO "success"
 // @Failure 400 {object} errors.Errors "error"
 // @Security token[read]
-// @Router /apps/users [get]
-func (c *AppController) GetUsers() (vo.UserPageVO, error) {
-	return vo.UserPageVO{}, nil
-}
-
-// @Tags 应用管理
-// @Summary 获取应用应用列表
-// @Description 通过应用ID获取应用列表
-// @Accept json
-// @Produce json
-// @Param token header string true "token认证"
-// @Param app_id query integer true "应用id"
-// @Param app_id query integer true "应用id"
-// @Success 200 {object} vo.AppPageVO "success"
-// @Failure 400 {object} errors.Errors "error"
-// @Security token[read]
-// @Router /apps/listbyappid [get]
-func (c *AppController) GetListbyappid() (vo.AppPageVO, error) {
-	return vo.AppPageVO{}, nil
+// @Router /apps/byappid [get]
+func (c *AppController) GetByappid() (vo.AppVO, error) {
+	return vo.AppVO{}, nil
 }

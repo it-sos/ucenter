@@ -286,7 +286,7 @@ var doc = `{
                     "200": {
                         "description": "图片流",
                         "schema": {
-                            "type": "string"
+                            "type": "interface"
                         }
                     },
                     "400": {
