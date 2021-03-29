@@ -132,7 +132,7 @@ var doc = `{
                     "200": {
                         "description": "success",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/vo.AppVO"
                         }
                     },
                     "400": {
@@ -246,6 +246,58 @@ var doc = `{
                 }
             }
         },
+        "/apps/byappid": {
+            "get": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
+                "description": "通过应用id获取应用信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "应用管理"
+                ],
+                "summary": "通过应用id获取应用信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "应用appid",
+                        "name": "appid",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/vo.AppVO"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
+                    }
+                }
+            }
+        },
         "/apps/icon": {
             "get": {
                 "security": [
@@ -286,7 +338,7 @@ var doc = `{
                     "200": {
                         "description": "图片流",
                         "schema": {
-                            "type": "interface"
+                            "type": "string"
                         }
                     },
                     "400": {
@@ -409,7 +461,7 @@ var doc = `{
                 }
             }
         },
-        "/apps/listbyappid": {
+        "/rolepermission/allowlistbyuidandappid": {
             "get": {
                 "security": [
                     {
@@ -418,7 +470,7 @@ var doc = `{
                         ]
                     }
                 ],
-                "description": "通过应用ID获取应用列表",
+                "description": "通过角色id和应用id获取已授权的权限列表",
                 "consumes": [
                     "application/json"
                 ],
@@ -426,9 +478,9 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "应用管理"
+                    "权限管理"
                 ],
-                "summary": "获取应用应用列表",
+                "summary": "获取角色已授权的权限列表",
                 "parameters": [
                     {
                         "type": "string",
@@ -440,14 +492,14 @@ var doc = `{
                     {
                         "type": "integer",
                         "description": "应用id",
-                        "name": "app_id",
+                        "name": "appid",
                         "in": "query",
                         "required": true
                     },
                     {
                         "type": "integer",
-                        "description": "应用id",
-                        "name": "app_id",
+                        "description": "角色id",
+                        "name": "uid",
                         "in": "query",
                         "required": true
                     }
@@ -456,7 +508,7 @@ var doc = `{
                     "200": {
                         "description": "success",
                         "schema": {
-                            "$ref": "#/definitions/vo.AppPageVO"
+                            "$ref": "#/definitions/vo.RolePermissionListVO"
                         }
                     },
                     "400": {
@@ -468,7 +520,7 @@ var doc = `{
                 }
             }
         },
-        "/apps/users": {
+        "/rolepermission/listbyuidandappid": {
             "get": {
                 "security": [
                     {
@@ -477,7 +529,7 @@ var doc = `{
                         ]
                     }
                 ],
-                "description": "通过应用ID和应用ID获取用户列表",
+                "description": "通过角色id和应用id获取权限列表",
                 "consumes": [
                     "application/json"
                 ],
@@ -485,9 +537,9 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "应用管理"
+                    "权限管理"
                 ],
-                "summary": "获取用户列表",
+                "summary": "获取角色权限列表",
                 "parameters": [
                     {
                         "type": "string",
@@ -499,7 +551,14 @@ var doc = `{
                     {
                         "type": "integer",
                         "description": "应用id",
-                        "name": "app_id",
+                        "name": "appid",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "角色id",
+                        "name": "uid",
                         "in": "query",
                         "required": true
                     }
@@ -508,7 +567,61 @@ var doc = `{
                     "200": {
                         "description": "success",
                         "schema": {
-                            "$ref": "#/definitions/vo.UserPageVO"
+                            "$ref": "#/definitions/vo.RolePermissionListVO"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
+                    }
+                }
+            }
+        },
+        "/rolepermissions": {
+            "put": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
+                "description": "更新角色权限",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "权限管理"
+                ],
+                "summary": "更新角色权限",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "request body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/vo.RolePermissionParamsVO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/vo.RolePermissionVO"
                         }
                     },
                     "400": {
@@ -1016,6 +1129,549 @@ var doc = `{
                         "description": "success",
                         "schema": {
                             "$ref": "#/definitions/vo.UserPageVO"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
+                    }
+                }
+            }
+        },
+        "/routes": {
+            "get": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
+                "description": "通过路由ID获取路由信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "路由管理"
+                ],
+                "summary": "获取路由信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "路由id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/vo.RouteVO"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
+                "description": "更新路由信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "路由管理"
+                ],
+                "summary": "更新路由信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "路由id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "request body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/vo.RouteParamsVO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/vo.RouteVO"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
+                "description": "创建路由信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "路由管理"
+                ],
+                "summary": "创建路由信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "request body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/vo.RouteParamsVO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/vo.RouteVO"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
+                "description": "通过路由id删除路由信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "路由管理"
+                ],
+                "summary": "删除路由信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "路由id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
+                    }
+                }
+            }
+        },
+        "/routes/byappid": {
+            "delete": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
+                "description": "通过应用id批量删除路由信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "路由管理"
+                ],
+                "summary": "删除路由信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "应用id",
+                        "name": "appid",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
+                    }
+                }
+            }
+        },
+        "/routes/list": {
+            "get": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
+                "description": "获取全部路由分页列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "路由管理"
+                ],
+                "summary": "获取路由分页列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "request body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/vo.PageVO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/vo.RoutePageVO"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
+                    }
+                }
+            }
+        },
+        "/routes/listbyappid": {
+            "get": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
+                "description": "通过应用id获取路由列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "路由管理"
+                ],
+                "summary": "通过应用id获取路由列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "路由appid",
+                        "name": "appid",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/vo.RoutePageVO"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
+                    }
+                }
+            }
+        },
+        "/userpermission/allowlistbyuidandappid": {
+            "get": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
+                "description": "通过用户id和应用id获取已授权的权限列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "权限管理"
+                ],
+                "summary": "获取用户已授权的权限列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "应用id",
+                        "name": "appid",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "用户id",
+                        "name": "uid",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/vo.UserPermissionListVO"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
+                    }
+                }
+            }
+        },
+        "/userpermission/listbyuidandappid": {
+            "get": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
+                "description": "通过用户id和应用id获取权限列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "权限管理"
+                ],
+                "summary": "获取用户权限列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "应用id",
+                        "name": "appid",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "用户id",
+                        "name": "uid",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/vo.UserPermissionListVO"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.Errors"
+                        }
+                    }
+                }
+            }
+        },
+        "/userpermissions": {
+            "put": {
+                "security": [
+                    {
+                        "token": [
+                            "read"
+                        ]
+                    }
+                ],
+                "description": "更新用户权限",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "权限管理"
+                ],
+                "summary": "更新用户权限",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token认证",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "request body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/vo.UserPermissionParamsVO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/vo.UserPermissionVO"
                         }
                     },
                     "400": {
@@ -1708,6 +2364,91 @@ var doc = `{
                 }
             }
         },
+        "vo.RolePermissionListVO": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "description": "权限数据列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/vo.RolePermissionVO"
+                    }
+                }
+            }
+        },
+        "vo.RolePermissionParamsVO": {
+            "type": "object",
+            "properties": {
+                "params": {
+                    "description": "关联权限，支持批量操作",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/vo.RolePermissionsVO"
+                    }
+                }
+            }
+        },
+        "vo.RolePermissionVO": {
+            "type": "object",
+            "properties": {
+                "app_id": {
+                    "description": "应用ID",
+                    "type": "integer"
+                },
+                "create_time": {
+                    "type": "string",
+                    "readOnly": true
+                },
+                "id": {
+                    "type": "integer",
+                    "readOnly": true,
+                    "example": 1
+                },
+                "is_allowed": {
+                    "description": "是否允许访问0=否；1=是",
+                    "type": "integer"
+                },
+                "role_id": {
+                    "description": "角色ID",
+                    "type": "integer"
+                },
+                "route_id": {
+                    "description": "路由ID",
+                    "type": "integer"
+                },
+                "update_time": {
+                    "type": "string",
+                    "readOnly": true
+                }
+            }
+        },
+        "vo.RolePermissionsVO": {
+            "type": "object",
+            "required": [
+                "app_id",
+                "route_id",
+                "user_id"
+            ],
+            "properties": {
+                "app_id": {
+                    "description": "应用ID",
+                    "type": "integer"
+                },
+                "is_allowed": {
+                    "description": "是否允许访问 0=否；1=是",
+                    "type": "integer",
+                    "default": 1
+                },
+                "route_id": {
+                    "description": "路由ID",
+                    "type": "integer"
+                },
+                "user_id": {
+                    "description": "角色ID",
+                    "type": "integer"
+                }
+            }
+        },
         "vo.RoleVO": {
             "type": "object",
             "properties": {
@@ -1726,6 +2467,98 @@ var doc = `{
                 },
                 "name": {
                     "description": "角色名称",
+                    "type": "string"
+                },
+                "update_time": {
+                    "type": "string",
+                    "readOnly": true
+                }
+            }
+        },
+        "vo.RoutePageVO": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "description": "每页数据",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/vo.RouteVO"
+                    }
+                },
+                "page": {
+                    "description": "当前页数",
+                    "type": "integer"
+                },
+                "size": {
+                    "description": "每页条数",
+                    "type": "integer"
+                },
+                "totalPage": {
+                    "description": "总页数",
+                    "type": "integer"
+                }
+            }
+        },
+        "vo.RouteParamsVO": {
+            "type": "object",
+            "required": [
+                "app_id",
+                "info",
+                "info",
+                "info",
+                "info",
+                "name"
+            ],
+            "properties": {
+                "app_id": {
+                    "description": "应用ID",
+                    "type": "integer"
+                },
+                "info": {
+                    "description": "父ID",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "功能名称",
+                    "type": "string"
+                }
+            }
+        },
+        "vo.RouteVO": {
+            "type": "object",
+            "properties": {
+                "app_id": {
+                    "description": "应用ID",
+                    "type": "integer"
+                },
+                "create_time": {
+                    "type": "string",
+                    "readOnly": true
+                },
+                "id": {
+                    "description": "路由ID",
+                    "type": "integer",
+                    "readOnly": true,
+                    "example": 1
+                },
+                "info": {
+                    "description": "功能描述",
+                    "type": "string"
+                },
+                "method": {
+                    "description": "方法",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "功能名称",
+                    "type": "string"
+                },
+                "parent_id": {
+                    "description": "父ID",
+                    "type": "integer"
+                },
+                "router": {
+                    "description": "路由",
                     "type": "string"
                 },
                 "update_time": {
@@ -1885,6 +2718,91 @@ var doc = `{
                 },
                 "phone": {
                     "type": "string"
+                }
+            }
+        },
+        "vo.UserPermissionListVO": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "description": "权限数据列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/vo.UserPermissionVO"
+                    }
+                }
+            }
+        },
+        "vo.UserPermissionParamsVO": {
+            "type": "object",
+            "properties": {
+                "params": {
+                    "description": "关联权限，支持批量操作",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/vo.UserPermissionsVO"
+                    }
+                }
+            }
+        },
+        "vo.UserPermissionVO": {
+            "type": "object",
+            "properties": {
+                "app_id": {
+                    "description": "应用ID",
+                    "type": "integer"
+                },
+                "create_time": {
+                    "type": "string",
+                    "readOnly": true
+                },
+                "id": {
+                    "type": "integer",
+                    "readOnly": true,
+                    "example": 1
+                },
+                "is_allowed": {
+                    "description": "是否允许访问 0=否；1=是",
+                    "type": "integer"
+                },
+                "route_id": {
+                    "description": "路由ID",
+                    "type": "integer"
+                },
+                "update_time": {
+                    "type": "string",
+                    "readOnly": true
+                },
+                "user_id": {
+                    "description": "用户ID",
+                    "type": "integer"
+                }
+            }
+        },
+        "vo.UserPermissionsVO": {
+            "type": "object",
+            "required": [
+                "app_id",
+                "route_id",
+                "user_id"
+            ],
+            "properties": {
+                "app_id": {
+                    "description": "应用ID",
+                    "type": "integer"
+                },
+                "is_allowed": {
+                    "description": "是否允许访问 0=否；1=是",
+                    "type": "integer",
+                    "default": 1
+                },
+                "route_id": {
+                    "description": "路由ID",
+                    "type": "integer"
+                },
+                "user_id": {
+                    "description": "用户ID",
+                    "type": "integer"
                 }
             }
         },

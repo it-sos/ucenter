@@ -21,7 +21,7 @@ type RouteController struct {
 // @Success 200 {object} vo.RouteVO "success"
 // @Failure 400 {object} errors.Errors "error"
 // @Security token[read]
-// @Router /apps [post]
+// @Router /routes [post]
 func (c *RouteController) Post() (vo.RouteVO, error) {
 	return vo.RouteVO{}, nil
 }
@@ -37,7 +37,7 @@ func (c *RouteController) Post() (vo.RouteVO, error) {
 // @Success 200 {object} vo.RouteVO	"success"
 // @Failure 400 {object} errors.Errors "error"
 // @Security token[read]
-// @Router /apps [put]
+// @Router /routes [put]
 func (c *RouteController) Put() (vo.RouteVO, error) {
 	return vo.RouteVO{}, nil
 }
@@ -52,7 +52,7 @@ func (c *RouteController) Put() (vo.RouteVO, error) {
 // @Success 200 {string} string	"success"
 // @Failure 400 {object} errors.Errors "error"
 // @Security token[read]
-// @Router /apps/byappid [delete]
+// @Router /routes/byappid [delete]
 func (c *RouteController) DeleteByappid() error {
 	return nil
 }
@@ -67,7 +67,7 @@ func (c *RouteController) DeleteByappid() error {
 // @Success 200 {string} string	"success"
 // @Failure 400 {object} errors.Errors "error"
 // @Security token[read]
-// @Router /apps [delete]
+// @Router /routes [delete]
 func (c *RouteController) Delete() error {
 	return nil
 }
@@ -82,7 +82,7 @@ func (c *RouteController) Delete() error {
 // @Success 200 {object} vo.RouteVO "success"
 // @Failure 400 {object} errors.Errors "error"
 // @Security token[read]
-// @Router /apps [get]
+// @Router /routes [get]
 func (c *RouteController) Get() (vo.RouteVO, error) {
 	return vo.RouteVO{}, nil
 }
@@ -97,22 +97,22 @@ func (c *RouteController) Get() (vo.RouteVO, error) {
 // @Success 200 {object} vo.RoutePageVO "success"
 // @Failure 400 {object} errors.Errors "error"
 // @Security token[read]
-// @Router /apps/list [get]
+// @Router /routes/list [get]
 func (c *RouteController) GetList() (vo.RoutePageVO, error) {
 	return vo.RoutePageVO{}, nil
 }
 
 // @Tags 路由管理
-// @Summary 通过appid获取路由信息
-// @Description 通过路由appid获取路由信息
+// @Summary 通过应用id获取路由列表
+// @Description 通过应用id获取路由列表
 // @Accept json
 // @Produce json
 // @Param token header string true "token认证"
 // @Param appid query integer true "路由appid"
-// @Success 200 {object} vo.RouteVO "success"
+// @Success 200 {object} vo.RoutePageVO "success"
 // @Failure 400 {object} errors.Errors "error"
 // @Security token[read]
-// @Router /apps/byappid [get]
-func (c *RouteController) GetByappid() (vo.RouteVO, error) {
-	return vo.RouteVO{}, nil
+// @Router /routes/listbyappid [get]
+func (c *RouteController) GetListByappid() (vo.RoutePageVO, error) {
+	return vo.RoutePageVO{}, nil
 }
