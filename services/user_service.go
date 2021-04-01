@@ -5,25 +5,27 @@ package services
 import (
 	"time"
 	"ucenter/datamodels"
+	"ucenter/models/vo"
 	"ucenter/repositories"
 )
 
 var user = &datamodels.User{Account: "peng.yu"}
 
 type UserService interface {
-	GetAll(page int, limit int) []datamodels.User
-	GetByID(id uint) map[string]interface{}
-	GetByDate() map[string]interface{}
-	GetCurWeek() string
-	GetCurTime() string
-	UpdatePosterAndGenreByID(id uint, morning uint8, noon uint8, night uint8) uint
+	Save(id int, paramsVO vo.UserParamsVO) vo.UserVO
+	Remove(id int) error
+	SetDisabled(id int, disabledVO vo.UserDisabledVO) error
+	SetPassword(id int, passwordVO vo.PasswordVO) error
+	GetByIdOrUuid(id uint, uuid string) (vo.UserVO, error)
+	GetList(page vo.PageVO) (vo.UserPageVO, error)
+	GetUserAppRole(id uint) (vo.UserAppRolesVO, error)
 }
 
-func NewUserService(repo repositories.UserRepository) UserService {
-	return &userService{
-		repo: repo,
-	}
-}
+//func NewUserService(repo repositories.UserRepository) UserService {
+//	return &userService{
+//		repo: repo,
+//	}
+//}
 
 type userService struct {
 	repo repositories.UserRepository
