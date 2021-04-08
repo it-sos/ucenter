@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"github.com/google/uuid"
 	"testing"
 	"ucenter/datamodels"
 	"ucenter/s/tests"
@@ -14,7 +15,9 @@ func connect() UserRepository {
 }
 
 func Test_userRepository_InsertOrUpdate(t *testing.T) {
-	t.Log(connect().InsertOrUpdate(user))
+	uuid, _ := uuid.NewUUID()
+	user.Uuid = uuid.String()
+	t.Log(connect().Insert(user))
 }
 
 func Test_userRepository_SelectMany(t *testing.T) {

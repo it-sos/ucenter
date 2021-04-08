@@ -17,8 +17,22 @@ func main() {
 			os.Remove("sqlite3.db")
 		}
 	}
-	db.Sync2(
-		new(datamodels.App),
+	db.DropTables(
 		new(datamodels.Role),
+		new(datamodels.RolePermission),
+		new(datamodels.AppRole),
+		new(datamodels.Route),
+		new(datamodels.UserRole),
+		new(datamodels.UserPermission),
+		new(datamodels.App),
+		new(datamodels.User))
+	db.Sync2(
+		new(datamodels.Role),
+		new(datamodels.RolePermission),
+		new(datamodels.AppRole),
+		new(datamodels.Route),
+		new(datamodels.UserRole),
+		new(datamodels.UserPermission),
+		new(datamodels.App),
 		new(datamodels.User))
 }
