@@ -11,7 +11,8 @@ type Errors struct {
 }
 
 var errCodeList = map[string]Errors{
-	"param_err": {4001001, "参数异常"},
+	"param_err":      {4001001, "参数异常"},
+	"login_auth_err": {4001002, "用户名或密码错误"},
 }
 
 func Error(key string) error {

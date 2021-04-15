@@ -18,6 +18,7 @@ type UserService interface {
 	GetByIdOrUuid(id uint, uuid string) (vo.UserVO, error)
 	GetList(page vo.PageVO) (vo.UserPageVO, error)
 	GetUserAppRole(id uint) (vo.UserAppRolesVO, error)
+	GetByAccount(account string) (datamodels.User, bool)
 }
 
 func NewUserService(repo repositories.UserRepository) UserService {
@@ -56,6 +57,10 @@ func (s *userService) GetList(page vo.PageVO) (vo.UserPageVO, error) {
 
 func (s *userService) GetUserAppRole(id uint) (vo.UserAppRolesVO, error) {
 	panic("implement me")
+}
+
+func (s *userService) GetByAccount(account string) (datamodels.User, bool) {
+	return s.repo.Select(&datamodels.User{Account: account})
 }
 
 func (s *userService) GetAll(page int, limit int) []datamodels.User {

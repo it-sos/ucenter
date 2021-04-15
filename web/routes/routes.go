@@ -8,7 +8,7 @@ import (
 	"ucenter/web/bootstrap"
 )
 
-var db = connect.Connect()
+var db = connect.Db()
 
 func Configure(b *bootstrap.Bootstrapper) {
 	mvc.Configure(b.Party("/"), IndexRoute)

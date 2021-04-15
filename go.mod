@@ -8,6 +8,7 @@ require (
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/flosch/pongo2/v4 v4.0.2 // indirect
 	github.com/go-openapi/spec v0.20.3 // indirect
+	github.com/go-redis/redis/v8 v8.8.0
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/go-xorm/xorm v0.7.9
 	github.com/gobwas/httphead v0.1.0 // indirect
@@ -36,7 +37,7 @@ require (
 	github.com/vmihailenco/msgpack/v5 v5.2.0 // indirect
 	github.com/yudai/pp v2.0.1+incompatible // indirect
 	golang.org/x/crypto v0.0.0-20210220033148-5ea612d1eb83 // indirect
-	golang.org/x/net v0.0.0-20210226172049-e18ecbb05110 // indirect
+	golang.org/x/net v0.0.0-20210226172049-e18ecbb05110
 	golang.org/x/sys v0.0.0-20210309074719-68d13333faf2 // indirect
 	golang.org/x/time v0.0.0-20210220033141-f8bda1e9f3ba // indirect
 	golang.org/x/tools v0.1.0 // indirect

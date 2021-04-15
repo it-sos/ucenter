@@ -4,7 +4,6 @@ import (
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/xorm"
-	"github.com/spf13/viper"
 	"ucenter/s/db"
 )
 
@@ -13,25 +12,27 @@ import (
 
 type Mysql struct{}
 
-func (m *Mysql) GetDsn(dbType string) string {
-	dbType = "mysql." + dbType
-	user, password, host, port, database, charset := viper.GetString(dbType+".user"),
-		viper.GetString(dbType+".password"),
-		viper.GetString(dbType+".host"),
-		viper.GetString(dbType+".port"),
-		viper.GetString(dbType+".database"),
-		viper.GetString(dbType+".charset")
-	return fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=true&loc=Local", user, password, host, port, database, charset)
+func (m *Mysql) GetDsn(c db.Configuration) string {
+	return fmt.Sprintf(
+		"%s:%s@tcp(%s:%d)/%d?charset=%s&parseTime=true&loc=Local",
+		c.GetUser(),
+		c.GetPassword(),
+		c.GetHost(),
+		c.GetPort(),
+		c.GetDatabase(),
+		c.GetCharset(),
+	)
 }
 
-func (m *Mysql) Connect() (*db.Db, error) {
-	dataSourceNameSlice := []string{m.GetDsn("master"), m.GetDsn("slave1"), m.GetDsn("slave1")}
-	engineGroup, err := xorm.NewEngineGroup("mysql", dataSourceNameSlice)
-
-	if err != nil {
-		return nil, err
-	}
-	return &db.Db{
-		Conn: engineGroup,
-	}, nil
+func (m *Mysql) Connect() (*xorm.EngineGroup, error) {
+	config := db.Configuration{}
+	config.UseMysql()
+	config.SetMode(db.MASTER)
+	master := m.GetDsn(config)
+	config.SetMode(db.SLAVE1)
+	slave1 := m.GetDsn(config)
+	config.SetMode(db.SLAVE2)
+	slave2 := m.GetDsn(config)
+	dataSourceNameSlice := []string{master, slave1, slave2}
+	return xorm.NewEngineGroup("mysql", dataSourceNameSlice)
 }

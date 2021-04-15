@@ -10,7 +10,7 @@ import (
 func ConnectDb() *db.Db {
 	os.Chdir("/data1/htdocs/ucenter")
 	bootstrap.SetupConfig()
-	conn := connect.Connect()
+	conn := connect.Db()
 	conn.Conn.ShowSQL(true)
 	return conn
 }

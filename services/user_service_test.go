@@ -6,11 +6,11 @@ import (
 	"ucenter/s/tests"
 )
 
-func connect() UserService {
+func userConnect() UserService {
 	db := tests.ConnectDb()
 	return NewUserService(repositories.NewUserRepository(db))
 }
 
 func Test_userService_GetAll(t *testing.T) {
-	//t.Log(connect().GetAll(2, 3))
+	t.Log(userConnect().GetByAccount("peng.yu"))
 }

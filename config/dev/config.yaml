@@ -1,4 +1,4 @@
-use-driver: mysql
+use-driver: mysql # 使用 mysql or sqlite
 mysql:
   master:
     user: root
@@ -7,3 +7,10 @@ mysql:
     port: 3306
     database: ucenter
     charset: utf8mb4
+redis:
+  master:
+    host: localhost
+    port: 6379
+    password:
+    database: 0
+

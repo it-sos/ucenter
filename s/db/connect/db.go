@@ -8,14 +8,15 @@ import (
 	"ucenter/s/db/sqlite"
 )
 
-func Connect() *db.Db {
-	var connectDb db.ConnectDb
+func Db() *db.Db {
 	useDriver := viper.GetString("use-driver")
+
 	if useDriver == "mysql" {
 		connectDb = new(mysql.Mysql)
 	} else {
 		connectDb = new(sqlite.Sqlite)
 	}
+
 	db, err := connectDb.Connect()
 	if err != nil {
 		panic(err)
