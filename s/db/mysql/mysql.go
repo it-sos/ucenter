@@ -27,7 +27,7 @@ func (m *mysql) GetDsn() string {
 
 const driver = "mysql"
 
-func (m *mysql) Connect() (*xorm.EngineGroup, error) {
+func (m *mysql) Connect() *db.Dbs {
 	db.Config.UseMysql()
 	db.Config.SetMode(db.Master)
 	master := m.GetDsn()
@@ -39,7 +39,10 @@ func (m *mysql) Connect() (*xorm.EngineGroup, error) {
 	engine, err := xorm.NewEngineGroup(driver, dataSourceNameSlice)
 	engine.TZLocation, _ = time.LoadLocation(db.Config.GetTimezone())
 	engine.DatabaseTZ, _ = time.LoadLocation(db.Config.GetTimezone())
-	return engine, err
+	if err != nil {
+		panic(err)
+	}
+	return &db.Dbs{Conn: engine}
 }
 
 func NewMysql() db.Db {

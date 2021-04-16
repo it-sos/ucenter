@@ -7,34 +7,26 @@ import (
 	"ucenter/s/db/sqlite"
 )
 
+import rds "ucenter/s/db/redis"
+
 type Db interface {
 	GetDsn() string
-	Connect() (*xorm.EngineGroup, error)
+	Connect() *Dbs
 }
 
-type dbs struct {
-	conn *xorm.EngineGroup
-	rdb  *redis.Client
-}
-
-type Dbs interface {
-	SetConn(conn *xorm.EngineGroup)
-	SetRdb(rdb *redis.Client)
+type Dbs struct {
+	Conn *xorm.EngineGroup
+	Rdb  *redis.Client
 }
 
 var Conn *xorm.EngineGroup
-var err error
+var Rdb *redis.Client
 
 func init() {
 	if Config.GetStorageDriver() == driverMysql {
-		Conn, err = mysql.NewMysql().Connect()
-		if err != nil {
-			panic(err)
-		}
+		Conn = mysql.NewMysql().Connect().Conn
 	} else {
-		Conn, err = sqlite.NewSqlite().Connect()
-		if err != nil {
-			panic(err)
-		}
+		Conn = sqlite.NewSqlite().Connect().Conn
 	}
+	Rdb = rds.NewRedis().Connect().Rdb
 }

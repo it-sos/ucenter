@@ -19,10 +19,7 @@ type Role struct {
 func initConfig() *xorm.EngineGroup {
 	os.Chdir("/data1/htdocs/punch-in")
 	connectDb := NewSqlite()
-	db, err := connectDb.Connect()
-	if err != nil {
-		log.Fatal(err)
-	}
+	db := connectDb.Connect().Conn
 	db.ShowSQL(true)
 	return db
 }

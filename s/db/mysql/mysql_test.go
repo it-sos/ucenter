@@ -20,11 +20,7 @@ type Role struct {
 func initConfig() *xorm.EngineGroup {
 	os.Chdir("/data1/htdocs/ucenter")
 	bootstrap.SetupConfig()
-	connectDb := NewMysql()
-	db, err := connectDb.Connect()
-	if err != nil {
-		log.Fatal(err)
-	}
+	db := NewMysql().Connect().Conn
 	db.ShowSQL(true)
 	return db
 }

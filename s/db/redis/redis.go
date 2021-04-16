@@ -12,17 +12,28 @@ import (
 
 type Redis struct{}
 
+func (r *Redis) GetDsn() string {
+	return fmt.Sprintf("%s:%d", db.Config.GetHost(), db.Config.GetPort())
+}
+
 var ctx = context.Background()
 
-func (r *Redis) Connect() (*redis.Client, error) {
+func (r *Redis) Connect() *db.Dbs {
 	db.Config.UseRedis()
 	db.Config.SetMode(db.Master)
 
 	rdb := redis.NewClient(&redis.Options{
-		Addr:     fmt.Sprintf("%s:%d", db.Config.GetHost(), db.Config.GetPort()),
+		Addr:     r.GetDsn(),
 		Password: db.Config.GetPassword(),
 		DB:       db.Config.GetDatabase(),
 	})
 	err := rdb.Ping(ctx).Err()
-	return rdb, err
+	if err != nil {
+		panic(err)
+	}
+	return &db.Dbs{Rdb: rdb}
+}
+
+func NewRedis() db.Db {
+	return &Redis{}
 }

@@ -15,8 +15,12 @@ func (s *sqlite) GetDsn() string {
 
 const driver = "sqlite3"
 
-func (s *sqlite) Connect() (*xorm.EngineGroup, error) {
-	return xorm.NewEngineGroup(driver, []string{s.GetDsn()})
+func (s *sqlite) Connect() *db.Dbs {
+	engine, err := xorm.NewEngineGroup(driver, []string{s.GetDsn()})
+	if err != nil {
+		panic(err)
+	}
+	return &db.Dbs{Conn: engine}
 }
 
 func NewSqlite() db.Db {
