@@ -2,104 +2,166 @@ package db
 
 import "github.com/spf13/viper"
 
-type Configuration struct {
-	Host        string `yaml:"host"`
-	Port        int    `yaml:"port"`
-	User        string `yaml:"user"`
-	Password    string `yaml:"password"`
-	Database    int    `yaml:"database"`
-	Charset     string `yaml:"charset"`
-	mode        string
-	storageType string
+type Configuration interface {
+	GetHost() string
+	GetPort() int
+	GetUser() string
+	GetPassword() string
+	GetDatabase() int
+	GetCharset() string
+	GetTimezone() string
+	GetStorageFile() string
+	GetStorageDriver() string
+	SetMode(mode string)
+	UseRedis()
+	UseMysql()
+	UseSqlite()
+	parse()
+}
+
+type configuration struct {
+	Host          string `yaml:"host"`
+	Port          int    `yaml:"port"`
+	User          string `yaml:"user"`
+	Password      string `yaml:"password"`
+	Database      int    `yaml:"database"`
+	Charset       string `yaml:"charset"`
+	Timezone      string `yaml:"timezone"`
+	StorageFile   string `yaml:"storage-file"`
+	StorageDriver string `yaml:"storage-driver"`
+	mode          string
+	storageType   string
 }
 
 const (
-	HOST     = "host"
-	PORT     = "port"
-	USER     = "user"
-	PASSWORD = "password"
-	DATABASE = "database"
-	CHARSET  = "charset"
+	host          = "host"
+	port          = "port"
+	user          = "user"
+	password      = "password"
+	database      = "database"
+	charset       = "charset"
+	storageFile   = "storage-file"
+	storageDriver = "storage-driver"
+	timezone      = "timezone"
 )
 
-func (c Configuration) parse() {
-	c.Host = c.getFieldString(HOST)
-	c.Port = c.getFieldInt(PORT)
-	c.User = c.getFieldString(USER)
-	c.Password = c.getFieldString(PASSWORD)
-	c.Database = c.getFieldInt(DATABASE)
-	c.Charset = c.getFieldString(CHARSET)
+func (c *configuration) parse() {
+	c.Host = c.getFieldString(host)
+	c.Port = c.getFieldInt(port)
+	c.User = c.getFieldString(user)
+	c.Password = c.getFieldString(password)
+	c.Database = c.getFieldInt(database)
+	c.Charset = c.getFieldString(charset)
+	c.StorageFile = c.getFieldString(storageFile)
+	c.Timezone = c.getFieldString(timezone)
+	c.StorageDriver = c.getRootFieldString(storageDriver)
 }
 
-func (c Configuration) getFieldString(field string) string {
+func (c *configuration) getFieldString(field string) string {
 	return viper.GetString(c.getStorageType() + "." + c.getMode() + "." + field)
 }
 
-func (c Configuration) getFieldInt(field string) int {
+func (c *configuration) getRootFieldString(field string) string {
+	return viper.GetString(field)
+}
+
+func (c *configuration) getFieldInt(field string) int {
 	return viper.GetInt(c.getStorageType() + "." + c.getMode() + "." + field)
 }
 
 const (
-	MASTER = "master"
-	SLAVE1 = "slave1"
-	SLAVE2 = "slave2"
-	SLAVE3 = "slave3"
+	Master = "master"
+	Slave1 = "slave1"
+	Slave2 = "slave2"
+	Slave3 = "slave3"
 )
 
-// 设置mode master/slave
-func (c Configuration) SetMode(mode string) {
+// 设置mode 见上
+func (c *configuration) SetMode(mode string) {
 	c.mode = mode
 }
 
 const (
-	REDIS  = "redis"
-	SQLITE = "sqlite"
-	MYSQL  = "mysql"
+	driverRedis  = "redis"
+	driverSqlite = "sqlite3"
+	driverMysql  = "mysql"
 )
 
-func (c Configuration) UseRedis() {
-	c.storageType = REDIS
+func (c *configuration) UseRedis() {
+	c.storageType = driverRedis
 	c.parse()
 }
 
-func (c Configuration) UseSqlite() {
-	c.storageType = SQLITE
+func (c *configuration) UseSqlite() {
+	c.storageType = driverSqlite
 	c.parse()
 }
 
-func (c Configuration) UseMysql() {
-	c.storageType = MYSQL
+func (c *configuration) UseMysql() {
+	c.storageType = driverMysql
 	c.parse()
 }
 
-func (c Configuration) getMode() string {
+func (c *configuration) getMode() string {
 	return c.mode
 }
 
-func (c Configuration) getStorageType() string {
+func (c *configuration) getStorageType() string {
 	return c.storageType
 }
 
-func (c Configuration) GetHost() string {
+func (c *configuration) getStorageFile() string {
+	return c.StorageFile
+}
+
+func (c *configuration) getTimezone() string {
+	return c.Timezone
+}
+
+func (c *configuration) GetHost() string {
 	return c.Host
 }
 
-func (c Configuration) GetPort() int {
+func (c *configuration) GetPort() int {
 	return c.Port
 }
 
-func (c Configuration) GetPassword() string {
+func (c *configuration) GetPassword() string {
 	return c.Password
 }
 
-func (c Configuration) GetDatabase() int {
+func (c *configuration) GetDatabase() int {
 	return c.Database
 }
 
-func (c Configuration) GetCharset() string {
+func (c *configuration) GetCharset() string {
 	return c.Charset
 }
 
-func (c Configuration) GetUser() string {
+func (c *configuration) GetUser() string {
 	return c.User
+}
+
+func (c *configuration) GetStorageDriver() string {
+	return c.StorageDriver
+}
+
+func (c *configuration) GetTimezone() string {
+	return c.Timezone
+}
+
+func (c *configuration) GetStorageFile() string {
+	return c.StorageFile
+}
+
+var Config Configuration
+
+func newConfiguration() Configuration {
+	return &configuration{}
+}
+
+func init() {
+	Config = newConfiguration()
+	Config.SetMode(Master)
+	Config.parse()
 }

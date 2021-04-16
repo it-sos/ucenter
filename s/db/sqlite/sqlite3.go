@@ -1,17 +1,24 @@
 package sqlite
 
 import (
+	"fmt"
 	"github.com/go-xorm/xorm"
 	_ "github.com/mattn/go-sqlite3"
+	"ucenter/s/db"
 )
 
-type Sqlite struct{}
+type sqlite struct{}
 
-func (s *Sqlite) GetDsn(dbType string) string {
-	return dbType + ".db?loc=Asia/Shanghai"
+func (s *sqlite) GetDsn() string {
+	return fmt.Sprintf("%s?loc=%s", db.Config.GetStorageFile(), db.Config.GetTimezone())
 }
 
-func (s *Sqlite) Connect() (*xorm.EngineGroup, error) {
-	dataSourceNameSlice := []string{s.GetDsn("sqlite3")}
-	return xorm.NewEngineGroup("sqlite3", dataSourceNameSlice)
+const driver = "sqlite3"
+
+func (s *sqlite) Connect() (*xorm.EngineGroup, error) {
+	return xorm.NewEngineGroup(driver, []string{s.GetDsn()})
+}
+
+func NewSqlite() db.Db {
+	return &sqlite{}
 }

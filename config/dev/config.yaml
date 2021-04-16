@@ -1,4 +1,7 @@
-use-driver: mysql # 使用 mysql or sqlite
+
+# 存储方案二选一， mysql or sqlite
+storage-driver: mysql
+
 mysql:
   master:
     user: root
@@ -7,6 +10,13 @@ mysql:
     port: 3306
     database: ucenter
     charset: utf8mb4
+    timezone: Asia/Shanghai
+
+sqlite:
+  master:
+    storage-file: sqlite3.db
+    timezone: Asia/Shanghai
+
 redis:
   master:
     host: localhost

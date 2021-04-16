@@ -4,35 +4,44 @@ import (
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/xorm"
+	"time"
 	"ucenter/s/db"
 )
 
 // https://github.com/go-xorm/xorm
 // https://gobook.io/read/gitea.com/xorm/manual-zh-CN/chapter-01/2.engine_group.html#
 
-type Mysql struct{}
+type mysql struct{}
 
-func (m *Mysql) GetDsn(c db.Configuration) string {
+func (m *mysql) GetDsn() string {
 	return fmt.Sprintf(
 		"%s:%s@tcp(%s:%d)/%d?charset=%s&parseTime=true&loc=Local",
-		c.GetUser(),
-		c.GetPassword(),
-		c.GetHost(),
-		c.GetPort(),
-		c.GetDatabase(),
-		c.GetCharset(),
+		db.Config.GetUser(),
+		db.Config.GetPassword(),
+		db.Config.GetHost(),
+		db.Config.GetPort(),
+		db.Config.GetDatabase(),
+		db.Config.GetCharset(),
 	)
 }
 
-func (m *Mysql) Connect() (*xorm.EngineGroup, error) {
-	config := db.Configuration{}
-	config.UseMysql()
-	config.SetMode(db.MASTER)
-	master := m.GetDsn(config)
-	config.SetMode(db.SLAVE1)
-	slave1 := m.GetDsn(config)
-	config.SetMode(db.SLAVE2)
-	slave2 := m.GetDsn(config)
+const driver = "mysql"
+
+func (m *mysql) Connect() (*xorm.EngineGroup, error) {
+	db.Config.UseMysql()
+	db.Config.SetMode(db.Master)
+	master := m.GetDsn()
+	db.Config.SetMode(db.Slave1)
+	slave1 := m.GetDsn()
+	db.Config.SetMode(db.Slave2)
+	slave2 := m.GetDsn()
 	dataSourceNameSlice := []string{master, slave1, slave2}
-	return xorm.NewEngineGroup("mysql", dataSourceNameSlice)
+	engine, err := xorm.NewEngineGroup(driver, dataSourceNameSlice)
+	engine.TZLocation, _ = time.LoadLocation(db.Config.GetTimezone())
+	engine.DatabaseTZ, _ = time.LoadLocation(db.Config.GetTimezone())
+	return engine, err
+}
+
+func NewMysql() db.Db {
+	return &mysql{}
 }

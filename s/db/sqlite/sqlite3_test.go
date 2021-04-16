@@ -1,11 +1,11 @@
 package sqlite
 
 import (
+	"github.com/go-xorm/xorm"
 	"log"
 	"os"
 	"testing"
 	"time"
-	"ucenter/s/db"
 )
 
 type Role struct {
@@ -16,15 +16,14 @@ type Role struct {
 	CreateTime time.Time `xorm:"not null created"` //创建时间
 }
 
-func initConfig() *db.Db {
+func initConfig() *xorm.EngineGroup {
 	os.Chdir("/data1/htdocs/punch-in")
-	var connectDb db.ConnectDb
-	connectDb = new(Sqlite)
+	connectDb := NewSqlite()
 	db, err := connectDb.Connect()
 	if err != nil {
 		log.Fatal(err)
 	}
-	db.Conn.ShowSQL(true)
+	db.ShowSQL(true)
 	return db
 }
 
@@ -36,7 +35,7 @@ func TestCreateTable(t *testing.T) {
 	x := initConfig()
 
 	role := new(Role)
-	err := x.Conn.Sync2(role)
+	err := x.Sync2(role)
 	if err != nil {
 		log.Println(err)
 		return
@@ -49,10 +48,10 @@ func TestAdd(t *testing.T) {
 	role := new(Role)
 	role.Name = "普通"
 	role.Info = "超级普通"
-	a, e := x.Conn.Insert(role)
+	a, e := x.Insert(role)
 	t.Log(a, e)
 	if a == 1 {
-		b, err := x.Conn.ID(1).Update(role)
+		b, err := x.ID(1).Update(role)
 		t.Log(b, err)
 	}
 }
