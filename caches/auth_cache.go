@@ -1,10 +1,12 @@
 package caches
 
-import "ucenter/s/db"
+import (
+	"ucenter/s/db/common"
+)
 
 type AuthCache interface {
 }
 
 type authCache struct {
-	rdb *db.Db
+	rdb *common.Db
 }

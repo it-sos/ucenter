@@ -5,7 +5,7 @@ package repositories
 import (
 	"sync"
 	"ucenter/datamodels"
-	"ucenter/s/db"
+	"ucenter/s/db/common"
 )
 
 type UserRepository interface {
@@ -21,12 +21,12 @@ type UserRepository interface {
 
 type userRepository struct {
 	mu sync.RWMutex
-	db *db.Db
+	db *common.Db
 }
 
 var err error
 
-func NewUserRepository(db *db.Db) UserRepository {
+func NewUserRepository(db *common.Db) UserRepository {
 	return &userRepository{db: db}
 }
 

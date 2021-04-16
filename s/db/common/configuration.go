@@ -1,4 +1,4 @@
-package db
+package common
 
 import "github.com/spf13/viper"
 
@@ -82,23 +82,23 @@ func (c *configuration) SetMode(mode string) {
 }
 
 const (
-	driverRedis  = "redis"
-	driverSqlite = "sqlite3"
-	driverMysql  = "mysql"
+	DriverRedis  = "redis"
+	DriverSqlite = "sqlite3"
+	DriverMysql  = "mysql"
 )
 
 func (c *configuration) UseRedis() {
-	c.storageType = driverRedis
+	c.storageType = DriverRedis
 	c.parse()
 }
 
 func (c *configuration) UseSqlite() {
-	c.storageType = driverSqlite
+	c.storageType = DriverSqlite
 	c.parse()
 }
 
 func (c *configuration) UseMysql() {
-	c.storageType = driverMysql
+	c.storageType = DriverMysql
 	c.parse()
 }
 
