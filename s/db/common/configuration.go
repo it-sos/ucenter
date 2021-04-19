@@ -14,6 +14,7 @@ type Configuration interface {
 	GetStorageFile() string
 	GetStorageDriver() string
 	SetMode(mode string)
+	Init() Configuration
 	UseRedis()
 	UseMysql()
 	UseSqlite()
@@ -58,7 +59,6 @@ func (c *configuration) parse() {
 	c.Charset = c.getFieldString(charset)
 	c.StorageFile = c.getFieldString(storageFile)
 	c.Timezone = c.getFieldString(timezone)
-	c.StorageDriver = c.getRootFieldString(storageDriver)
 }
 
 func (c *configuration) getFieldString(field string) string {
@@ -150,6 +150,11 @@ func (c *configuration) GetUser() string {
 
 func (c *configuration) GetStorageDriver() string {
 	return c.StorageDriver
+}
+
+func (c *configuration) Init() Configuration {
+	c.StorageDriver = c.getRootFieldString(storageDriver)
+	return c
 }
 
 func (c *configuration) GetTimezone() string {

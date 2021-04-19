@@ -3,9 +3,8 @@
 package repositories
 
 import (
-	"sync"
 	"ucenter/datamodels"
-	"ucenter/s/db/common"
+	"ucenter/s/db"
 )
 
 type UserRepository interface {
@@ -20,18 +19,16 @@ type UserRepository interface {
 }
 
 type userRepository struct {
-	mu sync.RWMutex
-	db *common.Db
 }
 
 var err error
 
-func NewUserRepository(db *common.Db) UserRepository {
-	return &userRepository{db: db}
+func NewUserRepository() UserRepository {
+	return &userRepository{}
 }
 
 func (ur *userRepository) Select(p *datamodels.User) (datamodels.User, bool) {
-	has, err := ur.db.Conn.Get(p)
+	has, err := db.Conn.Get(p)
 	if err != nil {
 		panic(err)
 	}
@@ -40,7 +37,7 @@ func (ur *userRepository) Select(p *datamodels.User) (datamodels.User, bool) {
 
 func (ur *userRepository) SelectMany(p *datamodels.User, offset int, limit int) (results []datamodels.User) {
 	user := make([]datamodels.User, 0)
-	err := ur.db.Conn.Limit(limit, offset).Find(&user)
+	err := db.Conn.Limit(limit, offset).Find(&user)
 	if err != nil {
 		panic(err)
 	}
@@ -48,7 +45,7 @@ func (ur *userRepository) SelectMany(p *datamodels.User, offset int, limit int) 
 }
 
 func (ur *userRepository) Insert(p *datamodels.User) (id uint) {
-	_, err = ur.db.Conn.Insert(p)
+	_, err = db.Conn.Insert(p)
 	if err != nil {
 		panic(err)
 	}
@@ -56,7 +53,7 @@ func (ur *userRepository) Insert(p *datamodels.User) (id uint) {
 }
 
 func (ur *userRepository) Update(p *datamodels.User) (id uint) {
-	_, err = ur.db.Conn.ID(p.Id).Update(p)
+	_, err = db.Conn.ID(p.Id).Update(p)
 	if err != nil {
 		panic(err)
 	}

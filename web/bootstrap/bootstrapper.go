@@ -10,6 +10,7 @@ import (
 	"github.com/spf13/viper"
 	"time"
 	"ucenter/s/core"
+	"ucenter/s/db"
 	"ucenter/s/errors"
 )
 
@@ -47,6 +48,10 @@ func SetupConfig() {
 	if err != nil {
 		panic(fmt.Errorf("Fatal error config file: %s \n", err))
 	}
+}
+
+func SetupInitDb() {
+	db.Init()
 }
 
 // SetupViews loads the templates.
@@ -126,6 +131,7 @@ func (b *Bootstrapper) Bootstrap() *Bootstrapper {
 	b.Use(logger.New())
 
 	SetupConfig()
+	SetupInitDb()
 	return b
 }
 
