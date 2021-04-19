@@ -3,10 +3,9 @@ package mysql
 import (
 	"github.com/go-xorm/xorm"
 	"log"
-	"os"
 	"testing"
 	"time"
-	"ucenter/web/bootstrap"
+	_ "ucenter/s/tests"
 )
 
 type Role struct {
@@ -18,14 +17,12 @@ type Role struct {
 }
 
 func initConfig() *xorm.EngineGroup {
-	os.Chdir("/data1/htdocs/ucenter")
-	bootstrap.SetupConfig()
 	db := NewMysql().Connect().Conn
 	db.ShowSQL(true)
 	return db
 }
 
-func Tesect(t *testing.T) {
+func TestInitConfig(t *testing.T) {
 	initConfig()
 }
 

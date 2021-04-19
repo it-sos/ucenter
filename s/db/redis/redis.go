@@ -10,22 +10,22 @@ import (
 
 // https://github.com/go-redis/redis
 
-type Redis struct{}
+type rds struct{}
 
-func (r *Redis) GetDsn() string {
+func (r *rds) GetDsn() string {
 	return fmt.Sprintf("%s:%d", common.Config.GetHost(), common.Config.GetPort())
 }
 
 var ctx = context.Background()
 
-func (r *Redis) Connect() *common.Dbs {
+func (r *rds) Connect() *common.Dbs {
 	common.Config.UseRedis()
 	common.Config.SetMode(common.Master)
 
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     r.GetDsn(),
 		Password: common.Config.GetPassword(),
-		DB:       common.Config.GetDatabase(),
+		DB:       common.Config.GetDb(),
 	})
 	err := rdb.Ping(ctx).Err()
 	if err != nil {
@@ -35,5 +35,5 @@ func (r *Redis) Connect() *common.Dbs {
 }
 
 func NewRedis() common.Db {
-	return &Redis{}
+	return &rds{}
 }

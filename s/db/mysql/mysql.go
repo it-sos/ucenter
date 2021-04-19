@@ -15,7 +15,7 @@ type mysql struct{}
 
 func (m *mysql) GetDsn() string {
 	return fmt.Sprintf(
-		"%s:%s@tcp(%s:%d)/%d?charset=%s&parseTime=true&loc=Local",
+		"%s:%s@tcp(%s:%d)/%s?charset=%s&parseTime=true&loc=Local",
 		common.Config.GetUser(),
 		common.Config.GetPassword(),
 		common.Config.GetHost(),
@@ -28,14 +28,15 @@ func (m *mysql) GetDsn() string {
 const driver = "mysql"
 
 func (m *mysql) Connect() *common.Dbs {
+	var dataSourceNameSlice []string
 	common.Config.UseMysql()
-	common.Config.SetMode(common.Master)
-	master := m.GetDsn()
-	common.Config.SetMode(common.Slave1)
-	slave1 := m.GetDsn()
-	common.Config.SetMode(common.Slave2)
-	slave2 := m.GetDsn()
-	dataSourceNameSlice := []string{master, slave1, slave2}
+	modes := []string{common.Master, common.Slave1, common.Slave2, common.Slave3}
+	for _, mode := range modes {
+		common.Config.SetMode(mode)
+		if common.Config.GetHost() != "" {
+			dataSourceNameSlice = append(dataSourceNameSlice, m.GetDsn())
+		}
+	}
 	engine, err := xorm.NewEngineGroup(driver, dataSourceNameSlice)
 	engine.TZLocation, _ = time.LoadLocation(common.Config.GetTimezone())
 	engine.DatabaseTZ, _ = time.LoadLocation(common.Config.GetTimezone())

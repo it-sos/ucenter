@@ -7,7 +7,8 @@ type Configuration interface {
 	GetPort() int
 	GetUser() string
 	GetPassword() string
-	GetDatabase() int
+	GetDatabase() string
+	GetDb() int
 	GetCharset() string
 	GetTimezone() string
 	GetStorageFile() string
@@ -24,7 +25,8 @@ type configuration struct {
 	Port          int    `yaml:"port"`
 	User          string `yaml:"user"`
 	Password      string `yaml:"password"`
-	Database      int    `yaml:"database"`
+	Db            int    `yaml:"db"`
+	Database      string `yaml:"database"`
 	Charset       string `yaml:"charset"`
 	Timezone      string `yaml:"timezone"`
 	StorageFile   string `yaml:"storage-file"`
@@ -39,6 +41,7 @@ const (
 	user          = "user"
 	password      = "password"
 	database      = "database"
+	db            = "db"
 	charset       = "charset"
 	storageFile   = "storage-file"
 	storageDriver = "storage-driver"
@@ -50,7 +53,8 @@ func (c *configuration) parse() {
 	c.Port = c.getFieldInt(port)
 	c.User = c.getFieldString(user)
 	c.Password = c.getFieldString(password)
-	c.Database = c.getFieldInt(database)
+	c.Database = c.getFieldString(database)
+	c.Db = c.getFieldInt(db)
 	c.Charset = c.getFieldString(charset)
 	c.StorageFile = c.getFieldString(storageFile)
 	c.Timezone = c.getFieldString(timezone)
@@ -79,6 +83,7 @@ const (
 // 设置mode 见上
 func (c *configuration) SetMode(mode string) {
 	c.mode = mode
+	c.parse()
 }
 
 const (
@@ -89,17 +94,14 @@ const (
 
 func (c *configuration) UseRedis() {
 	c.storageType = DriverRedis
-	c.parse()
 }
 
 func (c *configuration) UseSqlite() {
 	c.storageType = DriverSqlite
-	c.parse()
 }
 
 func (c *configuration) UseMysql() {
 	c.storageType = DriverMysql
-	c.parse()
 }
 
 func (c *configuration) getMode() string {
@@ -130,8 +132,12 @@ func (c *configuration) GetPassword() string {
 	return c.Password
 }
 
-func (c *configuration) GetDatabase() int {
+func (c *configuration) GetDatabase() string {
 	return c.Database
+}
+
+func (c *configuration) GetDb() int {
+	return c.Db
 }
 
 func (c *configuration) GetCharset() string {
@@ -162,6 +168,4 @@ func newConfiguration() Configuration {
 
 func init() {
 	Config = newConfiguration()
-	Config.SetMode(Master)
-	Config.parse()
 }

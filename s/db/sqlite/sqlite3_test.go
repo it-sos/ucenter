@@ -3,9 +3,9 @@ package sqlite
 import (
 	"github.com/go-xorm/xorm"
 	"log"
-	"os"
 	"testing"
 	"time"
+	_ "ucenter/s/tests"
 )
 
 type Role struct {
@@ -17,10 +17,7 @@ type Role struct {
 }
 
 func initConfig() *xorm.EngineGroup {
-	os.Chdir("/data1/htdocs/punch-in")
-	connectDb := NewSqlite()
-	db := connectDb.Connect().Conn
-	db.ShowSQL(true)
+	db := NewSqlite().Connect().Conn
 	return db
 }
 
