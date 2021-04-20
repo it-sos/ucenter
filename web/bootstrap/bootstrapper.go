@@ -1,14 +1,13 @@
 package bootstrap
 
 import (
-	"fmt"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/context"
 	"github.com/kataras/iris/v12/hero"
 	"github.com/kataras/iris/v12/middleware/logger"
 	"github.com/kataras/iris/v12/middleware/recover"
-	"github.com/spf13/viper"
 	"time"
+	_ "ucenter/s/config"
 	"ucenter/s/core"
 	"ucenter/s/db"
 	"ucenter/s/errors"
@@ -39,21 +38,6 @@ func New(appName, appOwner string, cfgs ...Configurator) *Bootstrapper {
 	return b
 }
 
-// set config
-func SetupConfig() {
-	viper.SetConfigName("config")
-	viper.SetConfigType("yaml")
-	viper.AddConfigPath("./config/" + core.GetEnviron())
-	err := viper.ReadInConfig()
-	if err != nil {
-		panic(fmt.Errorf("Fatal error config file: %s \n", err))
-	}
-}
-
-func SetupInitDb() {
-	db.Init()
-}
-
 // SetupViews loads the templates.
 func (b *Bootstrapper) SetupViews(viewsDir string) {
 	b.RegisterView(iris.HTML(viewsDir, ".html").Layout("shared/layout.html").Reload(!core.IsProudctEnv()))
@@ -67,7 +51,6 @@ func (b *Bootstrapper) SetupErrorHandlers() {
 				if status := ctx.GetStatusCode(); status == 0 || !context.StatusCodeNotSuccessful(status) {
 					ctx.StatusCode(hero.DefaultErrStatusCode)
 				}
-
 				if isOutJson(ctx) {
 					ctx.ContentType(context.ContentJSONHeaderValue)
 				}
@@ -130,8 +113,7 @@ func (b *Bootstrapper) Bootstrap() *Bootstrapper {
 	b.Use(recover.New())
 	b.Use(logger.New())
 
-	SetupConfig()
-	SetupInitDb()
+	db.Init()
 	return b
 }
 
