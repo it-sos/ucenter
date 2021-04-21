@@ -4,14 +4,12 @@ import (
 	"github.com/google/uuid"
 	"testing"
 	"ucenter/datamodels"
-	"ucenter/s/db"
-	_ "ucenter/s/tests"
+	_ "ucenter/s/tests/testsimple"
 )
 
 var user = &datamodels.User{Account: "peng.yu"}
 
 func connect() UserRepository {
-	db.Init()
 	return NewUserRepository()
 }
 

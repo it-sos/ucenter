@@ -1140,7 +1140,7 @@ var doc = `{
                 }
             }
         },
-        "/routes": {
+        "/testapp": {
             "get": {
                 "security": [
                     {
@@ -1353,7 +1353,7 @@ var doc = `{
                 }
             }
         },
-        "/routes/byappid": {
+        "/testapp/byappid": {
             "delete": {
                 "security": [
                     {
@@ -1405,7 +1405,7 @@ var doc = `{
                 }
             }
         },
-        "/routes/list": {
+        "/testapp/list": {
             "get": {
                 "security": [
                     {
@@ -1459,7 +1459,7 @@ var doc = `{
                 }
             }
         },
-        "/routes/listbyappid": {
+        "/testapp/listbyappid": {
             "get": {
                 "security": [
                     {

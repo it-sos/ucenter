@@ -8,7 +8,7 @@ import (
 )
 
 func UserRoute(app *mvc.Application) {
-	repo := repositories.NewUserRepository(db)
+	repo := repositories.NewUserRepository()
 	userService := services.NewUserService(repo)
 	app.Register(userService)
 	app.Handle(new(controllers.UserController))

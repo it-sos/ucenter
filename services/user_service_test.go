@@ -3,12 +3,11 @@ package services
 import (
 	"testing"
 	"ucenter/repositories"
-	"ucenter/s/tests"
+	_ "ucenter/s/tests/testsimple"
 )
 
 func userConnect() UserService {
-	db := tests.ConnectDb()
-	return NewUserService(repositories.NewUserRepository(db))
+	return NewUserService(repositories.NewUserRepository())
 }
 
 func Test_userService_GetAll(t *testing.T) {

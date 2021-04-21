@@ -2,18 +2,19 @@ package services
 
 import (
 	"testing"
+	"ucenter/models/vo"
 	"ucenter/repositories"
-	"ucenter/s/tests"
+	_ "ucenter/s/tests/testsimple"
 )
 
 func authInstance() AuthService {
-	db := tests.ConnectDb()
-	return NewAuthService(NewUserService(repositories.NewUserRepository(db)))
+	return NewAuthService(NewUserService(repositories.NewUserRepository()))
 }
 
 func Test_authService_Login(t *testing.T) {
 	instance := authInstance()
-	if instance.Login("peng.yu", "12334565").Error() != "{\"errCode\":4001002,\"message\":\"用户名或密码错误\"}" {
+	auth := vo.AuthVO{"peng.yu", "1234", ""}
+	if _, err := instance.Login(auth); err.Error() != "{\"errCode\":4001002,\"message\":\"用户名或密码错误\"}" {
 		t.Fail()
 	}
 }

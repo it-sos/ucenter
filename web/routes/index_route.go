@@ -8,7 +8,7 @@ import (
 )
 
 func IndexRoute(app *mvc.Application) {
-	repo := repositories.NewUserRepository(db)
+	repo := repositories.NewUserRepository()
 	punchService := services.NewUserService(repo)
 	app.Register(punchService)
 	app.Handle(new(controllers.IndexController))

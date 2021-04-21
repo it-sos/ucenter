@@ -7,7 +7,7 @@ import (
 	"github.com/kataras/iris/v12/middleware/logger"
 	"github.com/kataras/iris/v12/middleware/recover"
 	"time"
-	_ "ucenter/s/config"
+	"ucenter/s/config"
 	"ucenter/s/core"
 	"ucenter/s/db"
 	"ucenter/s/errors"
@@ -101,6 +101,12 @@ func (b *Bootstrapper) Configure(cs ...Configurator) {
 	}
 }
 
+// 初始化配置和存储连接等
+func (b *Bootstrapper) initialization() {
+	config.C.Init()
+	db.Init()
+}
+
 func (b *Bootstrapper) Bootstrap() *Bootstrapper {
 	b.SetupViews("./web/views")
 	b.SetupErrorHandlers()
@@ -113,7 +119,7 @@ func (b *Bootstrapper) Bootstrap() *Bootstrapper {
 	b.Use(recover.New())
 	b.Use(logger.New())
 
-	db.Init()
+	b.initialization()
 	return b
 }
 

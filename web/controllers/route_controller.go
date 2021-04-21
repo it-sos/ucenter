@@ -21,7 +21,7 @@ type RouteController struct {
 // @Success 200 {object} vo.RouteVO "success"
 // @Failure 400 {object} errors.Errors "error"
 // @Security token[read]
-// @Router /routes [post]
+// @Router /testapp [post]
 func (c *RouteController) Post() (vo.RouteVO, error) {
 	return vo.RouteVO{}, nil
 }
@@ -37,7 +37,7 @@ func (c *RouteController) Post() (vo.RouteVO, error) {
 // @Success 200 {object} vo.RouteVO	"success"
 // @Failure 400 {object} errors.Errors "error"
 // @Security token[read]
-// @Router /routes [put]
+// @Router /testapp [put]
 func (c *RouteController) Put() (vo.RouteVO, error) {
 	return vo.RouteVO{}, nil
 }
@@ -52,7 +52,7 @@ func (c *RouteController) Put() (vo.RouteVO, error) {
 // @Success 200 {string} string	"success"
 // @Failure 400 {object} errors.Errors "error"
 // @Security token[read]
-// @Router /routes/byappid [delete]
+// @Router /testapp/byappid [delete]
 func (c *RouteController) DeleteByappid() error {
 	return nil
 }
@@ -67,7 +67,7 @@ func (c *RouteController) DeleteByappid() error {
 // @Success 200 {string} string	"success"
 // @Failure 400 {object} errors.Errors "error"
 // @Security token[read]
-// @Router /routes [delete]
+// @Router /testapp [delete]
 func (c *RouteController) Delete() error {
 	return nil
 }
@@ -82,7 +82,7 @@ func (c *RouteController) Delete() error {
 // @Success 200 {object} vo.RouteVO "success"
 // @Failure 400 {object} errors.Errors "error"
 // @Security token[read]
-// @Router /routes [get]
+// @Router /testapp [get]
 func (c *RouteController) Get() (vo.RouteVO, error) {
 	return vo.RouteVO{}, nil
 }
@@ -97,7 +97,7 @@ func (c *RouteController) Get() (vo.RouteVO, error) {
 // @Success 200 {object} vo.RoutePageVO "success"
 // @Failure 400 {object} errors.Errors "error"
 // @Security token[read]
-// @Router /routes/list [get]
+// @Router /testapp/list [get]
 func (c *RouteController) GetList() (vo.RoutePageVO, error) {
 	return vo.RoutePageVO{}, nil
 }
@@ -112,7 +112,7 @@ func (c *RouteController) GetList() (vo.RoutePageVO, error) {
 // @Success 200 {object} vo.RoutePageVO "success"
 // @Failure 400 {object} errors.Errors "error"
 // @Security token[read]
-// @Router /routes/listbyappid [get]
+// @Router /testapp/listbyappid [get]
 func (c *RouteController) GetListByappid() (vo.RoutePageVO, error) {
 	return vo.RoutePageVO{}, nil
 }
