@@ -2,6 +2,7 @@ package testapp
 
 import (
 	"github.com/kataras/iris/v12"
+	_ "ucenter/s/tests"
 	"ucenter/web/bootstrap"
 )
 

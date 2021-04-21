@@ -8,5 +8,5 @@ import (
 
 func TestUserRoute(t *testing.T) {
 	e := httptest.New(t, testapp.App(Configure))
-	t.Log(e.GET("/users").Expect().Status(httptest.StatusBadRequest).Body())
+	t.Log(e.GET("/users").Expect().Status(httptest.StatusOK).Body())
 }
