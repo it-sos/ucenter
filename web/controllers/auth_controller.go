@@ -1,12 +1,14 @@
 package controllers
 
 import (
+	"github.com/kataras/iris/v12"
 	"ucenter/models/vo"
 	"ucenter/services"
 )
 
 type AuthController struct {
 	Service services.AuthService
+	Ctx     iris.Context
 }
 
 // @Tags 认证管理
@@ -45,6 +47,7 @@ func (c *AuthController) PostLogin() (vo.AuthTokenVO, error) {
 // @Failure 400 {object} errors.Errors "error"
 // @Router /auth/captcha [get]
 func (c *AuthController) GetCaptcha() error {
+	c.Ctx.Params().Get("account")
 	return nil
 }
 

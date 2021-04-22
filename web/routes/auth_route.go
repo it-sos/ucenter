@@ -7,9 +7,10 @@ import (
 	"ucenter/web/controllers"
 )
 
-func userRoute(app *mvc.Application) {
+func authRoute(app *mvc.Application) {
 	repo := repositories.NewUserRepository()
 	userService := services.NewUserService(repo)
-	app.Register(userService)
+	authService := services.NewAuthService(userService)
+	app.Register(authService)
 	app.Handle(new(controllers.UserController))
 }

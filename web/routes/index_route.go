@@ -7,7 +7,7 @@ import (
 	"ucenter/web/controllers"
 )
 
-func IndexRoute(app *mvc.Application) {
+func indexRoute(app *mvc.Application) {
 	repo := repositories.NewUserRepository()
 	punchService := services.NewUserService(repo)
 	app.Register(punchService)

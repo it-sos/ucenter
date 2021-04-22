@@ -6,6 +6,7 @@ import (
 )
 
 func Configure(b *bootstrap.Bootstrapper) {
-	mvc.Configure(b.Party("/"), IndexRoute)
-	mvc.Configure(b.Party("/users"), UserRoute)
+	mvc.Configure(b.Party("/"), indexRoute)
+	mvc.Configure(b.Party("/users"), userRoute)
+	mvc.Configure(b.Party("/auths"), authRoute)
 }

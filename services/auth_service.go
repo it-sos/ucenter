@@ -6,6 +6,7 @@ import (
 	"ucenter/s/crypt"
 	"ucenter/s/errors"
 	"ucenter/s/utils"
+	"ucenter/s/utils/captcha"
 )
 
 func NewAuthService(user UserService) AuthService {
@@ -26,8 +27,9 @@ type authService struct {
 }
 
 func (s *authService) GenerateCaptcha(account string) string {
-	//id, b64s := captcha.Generate()
-	return ""
+	id, b64s := captcha.Generate()
+	caches.NAuthCaptcha.Key(account).Set(id)
+	return b64s
 }
 
 func (s *authService) generalPassword(password string) (passwordShal, salt string) {
