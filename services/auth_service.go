@@ -16,12 +16,18 @@ func NewAuthService(user UserService) AuthService {
 
 type AuthService interface {
 	Login(auth vo.AuthVO) (vo.AuthTokenVO, error)
+	GenerateCaptcha(account string) string
 	generalPassword(password string) (passwordShal, salt string)
 	validatePassword(password, salt, passwordShal string) bool
 }
 
 type authService struct {
 	user UserService
+}
+
+func (s *authService) GenerateCaptcha(account string) string {
+	//id, b64s := captcha.Generate()
+	return ""
 }
 
 func (s *authService) generalPassword(password string) (passwordShal, salt string) {
@@ -43,7 +49,7 @@ func (s *authService) Login(auth vo.AuthVO) (vo.AuthTokenVO, error) {
 	if !has || !s.validatePassword(auth.Password, user.Salt, user.Password) {
 		return authToken, errors.Error("login_auth_err")
 	}
-	caches.NewAuthCache().Key(auth.Account).Clear()
+	caches.NAuthTimes.Key(auth.Account).Clear()
 	// todo 生成token与refresh_token
 	return authToken, nil
 }
@@ -53,7 +59,7 @@ const validCaptchaLimit = 3
 
 // 输入3次错误密码则要求验证码验证
 func (s *authService) validCaptcha(account, captcha string) error {
-	valid := caches.NewAuthCache().Key(account)
+	valid := caches.NAuthTimes.Key(account)
 	validTimes := valid.Get()
 	if validTimes <= validCaptchaLimit {
 		validTimes = valid.Incr()

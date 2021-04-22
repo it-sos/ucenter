@@ -24,6 +24,7 @@ require (
 	github.com/mattn/go-sqlite3 v1.14.6
 	github.com/mediocregopher/radix/v3 v3.7.0 // indirect
 	github.com/mitchellh/mapstructure v1.4.1 // indirect
+	github.com/mojocn/base64Captcha v1.3.4
 	github.com/nats-io/jwt v1.2.2 // indirect
 	github.com/nats-io/nats-server/v2 v2.1.9 // indirect
 	github.com/pelletier/go-toml v1.8.1 // indirect
@@ -37,6 +38,7 @@ require (
 	github.com/vmihailenco/msgpack/v5 v5.2.0 // indirect
 	github.com/yudai/pp v2.0.1+incompatible // indirect
 	golang.org/x/crypto v0.0.0-20210220033148-5ea612d1eb83 // indirect
+	golang.org/x/image v0.0.0-20210220032944-ac19c3e999fb // indirect
 	golang.org/x/net v0.0.0-20210226172049-e18ecbb05110
 	golang.org/x/sys v0.0.0-20210309074719-68d13333faf2 // indirect
 	golang.org/x/time v0.0.0-20210220033141-f8bda1e9f3ba // indirect

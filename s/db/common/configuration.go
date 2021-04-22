@@ -165,12 +165,8 @@ func (c *configuration) GetStorageFile() string {
 	return c.StorageFile
 }
 
-var Config Configuration
-
 func newConfiguration() Configuration {
 	return &configuration{}
 }
 
-func init() {
-	Config = newConfiguration()
-}
+var Config = newConfiguration()
