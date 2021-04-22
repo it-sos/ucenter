@@ -12,6 +12,7 @@ type AuthCache interface {
 }
 
 type AuthCmd interface {
+	Get() int64
 	Incr() int64
 	Decr() int64
 	Clear() bool
@@ -24,27 +25,32 @@ type authCmd struct {
 	k string
 }
 
+func (a *authCmd) Get() int64 {
+	times, _ := db.Rdb.Get(ctx, a.k).Int64()
+	return times
+}
+
 func NewAuthCache() AuthCache {
-	return authCache{}
+	return &authCache{}
 }
 
 const prefix = "auth_times_%s"
 
 var ctx = context.Background()
 
-func (a authCache) Key(k string) AuthCmd {
-	return authCmd{fmt.Sprintf(prefix, k)}
+func (a *authCache) Key(k string) AuthCmd {
+	return &authCmd{fmt.Sprintf(prefix, k)}
 }
 
 const ttl = 3 * time.Hour
 
-func (a authCmd) expire() {
+func (a *authCmd) expire() {
 	if err := db.Rdb.Expire(ctx, a.k, ttl).Err(); err != nil {
 		panic(err)
 	}
 }
 
-func (a authCmd) Decr() int64 {
+func (a *authCmd) Decr() int64 {
 	decr, err := db.Rdb.Decr(ctx, a.k).Result()
 	if err != nil {
 		panic(err)
@@ -53,7 +59,7 @@ func (a authCmd) Decr() int64 {
 	return decr
 }
 
-func (a authCmd) Clear() bool {
+func (a *authCmd) Clear() bool {
 	err := db.Rdb.Del(ctx, a.k).Err()
 	if err != nil {
 		panic(err)
@@ -61,7 +67,7 @@ func (a authCmd) Clear() bool {
 	return true
 }
 
-func (a authCmd) Incr() int64 {
+func (a *authCmd) Incr() int64 {
 	incr, err := db.Rdb.Incr(ctx, a.k).Result()
 	if err != nil {
 		panic(err)

@@ -11,4 +11,6 @@ func TestCache(t *testing.T) {
 	t.Log(NewAuthCache().Key("hello").Clear())
 	t.Log(NewAuthCache().Key("hello").Incr())
 	t.Log(NewAuthCache().Key("hello").Decr())
+	t.Log(NewAuthCache().Key("hello").Get())
+	t.Log(NewAuthCache().Key("hellos").Get())
 }
