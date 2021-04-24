@@ -14,7 +14,7 @@ type configJsonBody struct {
 }
 
 //var driver base64Captcha.Driver
-var store = base64Captcha.DefaultMemStore
+var store = rdsMemStore
 var driver = base64Captcha.DefaultDriverDigit
 
 var err error
