@@ -20,6 +20,7 @@ type AuthService interface {
 	GenerateCaptcha(account string) string
 	generalPassword(password string) (passwordShal, salt string)
 	validatePassword(password, salt, passwordShal string) bool
+	validCaptcha(account, captcha string) error
 }
 
 type authService struct {
@@ -60,17 +61,17 @@ func (s *authService) Login(auth vo.AuthVO) (vo.AuthTokenVO, error) {
 const validCaptchaLimit = 3
 
 // 输入3次错误密码则要求验证码验证
-func (s *authService) validCaptcha(account, captcha string) error {
+func (s *authService) validCaptcha(account, captchas string) error {
 	valid := caches.NAuthTimes.Key(account)
 	validTimes := valid.Get()
-	if validTimes <= validCaptchaLimit {
-		validTimes = valid.Incr()
+	if validTimes < validCaptchaLimit {
+		valid.Incr()
+		return nil
 	}
-	if validTimes > validCaptchaLimit {
-		if len(captcha) <= 6 {
-			return errors.Error("login_captcha_err")
-		}
+
+	id := caches.NAuthCaptcha.Key(account).Get()
+	if !captcha.Verify(id, captchas) {
+		return errors.Error("login_captcha_err")
 	}
-	// todo 验证码验证模块
 	return nil
 }

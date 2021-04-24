@@ -37,11 +37,20 @@ func (a *authCaptcha) Key(k string) AuthCaptchaCmd {
 const ttlCaptcha = 2 * time.Minute
 
 func (a *authCaptchaCmd) Get() string {
-	return db.Rdb.Get(ctx, a.k).String()
+	var (
+		str string
+		err error
+	)
+	if str, err = db.Rdb.Get(ctx, a.k).Result(); err != nil {
+		panic(err)
+	}
+	return str
 }
 
 func (a *authCaptchaCmd) Set(val string) {
-	db.Rdb.Set(ctx, a.k, val, ttlCaptcha)
+	if err := db.Rdb.Set(ctx, a.k, val, ttlCaptcha).Err(); err != nil {
+		panic(err)
+	}
 }
 
 func (a *authCaptchaCmd) Clear() bool {

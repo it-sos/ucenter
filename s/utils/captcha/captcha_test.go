@@ -18,7 +18,7 @@ func TestGenerate(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			gotId, gotB64s, err := Generate()
+			gotId, gotB64s := Generate()
 			t.Log(gotId, gotB64s, err)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Generate() error = %v, wantErr %v", err, tt.wantErr)
@@ -43,7 +43,7 @@ func TestVerify(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := Verify(); got != tt.want {
+			if got := Verify("", ""); got != tt.want {
 				t.Errorf("Verify() = %v, want %v", got, tt.want)
 			}
 		})

@@ -18,3 +18,9 @@ func Test_authService_Login(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestAuthService_GenerateCaptcha(t *testing.T) {
+	instance := authInstance()
+	t.Log(instance.GenerateCaptcha("peng.yu"))
+	t.Log(instance.validCaptcha("peng.yu", "37138"))
+}
