@@ -17,6 +17,7 @@ require (
 	github.com/k0kubun/colorstring v0.0.0-20150214042306-9440f1994b88 // indirect
 	github.com/kataras/golog v0.1.7
 	github.com/kataras/iris/v12 v12.2.0-alpha2.0.20210131192415-5994fd5d4eba
+	github.com/kataras/pio v0.0.10
 	github.com/klauspost/compress v1.11.12 // indirect
 	github.com/magiconair/properties v1.8.4 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect

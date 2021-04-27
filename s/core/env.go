@@ -10,6 +10,6 @@ func GetEnviron() string {
 	return env
 }
 
-func IsProudctEnv() bool {
+func IsProductEnv() bool {
 	return GetEnviron() == "product"
 }

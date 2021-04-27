@@ -2,6 +2,7 @@ package caches
 
 import (
 	"fmt"
+	"golang.org/x/net/context"
 	"time"
 	"ucenter/s/db"
 )
@@ -25,7 +26,7 @@ type authTimesCmd struct {
 }
 
 func (a *authTimesCmd) Get() int64 {
-	times, _ := db.Rdb.Get(ctx, a.k).Int64()
+	times, _ := db.Rdb.Get(context.Background(), a.k).Int64()
 	return times
 }
 
@@ -44,13 +45,13 @@ func (a *authTimes) Key(k string) AuthTimesCmd {
 const ttlTimes = 3 * time.Hour
 
 func (a *authTimesCmd) expire() {
-	if err := db.Rdb.Expire(ctx, a.k, ttlTimes).Err(); err != nil {
+	if err := db.Rdb.Expire(context.Background(), a.k, ttlTimes).Err(); err != nil {
 		panic(err)
 	}
 }
 
 func (a *authTimesCmd) Decr() int64 {
-	decr, err := db.Rdb.Decr(ctx, a.k).Result()
+	decr, err := db.Rdb.Decr(context.Background(), a.k).Result()
 	if err != nil {
 		panic(err)
 	}
@@ -59,7 +60,7 @@ func (a *authTimesCmd) Decr() int64 {
 }
 
 func (a *authTimesCmd) Clear() bool {
-	err := db.Rdb.Del(ctx, a.k).Err()
+	err := db.Rdb.Del(context.Background(), a.k).Err()
 	if err != nil {
 		panic(err)
 	}
@@ -67,7 +68,7 @@ func (a *authTimesCmd) Clear() bool {
 }
 
 func (a *authTimesCmd) Incr() int64 {
-	incr, err := db.Rdb.Incr(ctx, a.k).Result()
+	incr, err := db.Rdb.Incr(context.Background(), a.k).Result()
 	if err != nil {
 		panic(err)
 	}

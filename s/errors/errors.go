@@ -14,6 +14,7 @@ var errCodeList = map[string]Errors{
 	"param_err":         {4001001, "参数异常"},
 	"login_auth_err":    {4001002, "用户名或密码错误"},
 	"login_captcha_err": {4001003, "验证码不正确"},
+	"get_base_path_err": {4001004, "获取项目根路径失败"},
 }
 
 func Error(key string) error {

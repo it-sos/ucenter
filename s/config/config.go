@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/spf13/viper"
 	"ucenter/s/core"
+	"ucenter/s/global/variable"
 )
 
 type config struct {
@@ -16,6 +17,7 @@ type Config interface {
 	SetName(cName string)
 	SetType(cType string)
 	SetPath(cPath string)
+	GetFile(cFile string) string
 	GetName() string
 	GetType() string
 	GetPath() string
@@ -34,6 +36,10 @@ func (c *config) SetPath(cPath string) {
 	c.cPath = cPath
 }
 
+func (c *config) GetFile(cFile string) string {
+	return fmt.Sprintf("%s%s/%s", c.GetPath(), core.GetEnviron(), cFile)
+}
+
 func (c *config) GetName() string {
 	return c.cName
 }
@@ -49,7 +55,7 @@ func (c *config) GetPath() string {
 func (c *config) Init() {
 	viper.SetConfigName(c.GetName())
 	viper.SetConfigType(c.GetType())
-	viper.AddConfigPath("./config/" + core.GetEnviron())
+	viper.AddConfigPath(c.GetPath() + core.GetEnviron())
 	err := viper.ReadInConfig()
 	if err != nil {
 		panic(fmt.Errorf("Fatal error config file: %s \n", err))
@@ -66,5 +72,5 @@ func init() {
 	C = newConfig()
 	C.SetName("config")
 	C.SetType("yaml")
-	C.SetPath("./config/")
+	C.SetPath(variable.BasePath + "/config/")
 }

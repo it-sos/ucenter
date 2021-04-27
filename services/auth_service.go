@@ -1,12 +1,27 @@
 package services
 
 import (
+	"github.com/kataras/iris/v12/middleware/jwt"
+	"time"
 	"ucenter/caches"
 	"ucenter/models/vo"
+	"ucenter/s/config"
 	"ucenter/s/crypt"
 	"ucenter/s/errors"
 	"ucenter/s/utils"
 	"ucenter/s/utils/captcha"
+)
+
+const (
+	accessTokenMaxAge  = 10 * time.Minute
+	refreshTokenMaxAge = time.Hour
+)
+
+var (
+	privateKey, publicKey = jwt.MustLoadRSA(config.C.GetFile("pem/rsa_private_key.pem"), config.C.GetFile("rsa_public_key.pem"))
+
+	signer   = jwt.NewSigner(jwt.RS256, privateKey, accessTokenMaxAge)
+	verifier = jwt.NewVerifier(jwt.RS256, publicKey)
 )
 
 func NewAuthService(user UserService) AuthService {

@@ -2,6 +2,7 @@ package caches
 
 import (
 	"fmt"
+	"golang.org/x/net/context"
 	"time"
 	"ucenter/s/db"
 )
@@ -41,20 +42,20 @@ func (a *authCaptchaCmd) Get() string {
 		str string
 		err error
 	)
-	if str, err = db.Rdb.Get(ctx, a.k).Result(); err != nil {
+	if str, err = db.Rdb.Get(context.Background(), a.k).Result(); err != nil {
 		panic(err)
 	}
 	return str
 }
 
 func (a *authCaptchaCmd) Set(val string) {
-	if err := db.Rdb.Set(ctx, a.k, val, ttlCaptcha).Err(); err != nil {
+	if err := db.Rdb.Set(context.Background(), a.k, val, ttlCaptcha).Err(); err != nil {
 		panic(err)
 	}
 }
 
 func (a *authCaptchaCmd) Clear() bool {
-	err := db.Rdb.Del(ctx, a.k).Err()
+	err := db.Rdb.Del(context.Background(), a.k).Err()
 	if err != nil {
 		panic(err)
 	}

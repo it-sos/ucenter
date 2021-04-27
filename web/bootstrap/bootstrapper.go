@@ -40,7 +40,7 @@ func New(appName, appOwner string, cfgs ...Configurator) *Bootstrapper {
 
 // SetupViews loads the templates.
 func (b *Bootstrapper) SetupViews(viewsDir string) {
-	b.RegisterView(iris.HTML(viewsDir, ".html").Layout("shared/layout.html").Reload(!core.IsProudctEnv()))
+	b.RegisterView(iris.HTML(viewsDir, ".html").Layout("shared/layout.html").Reload(!core.IsProductEnv()))
 }
 
 // `(context.StatusCodeNotSuccessful`,  which defaults to >=400 (but you can change it).
