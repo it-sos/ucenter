@@ -3,6 +3,7 @@
 package services
 
 import (
+	"github.com/google/uuid"
 	"ucenter/datamodels"
 	"ucenter/models/vo"
 	"ucenter/repositories"
@@ -11,7 +12,8 @@ import (
 var user = &datamodels.User{Account: "peng.yu"}
 
 type UserService interface {
-	Save(id int, paramsVO vo.UserParamsVO) vo.UserVO
+	New(paramsVO vo.UserParamsVO) (vo.UserVO, error)
+	Update(id int, paramsVO vo.UserParamsVO) (vo.UserVO, error)
 	Remove(id int) error
 	SetDisabled(id int, disabledVO vo.UserDisabledVO) error
 	SetPassword(id int, passwordVO vo.PasswordVO) error
@@ -31,7 +33,34 @@ type userService struct {
 	repo repositories.UserRepository
 }
 
-func (s *userService) Save(id int, paramsVO vo.UserParamsVO) vo.UserVO {
+func (s *userService) New(paramsVO vo.UserParamsVO) (vo.UserVO, error) {
+	passwordShal, salt := NewAuthService(s).generalPassword(paramsVO.Password)
+	newUUID, _ := uuid.NewUUID()
+	user := &datamodels.User{
+		Uuid:       newUUID.String(),
+		Account:    paramsVO.Account,
+		Password:   passwordShal,
+		Nickname:   paramsVO.Nickname,
+		Phone:      paramsVO.Phone,
+		Expired:    paramsVO.Expired,
+		Salt:       salt,
+		IsDisabled: paramsVO.IsDisabled,
+		IsDeleted:  paramsVO.IsDeleted,
+	}
+	s.repo.Insert(user)
+
+	DisabledName := "禁用"
+	if paramsVO.IsDisabled == 0 {
+		DisabledName = "启用"
+	}
+	return vo.UserVO{
+		User:         *user,
+		DisabledName: DisabledName,
+		ExpireDate:   "",
+	}, nil
+}
+
+func (s *userService) Update(id int, paramsVO vo.UserParamsVO) (vo.UserVO, error) {
 	panic("implement me")
 }
 

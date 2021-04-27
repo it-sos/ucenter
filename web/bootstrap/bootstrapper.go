@@ -11,6 +11,7 @@ import (
 	"ucenter/s/core"
 	"ucenter/s/db"
 	"ucenter/s/errors"
+	"ucenter/s/global/consts"
 )
 
 type Configurator func(*Bootstrapper)
@@ -89,7 +90,7 @@ func isOutJson(ctx iris.Context) bool {
 
 const (
 	// StaticAssets is the root directory for public assets like images, css, js.
-	StaticAssets = "./web/public/"
+	StaticAssets = consts.BasePath + "/web/public/"
 	// Favicon is the relative 9to the "StaticAssets") favicon path for our app.
 	Favicon = "favicon.ico"
 )
@@ -108,7 +109,7 @@ func (b *Bootstrapper) initialization() {
 }
 
 func (b *Bootstrapper) Bootstrap() *Bootstrapper {
-	b.SetupViews("./web/views")
+	b.SetupViews(consts.BasePath + "/web/views")
 	b.SetupErrorHandlers()
 
 	// static files

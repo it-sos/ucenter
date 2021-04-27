@@ -17,8 +17,14 @@ const (
 	refreshTokenMaxAge = time.Hour
 )
 
+type UserClaims struct {
+	ID       string `json:"user_id"`
+	Username string `json:"username"`
+}
+
 var (
-	privateKey, publicKey = jwt.MustLoadRSA(config.C.GetFile("pem/rsa_private_key.pem"), config.C.GetFile("rsa_public_key.pem"))
+	privateKey, publicKey = jwt.MustLoadRSA(config.C.GetFile("pem/rsa_private_key.pem"),
+		config.C.GetFile("pem/rsa_public_key.pem"))
 
 	signer   = jwt.NewSigner(jwt.RS256, privateKey, accessTokenMaxAge)
 	verifier = jwt.NewVerifier(jwt.RS256, publicKey)
@@ -32,6 +38,7 @@ func NewAuthService(user UserService) AuthService {
 
 type AuthService interface {
 	Login(auth vo.AuthVO) (vo.AuthTokenVO, error)
+	Register(params vo.UserParamsVO) (vo.UserVO, error)
 	GenerateCaptcha(account string) string
 	generalPassword(password string) (passwordShal, salt string)
 	validatePassword(password, salt, passwordShal string) bool
@@ -40,6 +47,38 @@ type AuthService interface {
 
 type authService struct {
 	user UserService
+}
+
+func (s *authService) Register(params vo.UserParamsVO) (vo.UserVO, error) {
+	return s.user.New(params)
+}
+
+func (s *authService) Login(auth vo.AuthVO) (vo.AuthTokenVO, error) {
+	authToken := vo.AuthTokenVO{}
+	if err := s.validCaptcha(auth.Account, auth.Captcha); err != nil {
+		return authToken, err
+	}
+	user, has := s.user.GetByAccount(auth.Account)
+	if !has || !s.validatePassword(auth.Password, user.Salt, user.Password) {
+		return authToken, errors.Error("login_auth_err")
+	}
+	caches.NAuthTimes.Key(auth.Account).Clear()
+
+	refreshClaims := jwt.Claims{Subject: user.Uuid}
+
+	accessClaims := UserClaims{
+		ID:       user.Uuid,
+		Username: user.Account,
+	}
+
+	tokenPair, err := signer.NewTokenPair(accessClaims, refreshClaims, refreshTokenMaxAge)
+	if err != nil {
+		panic(err)
+	}
+	authToken.Token = string(tokenPair.AccessToken)
+	authToken.RefreshToken = string(tokenPair.RefreshToken)
+
+	return authToken, nil
 }
 
 func (s *authService) GenerateCaptcha(account string) string {
@@ -58,20 +97,6 @@ func (s *authService) validatePassword(password, salt, passwordShal string) bool
 	return crypt.Sha1(password+salt) == passwordShal
 }
 
-func (s *authService) Login(auth vo.AuthVO) (vo.AuthTokenVO, error) {
-	authToken := vo.AuthTokenVO{}
-	if err := s.validCaptcha(auth.Account, auth.Captcha); err != nil {
-		return authToken, err
-	}
-	user, has := s.user.GetByAccount(auth.Account)
-	if !has || !s.validatePassword(auth.Password, user.Salt, user.Password) {
-		return authToken, errors.Error("login_auth_err")
-	}
-	caches.NAuthTimes.Key(auth.Account).Clear()
-	// todo 生成token与refresh_token
-	return authToken, nil
-}
-
 // 超过3次需要验证码
 const validCaptchaLimit = 3
 
@@ -85,7 +110,7 @@ func (s *authService) validCaptcha(account, captchas string) error {
 	}
 
 	id := caches.NAuthCaptcha.Key(account).Get()
-	if !captcha.Verify(id, captchas) {
+	if id == "" || !captcha.Verify(id, captchas) {
 		return errors.Error("login_captcha_err")
 	}
 	return nil
