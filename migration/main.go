@@ -5,10 +5,9 @@ import (
 	"log"
 	"os"
 	"ucenter/datamodels"
-	"ucenter/s/tests"
+	"ucenter/s/db"
+	_ "ucenter/s/tests/testsimple"
 )
-
-var db = tests.ConnectDb().Conn
 
 func main() {
 	if viper.Get("use-driver") == "sqlite3" {
@@ -17,7 +16,7 @@ func main() {
 			os.Remove("sqlite3.db")
 		}
 	}
-	db.DropTables(
+	db.Conn.DropTables(
 		new(datamodels.Role),
 		new(datamodels.RolePermission),
 		new(datamodels.AppRole),
@@ -26,7 +25,7 @@ func main() {
 		new(datamodels.UserPermission),
 		new(datamodels.App),
 		new(datamodels.User))
-	db.Sync2(
+	db.Conn.Sync2(
 		new(datamodels.Role),
 		new(datamodels.RolePermission),
 		new(datamodels.AppRole),

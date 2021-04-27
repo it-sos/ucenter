@@ -1,33 +1,13 @@
 package services
 
 import (
-	"github.com/kataras/iris/v12/middleware/jwt"
-	"time"
 	"ucenter/caches"
 	"ucenter/models/vo"
-	"ucenter/s/config"
 	"ucenter/s/crypt"
 	"ucenter/s/errors"
 	"ucenter/s/utils"
 	"ucenter/s/utils/captcha"
-)
-
-const (
-	accessTokenMaxAge  = 10 * time.Minute
-	refreshTokenMaxAge = time.Hour
-)
-
-type UserClaims struct {
-	ID       string `json:"user_id"`
-	Username string `json:"username"`
-}
-
-var (
-	privateKey, publicKey = jwt.MustLoadRSA(config.C.GetFile("pem/rsa_private_key.pem"),
-		config.C.GetFile("pem/rsa_public_key.pem"))
-
-	signer   = jwt.NewSigner(jwt.RS256, privateKey, accessTokenMaxAge)
-	verifier = jwt.NewVerifier(jwt.RS256, publicKey)
+	"ucenter/s/utils/jwt"
 )
 
 func NewAuthService(user UserService) AuthService {
@@ -64,17 +44,7 @@ func (s *authService) Login(auth vo.AuthVO) (vo.AuthTokenVO, error) {
 	}
 	caches.NAuthTimes.Key(auth.Account).Clear()
 
-	refreshClaims := jwt.Claims{Subject: user.Uuid}
-
-	accessClaims := UserClaims{
-		ID:       user.Uuid,
-		Username: user.Account,
-	}
-
-	tokenPair, err := signer.NewTokenPair(accessClaims, refreshClaims, refreshTokenMaxAge)
-	if err != nil {
-		panic(err)
-	}
+	tokenPair := jwt.NewTokenPair(user.Uuid, user.Account)
 	authToken.Token = string(tokenPair.AccessToken)
 	authToken.RefreshToken = string(tokenPair.RefreshToken)
 

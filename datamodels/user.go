@@ -4,9 +4,9 @@ import "time"
 
 // 用户表
 type User struct {
-	Id         uint      `json:"id" readonly:"true" example:"1" xorm:"notnull autoincr pk id"`                             // 用户表ID
-	Uuid       string    `json:"uuid" example:"5bbc-4ala-3dja-1djs-0aja" xorm:"varchar(64) notnull index comment('uuid')"` // 用户uuid
-	Account    string    `json:"account" xorm:"varchar(32) notnull index comment('账号')"`                                   // 帐号
+	Id         uint      `json:"id" readonly:"true" example:"1" xorm:"notnull autoincr pk id"`                              // 用户表ID
+	Uuid       string    `json:"uuid" example:"5bbc-4ala-3dja-1djs-0aja" xorm:"varchar(64) notnull unique comment('uuid')"` // 用户uuid
+	Account    string    `json:"account" xorm:"varchar(32) notnull unique comment('账号')"`                                   // 帐号
 	Password   string    `json:"-" xorm:"varchar(64) notnull"`
 	Nickname   string    `json:"nickname" xorm:"varchar(16) notnull"` // 昵称
 	Phone      string    `json:"phone" xorm:"varchar(16) notnull default ''"`
