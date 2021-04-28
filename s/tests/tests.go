@@ -5,6 +5,5 @@ import (
 )
 
 func init() {
-	//os.Chdir("/data1/htdocs/ucenter")
 	config.C.Init()
 }

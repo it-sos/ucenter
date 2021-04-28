@@ -1,7 +1,6 @@
 package jwt
 
 import (
-	"crypto/rsa"
 	"github.com/kataras/iris/v12/middleware/jwt"
 	"time"
 	"ucenter/s/config"
@@ -22,7 +21,7 @@ var (
 		config.C.GetFile("rsa/rsa_captcha_public_key.pem"))
 )
 
-func NewTokenPair(uuid, account string) jwt.TokenPair {
+func NewTokenPair(uuid, account string) (accessToken, refreshToken string) {
 	refreshClaims := jwt.Claims{Subject: uuid}
 
 	accessClaims := UserClaims{
@@ -37,15 +36,11 @@ func NewTokenPair(uuid, account string) jwt.TokenPair {
 		panic(err)
 	}
 
-	return tokenPair
+	return string(tokenPair.AccessToken), string(tokenPair.RefreshToken)
 }
 
-func RefreshToken(refreshToken, uuid string) {
+func RefreshToken(refreshToken, uuid string) bool {
 	verifier := jwt.NewVerifier(jwt.RS256, publicKey)
-	verifier.VerifyToken([]byte(refreshToken), jwt.Expected{Subject: uuid})
-}
-
-func getRsaPem() (*rsa.PrivateKey, *rsa.PublicKey) {
-	return jwt.MustLoadRSA(config.C.GetFile("rsa/rsa_captcha_private_key.pem"),
-		config.C.GetFile("rsa/rsa_captcha_public_key.pem"))
+	_, err := verifier.VerifyToken([]byte(refreshToken), jwt.Expected{Subject: uuid})
+	return err == nil
 }
