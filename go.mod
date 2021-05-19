@@ -12,6 +12,7 @@ require (
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/go-xorm/xorm v0.7.9
 	github.com/gobwas/httphead v0.1.0 // indirect
+	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
 	github.com/google/uuid v1.2.0
 	github.com/iris-contrib/swagger/v12 v12.2.0-alpha
 	github.com/k0kubun/colorstring v0.0.0-20150214042306-9440f1994b88 // indirect

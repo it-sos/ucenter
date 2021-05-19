@@ -44,10 +44,7 @@ func (s *authService) Login(auth vo.AuthVO) (vo.AuthTokenVO, error) {
 	}
 	caches.NAuthTimes.Key(auth.Account).Clear()
 
-	tokenPair := jwt.NewTokenPair(user.Uuid, user.Account)
-	authToken.Token = string(tokenPair.AccessToken)
-	authToken.RefreshToken = string(tokenPair.RefreshToken)
-
+	authToken.Token, authToken.RefreshToken = jwt.NewTokenPair(user.Uuid, user.Account)
 	return authToken, nil
 }
 

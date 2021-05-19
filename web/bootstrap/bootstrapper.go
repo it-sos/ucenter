@@ -11,7 +11,7 @@ import (
 	"ucenter/s/core"
 	"ucenter/s/db"
 	"ucenter/s/errors"
-	"ucenter/s/global/consts"
+	"ucenter/s/global/variable"
 )
 
 type Configurator func(*Bootstrapper)
@@ -44,7 +44,7 @@ func (b *Bootstrapper) SetupViews(viewsDir string) {
 	b.RegisterView(iris.HTML(viewsDir, ".html").Layout("shared/layout.html").Reload(!core.IsProductEnv()))
 }
 
-// `(context.StatusCodeNotSuccessful`,  which defaults to >=400 (but you can change it).
+// SetupErrorHandlers `(context.StatusCodeNotSuccessful`,  which defaults to >=400 (but you can change it).
 func (b *Bootstrapper) SetupErrorHandlers() {
 	b.APIBuilder.ConfigureContainer().Container.GetErrorHandler = func(*context.Context) hero.ErrorHandler {
 		return hero.ErrorHandlerFunc(func(ctx *context.Context, err error) {
@@ -88,9 +88,9 @@ func isOutJson(ctx iris.Context) bool {
 		ctx.GetHeader("Accept") == context.ContentJSONHeaderValue
 }
 
-const (
+var (
 	// StaticAssets is the root directory for public assets like images, css, js.
-	StaticAssets = consts.BasePath + "/web/public/"
+	StaticAssets = variable.BasePath + "/web/public/"
 	// Favicon is the relative 9to the "StaticAssets") favicon path for our app.
 	Favicon = "favicon.ico"
 )
@@ -109,7 +109,7 @@ func (b *Bootstrapper) initialization() {
 }
 
 func (b *Bootstrapper) Bootstrap() *Bootstrapper {
-	b.SetupViews(consts.BasePath + "/web/views")
+	b.SetupViews(variable.BasePath + "/web/views")
 	b.SetupErrorHandlers()
 
 	// static files

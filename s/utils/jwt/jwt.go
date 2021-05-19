@@ -12,8 +12,8 @@ const (
 )
 
 type UserClaims struct {
-	ID       string `json:"user_id"`
-	Username string `json:"username"`
+	ID      string `json:"uuid"`
+	Account string `json:"account"`
 }
 
 var (
@@ -21,12 +21,12 @@ var (
 		config.C.GetFile("rsa/rsa_captcha_public_key.pem"))
 )
 
-func NewTokenPair(uuid, account string) (accessToken, refreshToken string) {
+func NewTokenPair(uuid, account string) jwt.TokenPair {
 	refreshClaims := jwt.Claims{Subject: uuid}
 
 	accessClaims := UserClaims{
-		ID:       uuid,
-		Username: account,
+		ID:      uuid,
+		Account: account,
 	}
 
 	signer := jwt.NewSigner(jwt.RS256, privateKey, accessTokenMaxAge)
@@ -36,11 +36,26 @@ func NewTokenPair(uuid, account string) (accessToken, refreshToken string) {
 		panic(err)
 	}
 
-	return string(tokenPair.AccessToken), string(tokenPair.RefreshToken)
+	return tokenPair
 }
 
-func RefreshToken(refreshToken, uuid string) bool {
-	verifier := jwt.NewVerifier(jwt.RS256, publicKey)
-	_, err := verifier.VerifyToken([]byte(refreshToken), jwt.Expected{Subject: uuid})
-	return err == nil
-}
+//func RefreshToken(refreshToken, uuid string) (jwt.TokenPair, error) {
+//	verifier := jwt.NewVerifier(jwt.RS256, publicKey)
+//	verifiedToken, err := verifier.VerifyToken([]byte(refreshToken), jwt.Expected{Subject: uuid})
+//	if err != nil {
+//		return jwt.TokenPair{}, err
+//	}
+//	fmt.Println(verifiedToken.StandardClaims.Subject)
+//	fmt.Println(verifiedToken.StandardClaims)
+//	fmt.Println(string(verifiedToken.Token))
+//	fmt.Println(string(verifiedToken.Header))
+//	fmt.Println(string(verifiedToken.Payload))
+//}
+//
+//func ValidateToken(accessToken string) error {
+//	verifier := jwt.NewVerifier(jwt.RS256, publicKey)
+//	verifiedToken, err := verifier.VerifyToken([]byte(accessToken))
+//	if err != nil {
+//		return jwt.TokenPair{}, err
+//	}
+//}

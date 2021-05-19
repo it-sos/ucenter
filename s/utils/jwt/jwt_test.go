@@ -6,9 +6,8 @@ import (
 )
 
 func TestNewTokenPair(t *testing.T) {
-	_, refreshToken := NewTokenPair("uuid", "account")
-	t.Log(refreshToken)
-	t.Log(RefreshToken(refreshToken, "uuid"))
+	NewTokenPair("uuid", "account")
+	//t.Log(RefreshToken(string(tokenPair.RefreshToken[1:len(tokenPair.RefreshToken)-1]), "uuid", "account"))
 }
 
 func TestRefreshToken(t *testing.T) {

@@ -8,13 +8,13 @@ import (
 )
 
 type UserRepository interface {
-	// 新增
+	// Insert 新增
 	Insert(p *datamodels.User) (id uint)
-	// 更新
+	// Update 更新
 	Update(p *datamodels.User) (id uint)
-	// 查询用户详细
+	// Select 查询用户详细
 	Select(p *datamodels.User) (datamodels.User, bool)
-	// 查询用户列表
+	// SelectMany 查询用户列表
 	SelectMany(p *datamodels.User, offset int, limit int) (results []datamodels.User)
 }
 

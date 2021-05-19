@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/spf13/viper"
 	"ucenter/s/core"
-	"ucenter/s/global/consts"
+	"ucenter/s/global/variable"
 )
 
 type config struct {
@@ -72,5 +72,5 @@ func init() {
 	C = newConfig()
 	C.SetName("config")
 	C.SetType("yaml")
-	C.SetPath(consts.BasePath + "/config/")
+	C.SetPath(variable.BasePath + "/config/")
 }
