@@ -59,3 +59,18 @@ func NewTokenPair(uuid, account string) jwt.TokenPair {
 //		return jwt.TokenPair{}, err
 //	}
 //}
+
+func RefreshToken(refreshToken []byte, uuid string) bool {
+	verifier := jwt.NewVerifier(jwt.RS256, publicKey)
+	_, err := verifier.VerifyToken(refreshToken, jwt.Expected{Subject: uuid})
+	return err == nil
+}
+
+func ValidatorToken(token []byte) bool {
+	verifier := jwt.NewVerifier(jwt.RS256, publicKey)
+	_, err := verifier.VerifyToken(token)
+	if err != nil {
+		return false
+	}
+	return true
+}
